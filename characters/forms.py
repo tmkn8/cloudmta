@@ -4,4 +4,4 @@ from .models import Character
 class CreateCharacterForm(forms.ModelForm):
     class Meta:
         model = Character
-        fields = ['lastname', 'sex', 'dob', 'skin']
+        fields = ['name', 'sex', 'dob', 'skin']
