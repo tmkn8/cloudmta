@@ -6,8 +6,8 @@ from .forms import CreateCharacterForm
 @login_required
 def characters_index(request):
     """Wyświetl wszystkie postacie użytkownika"""
-    characters = Character.objects.all(memberid=request.user.pk)
-    return render(request,)
+    characters = Character.objects.filter(memberid=request.user.pk)
+    return render(request, 'characters/index.html', {'characters': characters})
 
 @user_passes_test(get_user_model().can_create_character)
 def characters_create(request):
@@ -33,4 +33,10 @@ def characters_show_index(request, pk):
     """Pokaż główną zakładkę w szczegółach postaci"""
     character = get_character_object(request, pk)
     return render(request, 'characters/show/index.html',
+        {'character': character})
+
+def characters_show_settings(request, pk):
+    """Pokaż ustawienia w szczegółach postaci"""
+    character = get_character_object(request, pk)
+    return render(request, 'characters/show/settings.html',
         {'character': character})

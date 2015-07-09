@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from django_unixdatetimefield import UnixDateTimeField
 from django.conf import settings
+from django.core.validators import RegexValidator
 
 class Character(models.Model):
     id = models.BigIntegerField(db_column='ID', primary_key=True)
