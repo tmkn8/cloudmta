@@ -7,8 +7,10 @@ class Character(models.Model):
     id = models.BigIntegerField(db_column='ID', primary_key=True)
     memberid = models.BigIntegerField(db_column='memberID', db_index=True,
         verbose_name=_('ID użytkownika'))
-    name = models.CharField(max_length=20, verbose_name=_('Imię'))
-    lastname = models.CharField(max_length=20, verbose_name=_('Nazwisko'))
+    NAME_VALIDATOR =  NAME_VALIDATOR = RegexValidator(r'^([A-Za-z]{2,})([\s][A-Za-z]{2,})?([\s][A-Za-z]{2,})$')
+    name = models.CharField(max_length=22, validators=[NAME_VALIDATOR],
+        verbose_name=_('Imię i nazwisko'), help_text=_('Drugie imię opcjonalne,'
+        ' odstępy rozdzielać spacją.'))
     facecode = models.CharField(db_column='faceCode',
         verbose_name=_('Kod twarzy'), max_length=6, unique=True)
     shortdna = models.CharField(db_column='shortDNA', max_length=4, unique=True,
