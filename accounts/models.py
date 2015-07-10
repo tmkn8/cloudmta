@@ -19,6 +19,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     member_id = models.IntegerField(verbose_name=_('ID konta '
         'na forum'), unique=True, blank=True, null=True)
     is_staff = models.BooleanField(default=False)
+    passed_rp_test = models.BooleanField(default=False)
+
+    def member(self):
+        """Pobierz obiekt użytkownika forum"""
+        return Member.objects.get(pk=self.member_id)
+
+    def characters(self):
+        """Pobierz postacie użytkownika"""
+        return Character.objects.filter(memberid=self.member_id)
 
     def __str__(self):
         """Zwróć nazwę użytkownika"""
@@ -36,24 +45,28 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Pobierz ID konta z forum"""
         return self.member_id
 
-    def member(self):
-        """Pobierz obiekt użytkownika forum"""
-        return Member.objects.get(pk=self.get_member_id())
-
     def can_create_character(self):
         """Sprawdź czy użytkownik może stworzyć postać"""
         if not self.is_authenticated():
             return False
-
+        if not self.has_passed_rp_test():
+            return False
         if self.characters().filter(
                     Q(onlinetime__lte=settings.RP_MIN_CHARACTER_TIME),
-                    Q(blocked=False)
+                    Q(blocked=False),
+                    Q(memberid=self.member_id)
                 ).count():
             return False
         return True
 
-    def characters(self):
-        return Character.objects.filter(memberid=self.get_member_id())
+    def has_passed_rp_test(self):
+        """Czy użytkownik zdał test RP"""
+        return self.passed_rp_test
+
+    def pass_rp_test(self):
+        """Zdaj test RP gracza"""
+        self.passed_rp_test = True
+        self.save()
 
 class Member(models.Model):
     """Ten model jest tabelą z MyBB"""
@@ -95,3 +108,29 @@ class Member(models.Model):
     class Meta:
         managed = False
         db_table ='mybb_users'
+
+class QuizQuestion(models.Model):
+    question = models.CharField(max_length=200, verbose_name=_('Pytanie'))
+    answer_a = models.CharField(max_length=200, verbose_name=_('Odpowiedź A'))
+    answer_b = models.CharField(max_length=200, verbose_name=_('Odpowiedź B'))
+    answer_c = models.CharField(max_length=200, verbose_name=_('Odpowiedź C'))
+    answer_d = models.CharField(max_length=200, verbose_name=_('Odpowiedź D'))
+    CORRECT_ANSWER_CHOICES = (
+        ('a', _('Odpowiedź A')),
+        ('b', _('Odpowiedź B')),
+        ('c', _('Odpowiedź C')),
+        ('d', _('Odpowiedź D')),
+    )
+    correct_answer = models.CharField(max_length=1,
+        choices=CORRECT_ANSWER_CHOICES)
+
+    def __str__(self):
+        return _("Pytanie %s..." % self.question[:10])
+
+    def is_valid_answer(self, answer):
+        """Sprawdź czy podana odpowiedź jest poprawna."""
+        if not isinstance(answer, str):
+            return False
+        if self.correct_answer.lower() == answer.lower():
+            return True
+        return False

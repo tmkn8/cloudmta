@@ -11,6 +11,7 @@ def characters_index(request):
     return render(request, 'characters/index.html', {'characters': characters})
 
 @login_required
+@user_passes_test(get_user_model().has_passed_rp_test, 'accounts:roleplay-test')
 @user_passes_test(get_user_model().can_create_character,
     'characters:index')
 def characters_create(request):
