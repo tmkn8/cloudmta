@@ -3,7 +3,7 @@ from dateutil.relativedelta import relativedelta
 from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext as _
-from .models import Character
+from .models import Character, StartSkin
 
 class CreateCharacterForm(forms.ModelForm):
     class Meta:
@@ -21,4 +21,8 @@ class CreateCharacterForm(forms.ModelForm):
 
     def clean(self):
         super(CreateCharacterForm, self).clean()
-        # TODO: Validate if skin matches sex
+        skin = self.cleaned_data['skin']
+        sex = self.cleaned_data['sex']
+        if not StartSkin.objects.filter(skin_id=skin, sex=sex).count():
+            raise forms.ValidationError(_('Wybrano nieprawidłowy skin. Spróbuj '
+                'Ponownie'))

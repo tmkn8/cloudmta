@@ -56,7 +56,26 @@ class Character(models.Model):
     def __str__(self):
         return self.name
 
+    def get_skin_static_url(self):
+        return "%s/%d.%s" % (settings.RP_SKINS_STATIC_DIRECTORY, self.skin_id, settings.RP_SKINS_IMG_FORMAT)
+
     class Meta:
         db_table = '_characters'
         verbose_name = _('Postać')
         verbose_name_plural = _('Postacie')
+
+class StartSkin(models.Model):
+    skin_id = models.PositiveSmallIntegerField(verbose_name=_('ID skina'), unique=True)
+    SEX_CHOICES = (
+        (1, _('Mężczyzna')),
+        (2, _('Kobieta')),
+    )
+    sex = models.PositiveSmallIntegerField(choices=SEX_CHOICES,
+        verbose_name=_('Płeć'))
+
+    def __str__(self):
+        return _("Startowy skin %d" % self.skin_id)
+
+    class Meta:
+        verbose_name = _('Skin startowy')
+        verbose_name_plural = _('Skiny startowe')

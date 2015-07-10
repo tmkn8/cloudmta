@@ -12,3 +12,9 @@ RP_MIN_AGE_OF_CHARACTER = 16
 
 # Maksymalny wiek postaci
 RP_MAX_AGE_OF_CHARACTER = 100
+
+# Scieżka do plików skinów w static
+RP_SKINS_STATIC_DIRECTORY = 'skins'
+
+# Format obrazków skinów
+RP_SKINS_IMG_FORMAT = 'png'
