@@ -6,3 +6,9 @@ RP_MIN_CHARACTER_TIME = 5*3600
 
 # Liczba pytań w quizie
 RP_TEST_QUESTIONS_NUMBERS = 3
+
+# Minimalny wiek postaci
+RP_MIN_AGE_OF_CHARACTER = 16
+
+# Maksymalny wiek postaci
+RP_MAX_AGE_OF_CHARACTER = 100
