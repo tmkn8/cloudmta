@@ -19,7 +19,7 @@ class Character(models.Model):
         while True:
             facecode = ''
             for i in range(6):
-                facecode += random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+                facecode += random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789').upper()
             if not Character.objects.filter(facecode=facecode).count():
                 return facecode
     facecode = models.CharField(db_column='faceCode', default=generate_facecode,
@@ -29,7 +29,7 @@ class Character(models.Model):
         while True:
             shortdna = ''
             for i in range(4):
-                shortdna += random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+                shortdna += random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789').lower()
             if not Character.objects.filter(shortdna=shortdna).count():
                 return shortdna
     shortdna = models.CharField(db_column='shortDNA', max_length=4, unique=True,
