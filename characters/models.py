@@ -1,3 +1,5 @@
+import random
+import hashlib
 from django.db import models
 from django.utils.translation import ugettext as _
 from django_unixdatetimefield import UnixDateTimeField
@@ -12,13 +14,36 @@ class Character(models.Model):
     name = models.CharField(max_length=22, validators=[NAME_VALIDATOR],
         verbose_name=_('Imię i nazwisko'), help_text=_('Drugie imię opcjonalne,'
         ' odstępy rozdzielać spacją.'))
-    facecode = models.CharField(db_column='faceCode',
+
+    def generate_facecode():
+        while True:
+            facecode = ''
+            for i in range(6):
+                facecode += random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+            if not Character.objects.filter(facecode=facecode).count():
+                return facecode
+    facecode = models.CharField(db_column='faceCode', default=generate_facecode,
         verbose_name=_('Kod twarzy'), max_length=6, unique=True)
+
+    def generate_shortdna_code():
+        while True:
+            shortdna = ''
+            for i in range(4):
+                shortdna += random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+            if not Character.objects.filter(shortdna=shortdna).count():
+                return shortdna
     shortdna = models.CharField(db_column='shortDNA', max_length=4, unique=True,
         verbose_name=_('Krótki kod DNA'), help_text=_('Używany m.in. do '
-        'kominiarek'))
+        'kominiarek'), default=generate_shortdna_code)
+
+    def generate_dna_code():
+        while True:
+            random_number = str(random.getrandbits(128))
+            dna = hashlib.md5(random_number.encode('utf-8')).hexdigest().upper()
+            if not Character.objects.filter(dna=dna).count():
+                return dna
     dna = models.CharField(db_column='DNA', max_length=255, unique=True,
-        verbose_name=_('DNA'))
+        verbose_name=_('DNA'), default=generate_dna_code)
     hp = models.FloatField(default=100, verbose_name=_('Punkty życia'))
     skin = models.PositiveSmallIntegerField(default=1,
         verbose_name=_('ID Skina'))
@@ -47,7 +72,7 @@ class Character(models.Model):
     ingame = models.BooleanField(db_column='inGame', verbose_name=_('Postać w '
         'grze'), default=False)
     lastvisit = UnixDateTimeField(db_column='lastVisit',
-        verbose_name=_('Ostatnia wizyta'), null=True, blank=True)
+        verbose_name=_('Ostatnia wizyta'), null=True, blank=True, editable=False)
     blocked = models.BooleanField(default=False, verbose_name=_('Zablokowana'))
     hide = models.BooleanField(default=False, verbose_name=_('Ukryta'))
     dob = models.DateField(verbose_name=_('Data urodzenia'))
