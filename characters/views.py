@@ -1,15 +1,18 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth import get_user_model
+from .models import Character
 from .forms import CreateCharacterForm
 
 @login_required
 def characters_index(request):
     """Wyświetl wszystkie postacie użytkownika"""
-    characters = Character.objects.filter(memberid=request.user.pk)
+    characters = Character.objects.filter(memberid=request.user.member_id)
     return render(request, 'characters/index.html', {'characters': characters})
 
-@user_passes_test(get_user_model().can_create_character)
+@login_required
+@user_passes_test(get_user_model().can_create_character,
+    'characters:index')
 def characters_create(request):
     """Stwórz postać"""
     if request.method == 'POST':

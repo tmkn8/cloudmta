@@ -1,13 +1,14 @@
 from django.db import models
+from django.db.models import Q
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext as _
 from characters.models import Character
 import hashlib
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_VALIDATOR = RegexValidator(r'^([A-Za-z0-9]{3,})$')
     username = models.CharField(verbose_name=_('Nazwa użytkownika'),
         max_length=20, validators=[USERNAME_VALIDATOR], unique=True,
@@ -39,17 +40,20 @@ class User(AbstractBaseUser):
         """Pobierz obiekt użytkownika forum"""
         return Member.objects.get(pk=self.get_member_id())
 
-    def can_create_characters(self):
-        """Sprawdź czy użytkownik może tworzyć postacie"""
+    def can_create_character(self):
+        """Sprawdź czy użytkownik może stworzyć postać"""
+        if not self.is_authenticated():
+            return False
+
         if self.characters().filter(
-                    Q(online_time__lte=settings.RP_MIN_CHARACTER_TIME),
+                    Q(onlinetime__lte=settings.RP_MIN_CHARACTER_TIME),
                     Q(blocked=False)
                 ).count():
             return False
         return True
 
     def characters(self):
-        return Character.objects.filter(memberid=self.get_member_id)
+        return Character.objects.filter(memberid=self.get_member_id())
 
 class Member(models.Model):
     """Ten model jest tabelą z MyBB"""
@@ -67,19 +71,16 @@ class Member(models.Model):
         """Funkcja pobiera użytkownika Django powiązanego z użytkownikiem MyBB
         i aktualizuje podany email oraz nazwę użytkownika lub tworzy nowy model.
         """
-        user = get_user_model().objects.get_or_create(member_id=self.pk)
-
+        user, created = get_user_model().objects.get_or_create(member_id=self.pk)
+        changed = False
         if user.email != self.email:
             user.email = self.email
             changed = True
-
         if user.username != self.username:
             user.username = self.username
             changed = True
-
         if changed:
             user.save()
-
         return user
 
     def check_password(self, password=None):

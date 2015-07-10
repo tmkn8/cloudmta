@@ -5,9 +5,9 @@ from django.conf import settings
 from django.core.validators import RegexValidator
 
 class Character(models.Model):
-    id = models.BigIntegerField(db_column='ID', primary_key=True)
+    id = models.AutoField(db_column='ID', primary_key=True)
     memberid = models.BigIntegerField(db_column='memberID', db_index=True,
-        verbose_name=_('ID użytkownika'))
+        verbose_name=_('ID użytkownika'), help_text=_('Konto globalne'))
     NAME_VALIDATOR =  NAME_VALIDATOR = RegexValidator(r'^([A-Za-z]{2,})([\s][A-Za-z]{2,})?([\s][A-Za-z]{2,})$')
     name = models.CharField(max_length=22, validators=[NAME_VALIDATOR],
         verbose_name=_('Imię i nazwisko'), help_text=_('Drugie imię opcjonalne,'
@@ -45,16 +45,16 @@ class Character(models.Model):
     sex = models.PositiveSmallIntegerField(choices=SEX_CHOICES,
         verbose_name=_('Płeć'))
     ingame = models.BooleanField(db_column='inGame', verbose_name=_('Postać w '
-        'grze'))
+        'grze'), default=False)
     lastvisit = UnixDateTimeField(db_column='lastVisit',
-        verbose_name=_('Ostatnia wizyta'))
+        verbose_name=_('Ostatnia wizyta'), null=True, blank=True)
     blocked = models.BooleanField(default=False, verbose_name=_('Zablokowana'))
     hide = models.BooleanField(default=False, verbose_name=_('Ukryta'))
     dob = models.DateField(verbose_name=_('Data urodzenia'))
     activated = models.BooleanField(default=False, verbose_name=_('Aktywowana'))
 
     def __str__(self):
-        return "%s %s" % (self.name, self.lastname)
+        return self.name
 
     class Meta:
         db_table = '_characters'
