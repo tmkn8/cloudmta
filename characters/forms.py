@@ -25,4 +25,4 @@ class CreateCharacterForm(forms.ModelForm):
         sex = self.cleaned_data['sex']
         if not StartSkin.objects.filter(skin_id=skin, sex=sex).count():
             raise forms.ValidationError(_('Wybrano nieprawidłowy skin. Spróbuj '
-                'Ponownie'))
+                'ponownie.'))
