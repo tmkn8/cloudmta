@@ -134,3 +134,7 @@ class QuizQuestion(models.Model):
         if self.correct_answer.lower() == answer.lower():
             return True
         return False
+
+    class Meta:
+        verbose_name = _('Pytanie z testu wiedzy RP')
+        verbose_name_plural = _('Pytania z testu wiedzy RP')

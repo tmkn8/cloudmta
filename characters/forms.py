@@ -26,3 +26,8 @@ class CreateCharacterForm(forms.ModelForm):
         if not StartSkin.objects.filter(skin_id=skin, sex=sex).count():
             raise forms.ValidationError(_('Wybrano nieprawidłowy skin. Spróbuj '
                 'ponownie.'))
+
+class CharacterSettingsForm(forms.ModelForm):
+    class Meta:
+        model = Character
+        fields = ['hide']

@@ -79,3 +79,16 @@ class StartSkin(models.Model):
     class Meta:
         verbose_name = _('Skin startowy')
         verbose_name_plural = _('Skiny startowe')
+
+class Facecode(models.Model):
+    charid = models.ForeignKey('Character', db_column='charID',
+        verbose_name=_('Postać'), related_name='facecodes')
+    facecode = models.CharField(db_column='faceCode', max_length=10,
+        verbose_name=_('Kod twarzy'), help_text=_('Kod twarzy postaci, do '
+        'której przypisany jest alias.'))
+    name = models.CharField(max_length=100, verbose_name=_('Alias postaci'))
+
+    class Meta:
+        db_table = '_faceCodes'
+        verbose_name = _('Kod twarzy')
+        verbose_name_plural = _('Kody twarzy')
