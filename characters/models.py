@@ -72,7 +72,7 @@ class Character(models.Model):
     ingame = models.BooleanField(db_column='inGame', verbose_name=_('Postać w '
         'grze'), default=False)
     lastvisit = UnixDateTimeField(db_column='lastVisit',
-        verbose_name=_('Ostatnia wizyta'), null=True, blank=True, editable=False)
+        verbose_name=_('Ostatnia wizyta'), null=True, blank=True)
     blocked = models.BooleanField(default=False, verbose_name=_('Zablokowana'))
     hide = models.BooleanField(default=False, verbose_name=_('Ukryta'))
     dob = models.DateField(verbose_name=_('Data urodzenia'))
@@ -99,7 +99,7 @@ class StartSkin(models.Model):
         verbose_name=_('Płeć'))
 
     def __str__(self):
-        return _("Startowy skin %d" % self.skin_id)
+        return _("Startowy skin %d ()%s)" % (self.skin_id, self.get_sex_displayed()[0]))
 
     class Meta:
         verbose_name = _('Skin startowy')

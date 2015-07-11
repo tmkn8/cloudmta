@@ -1,3 +1,5 @@
+from django.utils.translation import ugettext as _
+
 # Domyślne pieniądze przy tworzeniu postaci
 RP_DEFAULT_CHARACTER_MONEY = 350
 
@@ -18,3 +20,8 @@ RP_SKINS_STATIC_DIRECTORY = 'skins'
 
 # Format obrazków skinów
 RP_SKINS_IMG_FORMAT = 'png'
+
+# Typy przedmiotów
+ITEM_TYPE_CHOICES = (
+    (1, 'Jakiś typ'),
+)
