@@ -58,6 +58,14 @@ def characters_show_vehicles(request, pk):
         {'character': character, 'vehicles': vehicles})
 
 @login_required
+def characters_show_groups(request, pk):
+    """Pokaż pojazdy postaci"""
+    character = get_character_object(request, pk)
+    groups = character.groups.all()
+    return render(request, 'characters/show/groups.html',
+        {'character': character, 'groups': groups})
+
+@login_required
 def characters_show_settings(request, pk):
     """Pokaż ustawienia w szczegółach postaci"""
     character = get_character_object(request, pk)

@@ -5,6 +5,9 @@ from jsonfield import JSONField
 class Group(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True,
         verbose_name=_('ID grupy'))
+    members = models.ManyToManyField('characters.Character',
+        through='GroupMember', through_fields=('groupid', 'userid'),
+        related_name='groups', related_query_name='group')
     name = models.CharField(max_length=64, verbose_name=_('Nazwa'))
     tag = models.CharField(max_length=4, verbose_name=_('Tag'))
     r = models.PositiveSmallIntegerField(verbose_name=_('Kolor R'), default=0)
