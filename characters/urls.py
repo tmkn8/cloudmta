@@ -9,5 +9,6 @@ urlpatterns = patterns('characters.views',
         url(r'^$', 'characters_show_index', name='index'),
         url(r'^items$', 'characters_show_items', name='items'),
         url(r'^settings$', 'characters_show_settings', name='settings'),
+        url(r'^vehicles$', 'characters_show_vehicles', name='vehicles'),
     ), namespace='show'))
 )

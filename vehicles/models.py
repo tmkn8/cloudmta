@@ -51,7 +51,13 @@ class Vehicle(models.Model):
         'pojazdu'))
     interior = models.PositiveIntegerField(default=0, verbose_name=_('Wnętrze'))
     dimension = models.PositiveIntegerField(default=0, verbose_name=_('Wymiar'))
-    flashtype = models.PositiveIntegerField(db_column='flashType', default=0)
+    FLASHTYPE_CHOICES = (
+        (0, _('Brak')),
+        (1, _('Światła PD')),
+        (2, _('Światła FD')),
+    )
+    flashtype = models.PositiveIntegerField(db_column='flashType', default=0,
+        verbose_name=_('Typ świateł emergency'), choices=FLASHTYPE_CHOICES)
     distance = models.FloatField(default=0, verbose_name=_('Przebieg'))
     hasalarm = models.BooleanField(db_column='hasAlarm', default=False,
         verbose_name=_('Alarm'))
@@ -59,6 +65,9 @@ class Vehicle(models.Model):
         help_text=_('Hamulec ręczny zaciągnięty'))
     tireblock = models.BooleanField(default=False, db_column='tireBlock',
         verbose_name=_('Blokada na koło'))
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         db_table = '_vehicles'

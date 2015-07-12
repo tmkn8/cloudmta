@@ -50,6 +50,14 @@ def characters_show_items(request, pk):
         {'character': character, 'items': items})
 
 @login_required
+def characters_show_vehicles(request, pk):
+    """Pokaż pojazdy postaci"""
+    character = get_character_object(request, pk)
+    vehicles = character.vehicles
+    return render(request, 'characters/show/vehicles.html',
+        {'character': character, 'vehicles': vehicles})
+
+@login_required
 def characters_show_settings(request, pk):
     """Pokaż ustawienia w szczegółach postaci"""
     character = get_character_object(request, pk)

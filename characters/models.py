@@ -6,6 +6,7 @@ from django_unixdatetimefield import UnixDateTimeField
 from django.conf import settings
 from django.core.validators import RegexValidator
 from items.models import Item
+from vehicles.models import Vehicle
 
 class Character(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
@@ -89,6 +90,11 @@ class Character(models.Model):
         """Pobierz obiekty przedmiotów tej postaci"""
         return Item.objects.filter(owner=self.pk,
             ownertype=settings.RP_ITEM_OWNER_TYPE_ID_CHARACTER)
+
+    def vehicles(self):
+        """Pobierz pojazdy postaci"""
+        return Vehicle.objects.filter(ownerid=self.pk,
+            ownertype=settings.RP_VEHICLE_OWNER_TYPE_ID_CHARACTER)
 
     class Meta:
         db_table = '_characters'
