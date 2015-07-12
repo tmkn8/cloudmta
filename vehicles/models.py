@@ -69,6 +69,26 @@ class Vehicle(models.Model):
     def __str__(self):
         return self.name
 
+    def check_permissions(self, user):
+        """Czy dany użytkownik może przeglądać pojazd"""
+        if user is None:
+            return False
+
+        # Sprawdź czy postać jest właścicielem pojazdu
+        if self.ownertype == settings.RP_VEHICLE_OWNER_TYPE_ID_CHARACTER:
+            from characters.models import Character
+            owner_character = Character.objects.get(pk=self.ownerid)
+            if owner_character.memberid == user.member_id:
+                return True
+
+        # Sprwadź czy postać należy do grupy
+        if self.ownertype == settings.RP_VEHICLE_OWNER_TYPE_ID_GROUP:
+            # TODO: Jak będzie dodany model grupy, to sprawdź to
+            # return True
+            return False
+
+        return False
+
     class Meta:
         db_table = '_vehicles'
         verbose_name = _('pojazd')
