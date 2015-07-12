@@ -5,6 +5,7 @@ from django.utils.translation import ugettext as _
 from django_unixdatetimefield import UnixDateTimeField
 from django.conf import settings
 from django.core.validators import RegexValidator
+from items.models import Item
 
 class Character(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
@@ -84,6 +85,11 @@ class Character(models.Model):
     def get_skin_static_url(self):
         return "%s/%d.%s" % (settings.RP_SKINS_STATIC_DIRECTORY, self.skin_id, settings.RP_SKINS_IMG_FORMAT)
 
+    def items(self):
+        """Pobierz obiekty przedmiotów tej postaci"""
+        return Item.objects.filter(owner=self.pk,
+            ownertype=settings.RP_ITEM_OWNER_TYPE_ID_CHARACTER)
+
     class Meta:
         db_table = '_characters'
         verbose_name = _('Postać')
@@ -99,7 +105,7 @@ class StartSkin(models.Model):
         verbose_name=_('Płeć'))
 
     def __str__(self):
-        return _("Startowy skin %d ()%s)" % (self.skin_id, self.get_sex_displayed()[0]))
+        return _("Startowy skin %d (%s)" % (self.skin_id, self.get_sex_display()[0]))
 
     class Meta:
         verbose_name = _('Skin startowy')

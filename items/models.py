@@ -9,10 +9,10 @@ class Item(models.Model):
         verbose_name=_('ID przedmiotu'))
     name = models.CharField(max_length=32, verbose_name=_('Nazwa przedmiotu'))
     OWNERTYPE_CHOICES = (
-        (0, _('Na ziemi')),
-        (1, _('Postać')),
-        (3, _('Pojazd')),
-        (4, _('Drzwi')),
+        (settings.RP_ITEM_OWNER_TYPE_ID_NONE, _('Na ziemi')),
+        (settings.RP_ITEM_OWNER_TYPE_ID_CHARACTER, _('Postać')),
+        (settings.RP_ITEM_OWNER_TYPE_ID_VEHICLE, _('Pojazd')),
+        (settings.RP_ITEM_OWNER_TYPE_ID_DOOR, _('Drzwi')),
     )
     ownertype = models.PositiveSmallIntegerField(db_column='ownerType',
         choices=OWNERTYPE_CHOICES, db_index=True)

@@ -42,6 +42,14 @@ def characters_show_index(request, pk):
         {'character': character})
 
 @login_required
+def characters_show_items(request, pk):
+    """Pokaż przedmioty postaci"""
+    character = get_character_object(request, pk)
+    items = character.items
+    return render(request, 'characters/show/items.html',
+        {'character': character, 'items': items})
+
+@login_required
 def characters_show_settings(request, pk):
     """Pokaż ustawienia w szczegółach postaci"""
     character = get_character_object(request, pk)
