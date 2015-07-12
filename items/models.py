@@ -64,6 +64,10 @@ class OrderType(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = _('Typ zamówień')
+        verbose_name_plural = _('Typy zamówień')
+
 class Order(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True,
         verbose_name='ID produktu')
