@@ -92,8 +92,8 @@ class Character(models.Model):
 
     class Meta:
         db_table = '_characters'
-        verbose_name = _('Postać')
-        verbose_name_plural = _('Postacie')
+        verbose_name = _('postać')
+        verbose_name_plural = _('postacie')
 
 class StartSkin(models.Model):
     skin_id = models.PositiveSmallIntegerField(verbose_name=_('ID skina'), unique=True)
@@ -108,8 +108,8 @@ class StartSkin(models.Model):
         return _("Startowy skin %d (%s)" % (self.skin_id, self.get_sex_display()[0]))
 
     class Meta:
-        verbose_name = _('Skin startowy')
-        verbose_name_plural = _('Skiny startowe')
+        verbose_name = _('skin startowy')
+        verbose_name_plural = _('skiny startowe')
 
 class Facecode(models.Model):
     charid = models.ForeignKey('Character', db_column='charID',
@@ -121,5 +121,5 @@ class Facecode(models.Model):
 
     class Meta:
         db_table = '_faceCodes'
-        verbose_name = _('Kod twarzy')
-        verbose_name_plural = _('Kody twarzy')
+        verbose_name = _('kod twarzy')
+        verbose_name_plural = _('kody twarzy')

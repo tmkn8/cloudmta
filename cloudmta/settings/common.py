@@ -19,7 +19,8 @@ INSTALLED_APPS = (
     'characters',
     'accounts',
     'items',
-
+    'vehicles',
+    
     # Third-party apps
 )
 

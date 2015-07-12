@@ -68,6 +68,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.passed_rp_test = True
         self.save()
 
+    class Meta:
+        verbose_name = _('użytkownik Django')
+        verbose_name_plural = _('użytkownicy Django')
+
 class Member(models.Model):
     """Ten model jest tabelą z MyBB"""
     uid = models.IntegerField(primary_key=True)
@@ -108,6 +112,8 @@ class Member(models.Model):
     class Meta:
         managed = False
         db_table ='mybb_users'
+        verbose_name = _('użytkownik forum')
+        verbose_name_plural = _('użytkownicy forum')
 
 class QuizQuestion(models.Model):
     question = models.CharField(max_length=200, verbose_name=_('Pytanie'))
@@ -136,5 +142,5 @@ class QuizQuestion(models.Model):
         return False
 
     class Meta:
-        verbose_name = _('Pytanie z testu wiedzy RP')
-        verbose_name_plural = _('Pytania z testu wiedzy RP')
+        verbose_name = _('pytanie z testu wiedzy RP')
+        verbose_name_plural = _('pytania z testu wiedzy RP')

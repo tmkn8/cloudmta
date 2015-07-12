@@ -41,10 +41,9 @@ class Item(models.Model):
     x = models.FloatField(default=0, verbose_name=_('Pozycja X'))
     y = models.FloatField(default=0, verbose_name=_('Pozycja Y'))
     z = models.FloatField(default=0, verbose_name=_('Pozycja Z'))
-    # TODO: Trzeba zmienić verbose_name dla rx, ry, rz
-    rx = models.FloatField(default=0, verbose_name=_('r X'))
-    ry = models.FloatField(default=0, verbose_name=_('r Y'))
-    rz = models.FloatField(default=0, verbose_name=_('r Z'))
+    rx = models.FloatField(default=0, verbose_name=_('Rotacja X'))
+    ry = models.FloatField(default=0, verbose_name=_('Rotacja Y'))
+    rz = models.FloatField(default=0, verbose_name=_('Rotacja Z'))
     interior = models.IntegerField(default=0,
         verbose_name=_('Interior'))
     dimension = models.IntegerField(default=0,
@@ -52,8 +51,8 @@ class Item(models.Model):
 
     class Meta:
         db_table = '_items'
-        verbose_name = _('Przedmiot')
-        verbose_name_plural = _('Przedmioty')
+        verbose_name = _('przedmiot')
+        verbose_name_plural = _('przedmioty')
 
     def __str__(self):
         return self.name
@@ -65,8 +64,8 @@ class OrderType(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = _('Typ zamówień')
-        verbose_name_plural = _('Typy zamówień')
+        verbose_name = _('typ zamówień')
+        verbose_name_plural = _('typy zamówień')
 
 class Order(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True,
@@ -89,8 +88,8 @@ class Order(models.Model):
 
     class Meta:
         db_table = '_orders'
-        verbose_name = _('Produkt')
-        verbose_name_plural = _('Produkty')
+        verbose_name = _('produkt')
+        verbose_name_plural = _('produkty')
 
 
 class OrderCategory(models.Model):
@@ -111,8 +110,8 @@ class OrderCategory(models.Model):
 
     class Meta:
         db_table = '_ordersCat'
-        verbose_name = _('Kategoria produktów')
-        verbose_name_plural = _('Kategorie produktów')
+        verbose_name = _('kategoria produktów')
+        verbose_name_plural = _('kategorie produktów')
 
 class Deposite(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True, verbose_name=_('ID '
@@ -139,8 +138,8 @@ class Deposite(models.Model):
 
     class Meta:
         db_table = '_deposite'
-        verbose_name = _('Produkt w drzwiach')
-        verbose_name_plural = _('Produkty w drzwiach')
+        verbose_name = _('produkt w drzwiach')
+        verbose_name_plural = _('produkty w drzwiach')
 
 class Delivery(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True, verbose_name=_('ID '
@@ -174,5 +173,5 @@ class Delivery(models.Model):
 
     class Meta:
         db_table = '_delivers'
-        verbose_name = _('Dostawa')
-        verbose_name_plural = _('Dostawy')
+        verbose_name = _('dostawa')
+        verbose_name_plural = _('dostawy')
