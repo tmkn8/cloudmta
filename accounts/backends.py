@@ -8,7 +8,6 @@ class MyBBMemberBackend(object):
         try:
             member = Member.objects.get(email=username)
             if member.check_password(password):
-                Exception(member)
                 return member.get_django_user_model()
         except Member.DoesNotExist:
             return None

@@ -11,23 +11,17 @@ import hashlib
 class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_VALIDATOR = RegexValidator(r'^([A-Za-z0-9]{3,})$')
     username = models.CharField(verbose_name=_('Nazwa użytkownika'),
-        max_length=20, validators=[USERNAME_VALIDATOR], unique=True,
-        editable=False)
-    email = models.EmailField(verbose_name=_('Adres e-mail'), unique=True,
-        editable=False)
+        max_length=20, validators=[USERNAME_VALIDATOR], unique=True)
+    email = models.EmailField(verbose_name=_('Adres e-mail'), unique=True)
     USERNAME_FIELD = 'email'
-    member_id = models.IntegerField(verbose_name=_('ID konta '
-        'na forum'), unique=True, blank=True, null=True)
-    is_staff = models.BooleanField(default=False)
-    passed_rp_test = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False, verbose_name=_('Ekipa'),
+        help_text=_('Ma dostęp do strony administracji.'))
+    passed_rp_test = models.BooleanField(default=False, verbose_name=_('Zdał '
+        'test RP'))
 
     def member(self):
         """Pobierz obiekt użytkownika forum"""
-        return Member.objects.get(pk=self.member_id)
-
-    def characters(self):
-        """Pobierz postacie użytkownika"""
-        return Character.objects.filter(memberid=self.member_id)
+        return Member.objects.get(pk=self.pk)
 
     def __str__(self):
         """Zwróć nazwę użytkownika"""
@@ -41,10 +35,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Wymagane przez rodzica"""
         return self
 
-    def get_member_id(self):
-        """Pobierz ID konta z forum"""
-        return self.member_id
-
     def can_create_character(self):
         """Sprawdź czy użytkownik może stworzyć postać"""
         if not self.is_authenticated():
@@ -54,7 +44,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         if self.characters().filter(
                     Q(onlinetime__lte=settings.RP_MIN_CHARACTER_TIME),
                     Q(blocked=False),
-                    Q(memberid=self.member_id)
+                    Q(memberid=self)
                 ).count():
             return False
         return True
@@ -74,11 +64,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Member(models.Model):
     """Ten model jest tabelą z MyBB"""
-    uid = models.IntegerField(primary_key=True)
-    username = models.CharField(max_length=120)
-    email = models.EmailField(max_length=220)
-    password = models.CharField(max_length=120)
-    salt = models.CharField(max_length=10)
+    uid = models.AutoField(primary_key=True, verbose_name=_('UID'))
+    username = models.CharField(max_length=120, verbose_name=_('Nazwa '
+        'użytkownika'))
+    email = models.EmailField(max_length=220, verbose_name=_('Adres e-mail'))
+    password = models.CharField(max_length=120, verbose_name=_('Hasło'),
+        editable=False)
+    salt = models.CharField(max_length=10, verbose_name=_('Sól'),
+        editable=False)
 
     def get_django_user_model(self):
         """Znajdź model użytkownika w Django"""
@@ -88,26 +81,27 @@ class Member(models.Model):
         """Funkcja pobiera użytkownika Django powiązanego z użytkownikiem MyBB
         i aktualizuje podany email oraz nazwę użytkownika lub tworzy nowy model.
         """
-        user, created = get_user_model().objects.get_or_create(member_id=self.pk)
-        changed = False
-        if user.email != self.email:
+        user, created = get_user_model().objects.get_or_create(pk=self.pk)
+        if created == True:
+            user.id = self.pk
+            user.save()
+        if user.email != self.email or user.username != self.username:
             user.email = self.email
-            changed = True
-        if user.username != self.username:
             user.username = self.username
-            changed = True
-        if changed:
             user.save()
         return user
 
     def check_password(self, password=None):
         """Sprawdza hasło algorytmem MyBB"""
         member_salt_hash = hashlib.md5(self.salt.encode('utf-8')).hexdigest()
-        input_password = password.encode('utf-8')
-        hashed_password = hashlib.md5(member_salt_hash.encode('utf-8') + input_password)
+        input_password = hashlib.md5(password.encode('utf-8')).hexdigest()
+        hashed_password = hashlib.md5(member_salt_hash.encode('utf-8') + input_password.encode('utf-8'))
         if hashed_password.hexdigest() == self.password:
             return True
         return False
+
+    def __str__(self):
+        return self.username
 
     class Meta:
         managed = False

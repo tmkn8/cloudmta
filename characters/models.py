@@ -10,8 +10,9 @@ from vehicles.models import Vehicle
 
 class Character(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
-    memberid = models.BigIntegerField(db_column='memberID', db_index=True,
-        verbose_name=_('ID użytkownika'), help_text=_('Konto globalne'))
+    memberid = models.ForeignKey(settings.AUTH_USER_MODEL,
+        verbose_name=_('Konto'), related_name='characters',
+        related_query_name='character')
     NAME_VALIDATOR =  NAME_VALIDATOR = RegexValidator(r'^([A-Za-z]{2,})([\s][A-Za-z]{2,})?([\s][A-Za-z]{2,})$')
     name = models.CharField(max_length=22, validators=[NAME_VALIDATOR],
         verbose_name=_('Imię i nazwisko'), help_text=_('Drugie imię opcjonalne,'
