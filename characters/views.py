@@ -7,7 +7,7 @@ from .forms import CreateCharacterForm, CharacterSettingsForm
 @login_required
 def characters_index(request):
     """Wyświetl wszystkie postacie użytkownika"""
-    characters = Character.objects.filter(memberid=request.user.member_id)
+    characters = request.user.characters.all()
     return render(request, 'characters/index.html', {'characters': characters})
 
 @login_required

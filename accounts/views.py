@@ -2,12 +2,36 @@ from django.shortcuts import render, redirect
 from django.utils.translation import ugettext as _
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login, authenticate, logout
 from django.contrib.auth.decorators import user_passes_test, login_required
 from .models import QuizQuestion
+from .forms import LoginForm
 
 def has_not_passed_rp_test(user):
     return not user.has_passed_rp_test()
+
+def accounts_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        form = LoginForm(request.POST)
+        if user is not None:
+            login(request, user)
+            messages.success(request, _('Zalogowanie przebiegło poprawnie.'))
+            return redirect('homepage')
+        else:
+            messages.error(request, _('Podałeś nieprawidłowe dane'))
+    else:
+        form = LoginForm()
+    return render(request, 'accounts/login.html', {'form': form})
+
+def accounts_logout(request):
+    logout(request)
+    return redirect('homepage')
+
+def accounts_register(request):
+    return redirect(settings.FORUM_REGISTER_ACCOUNT_LINK)
 
 @login_required
 @user_passes_test(has_not_passed_rp_test, 'characters:index')
