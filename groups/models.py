@@ -44,12 +44,7 @@ class Group(models.Model):
 
     def get_user_permissions(self, user):
         """Pobierz listę uprawnień grupowych danego użytkownika"""
-        group_perms = self.get_group_permissions()
-
-        # Wyzeruj wszystkie uprawnienia użytkownika
         user_perms = {}
-        for key in group_perms:
-            user_perms[key] = False
 
         # Pobierz członkostwa danego użytkownika w tej grupie
         members = self.groupmembers.filter(userid__in=user.characters.all())
@@ -57,7 +52,7 @@ class Group(models.Model):
         if not members:
             return None
 
-        # Iteruj przez wszystkie członkostwa
+        # Iteruj przez wszystkie członkostwa użytkownika
         for member in members:
             # Pobierz uprawnienia dla rangi danego członkostwa
             rank_perms = member.rankid.get_rank_permissions()
@@ -65,13 +60,17 @@ class Group(models.Model):
             if not rank_perms:
                 return None
 
-            # Iteruj przez uprawnienia grupy
-            for key in group_perms:
+            # Iteruj przez uprawnienia rangi
+            for key in rank_perms:
                 # Jeżeli uprawnienie rangi jest true, wtedy
                 # je ustaw użytkownikowi na tą samą wartość
                 try:
-                    if not user_perms[key] and rank_perms[key]:
+                    if rank_perms[key]:
                         user_perms[key] = rank_perms[key]
+
+                    # Jeżeli wartość jest jeszcze nieustawiona, wywołaj wyjątek
+                    # i ustaw w nim false
+                    user_perms[key]
                 except KeyError:
                     user_perms[key] = False
 
@@ -127,10 +126,32 @@ class GroupRank(models.Model):
         return self.name
 
     def get_rank_permissions(self):
-        """Pobierz uprawnienia rangi z JSON do dicitonary"""
+        """Pobierz uprawnienia rangi z JSON do dicitonary
+
+        Waliduje z listą uprawnień grupy. Nie przepuści wartości spoza uprawnień grupy."""
         try:
-            return self.perms[0]
+            if self.perms:
+                perms = self.perms[0]
+            else:
+                perms = {}
         except ValueError:
             return None
         except KeyError:
             return None
+
+        # Pobierz uprawnienia grupy
+        group_perms = self.groupid.get_group_permissions()
+
+        # Wyzeruj wszystkie uprawnienia rangi
+        rank_perms = {}
+        for key in group_perms:
+            rank_perms[key] = False
+
+        # Iteruj przez uprawnienia grupy i przypisz uprawnienia rangi
+        for key in group_perms:
+            try:
+                rank_perms[key] = perms[key]
+            except KeyError:
+                rank_perms[key] = False
+
+        return rank_perms
