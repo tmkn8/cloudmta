@@ -41,7 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             return False
         if not self.has_passed_rp_test():
             return False
-        if self.characters().filter(
+        if self.characters.filter(
                     Q(onlinetime__lte=settings.RP_MIN_CHARACTER_TIME),
                     Q(blocked=False),
                     Q(memberid=self)
