@@ -20,7 +20,7 @@ def characters_create(request):
         form = CreateCharacterForm(request.POST)
         if form.is_valid():
             character = form.save(commit=False)
-            character.memberid = request.user.get_member_id()
+            character.memberid = request.user
             character.save()
             return redirect('characters:show:index', pk=character.pk)
     else:
@@ -32,7 +32,7 @@ def get_character_object(request, pk):
 
     Funkcja zapobiega powtarzaniu kodu do pobierania obiektu postaci.
     Zwraca kod HTTP 404, jeżeli użytkownik nie jest właścicielem postaci."""
-    return get_object_or_404(Character, pk=pk, memberid=request.user.get_member_id())
+    return get_object_or_404(Character, pk=pk, memberid=request.user)
 
 @login_required
 def characters_show_index(request, pk):
