@@ -4,7 +4,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.utils.translation import ugettext as _
 from .models import Group, GroupRank
-from .forms import RankEditForm, MemberEditForm
+from .forms import RankEditForm, MemberEditForm, CreateGroupInvitationForm
 
 def get_group_object(request, pk):
     """Zwróć obiekt grupy
@@ -154,3 +154,45 @@ def groups_show_ranks_default_rank(request, pk):
         return redirect('groups:show:ranks', group.pk)
     return render(request, 'groups/show/ranks_default_rank.html', {'group': group,
         'ranks': ranks})
+
+@login_required
+def groups_show_invitations(request, pk):
+    """Wyświetl listę aktywnych zaproszeń z grupy"""
+    group = get_group_object(request, pk)
+    invitations = group.groupinvitations.order_by('-pk').all()
+    return render(request, 'groups/show/invitations.html', {'group': group,
+        'invitations': invitations})
+
+@login_required
+def groups_show_invitations_create(request, pk):
+    """Wyświetl formularz zapraszania graczy do grupy"""
+    group = get_group_object(request, pk)
+    allow_only_leaders(group=group, user=request.user)
+    if request.method == 'POST':
+        form = CreateGroupInvitationForm(request.POST)
+        if form.is_valid():
+            invitation = form.save(commit=False)
+
+            if group.groupinvitations.filter(character=invitation.character).count():
+                messages.error(request, _("Ta postać jest już zaproszona."))
+                return redirect('groups:show:invitations_create', group.pk)
+
+            invitation.invited_by = request.user
+            invitation.group = group
+            invitation.save()
+            messages.success(request, _("Stworzyłeś zaproszenie dla %s" %
+                invitation.character))
+            return redirect('groups:show:invitations', group.pk)
+    else:
+        form = CreateGroupInvitationForm()
+    return render(request, 'groups/show/invitations_create.html', {'group': group,
+        'form': form})
+
+@login_required
+def groups_show_invitations_delete(request, pk, invitation_id):
+    """Usuń zaproszenie do grupy."""
+    group = get_group_object(request, pk)
+    allow_only_leaders(group=group, user=request.user)
+    invitation = group.groupinvitations.get(pk=invitation_id).delete()
+    messages.success(request, _('Usunąłeś zaproszenie.'))
+    return redirect('groups:show:invitations', group.pk)

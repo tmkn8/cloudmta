@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth import get_user_model
+from django.conf import settings
+from django.contrib import messages
+from django.utils.translation import ugettext as _
 from .models import Character
 from .forms import CreateCharacterForm, CharacterSettingsForm
 
@@ -77,3 +80,42 @@ def characters_show_settings(request, pk):
         form = CharacterSettingsForm(instance=character)
     return render(request, 'characters/show/settings.html',
         {'character': character, 'form': form})
+
+@login_required
+def characters_show_group_invitations(request, pk):
+    """Pokaż zaproszenia do grup"""
+    character = get_character_object(request, pk)
+    invitations = character.groupinvitations.all()
+    return render(request, 'characters/show/group_invitations.html',
+        {'character': character, 'invitations': invitations})
+
+@login_required
+def characters_show_group_invitations_accept(request, pk, invitation_id):
+    """Akceptuj zaproszenie do grupy"""
+    character = get_character_object(request, pk)
+    invitation = get_object_or_404(character.groupinvitations, pk=invitation_id)
+    # Czy gracz nie jest w za dużej ilości grup?
+    if character.groupmembers.all().count() >= settings.RP_MAX_GROUP_NUMBER:
+        messages.error(request, _("Przekroczyłeś limit ilości grup na postać: "
+            "%d" % settings.RP_MAX_GROUP_NUMBER))
+        return redirect('characters:show:group_invitations', character.pk)
+
+    # Czy gracz nie jest już w tej grupie obecnie?
+    if character.groupmembers.filter(groupid=invitation.group).count():
+        messages.error(request, _("Inna Twoja postać już obecnie jest w tej "
+            "grupie."))
+        return redirect('characters:show:group_invitations', character.pk)
+
+    invitation.group.add_new_member(character=character)
+    invitation.delete()
+    messages.success(request, _("Zostałeś dodany do grupy"))
+    return redirect('characters:show:group_invitations', character.pk)
+
+@login_required
+def characters_show_group_invitations_decline(request, pk, invitation_id):
+    """Odrzuć zaproszenie do grupy"""
+    character = get_character_object(request, pk)
+    invitation = get_object_or_404(character.groupinvitations, pk=invitation_id)
+    invitation.delete()
+    messages.success(request, _("Skasowano zaproszenie do grupy"))
+    return redirect('characters:show:group_invitations', character.pk)

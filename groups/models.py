@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 from jsonfield import JSONField
+from django_unixdatetimefield import UnixDateTimeField
+from django.conf import settings
 
 class Group(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True,
@@ -88,6 +90,16 @@ class Group(models.Model):
                     user_perms[key] = False
 
         return user_perms
+
+    def get_default_rank(self):
+        """Pobiera domyślną rangę"""
+        return self.groupranks.filter(defaultrank=True).first()
+
+    def add_new_member(self, character):
+        """Dodaj nowego członka do grupy"""
+        new_member = GroupMember(userid=character,
+            rankid=self.get_default_rank(), groupid=self)
+        new_member.save()
 
     class Meta:
         db_table = '_groups'
@@ -180,3 +192,23 @@ class GroupRank(models.Model):
                 converted_perms[perm] = False
 
         return [converted_perms]
+
+class GroupInvitation(models.Model):
+    character = models.ForeignKey('characters.Character',
+        related_name='groupinvitations', related_query_name='groupinvitation',
+        verbose_name=_('Postać'))
+    group = models.ForeignKey('groups.Group', related_name='groupinvitations',
+        related_query_name='groupinvitation', verbose_name=_('Grupa'))
+    date = UnixDateTimeField(verbose_name=_('Data zaproszenia'),
+        auto_now_add=True)
+    invited_by = models.ForeignKey(settings.AUTH_USER_MODEL,
+        verbose_name=_('Zaproszony przez'), help_text=_('Konto globalne, nie '
+        'postać'))
+
+    def __str__(self):
+        return _("Zaproszenie do %s dla %s przez %s" %(self.group.tag,
+            self.character, self.invited_by))
+
+    class Meta:
+        verbose_name = _('zaproszenie do grupy')
+        verbose_name_plural = _('zaproszenia do grupy')

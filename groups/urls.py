@@ -18,5 +18,11 @@ urlpatterns = patterns('groups.views',
 
         url(r'^ranks/default-rank/$', 'groups_show_ranks_default_rank',
             name='ranks_default_rank'),
+
+        url(r'^invitations/$', 'groups_show_invitations', name='invitations'),
+        url(r'^invitations/create/$', 'groups_show_invitations_create',
+            name='invitations_create'),
+        url(r'^invitations/(?P<invitation_id>[\d]+)/delete/$',
+            'groups_show_invitations_delete', name='invitations_delete'),
     ), namespace='show')),
 )

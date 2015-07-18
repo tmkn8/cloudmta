@@ -16,7 +16,7 @@ class Character(models.Model):
     NAME_VALIDATOR =  NAME_VALIDATOR = RegexValidator(r'^([A-Za-z]{2,})([\s][A-Za-z]{2,})?([\s][A-Za-z]{2,})$')
     name = models.CharField(max_length=22, validators=[NAME_VALIDATOR],
         verbose_name=_('Imię i nazwisko'), help_text=_('Drugie imię opcjonalne,'
-        ' odstępy rozdzielać spacją.'))
+        ' odstępy rozdzielać spacją.'), unique=True)
 
     def generate_facecode():
         while True:

@@ -11,5 +11,13 @@ urlpatterns = patterns('characters.views',
         url(r'^settings/$', 'characters_show_settings', name='settings'),
         url(r'^vehicles/$', 'characters_show_vehicles', name='vehicles'),
         url(r'^groups/$', 'characters_show_groups', name='groups'),
+        url(r'^group-invitations/$', 'characters_show_group_invitations',
+            name='group_invitations'),
+        url(r'^group-invitations/(?P<invitation_id>[\d]+)/accept/$',
+            'characters_show_group_invitations_accept',
+            name='group_invitations_accept'),
+        url(r'^group-invitations/(?P<invitation_id>[\d]+)/decline/$',
+            'characters_show_group_invitations_decline',
+            name='group_invitations_decline'),
     ), namespace='show'))
 )
