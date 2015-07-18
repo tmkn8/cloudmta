@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.utils.translation import ugettext as _
-from .models import Group
+from .models import Group, GroupRank
 from .forms import RankEditForm, MemberEditForm
 
 def get_group_object(request, pk):
@@ -130,3 +130,27 @@ def groups_show_ranks_delete(request, pk, rank_id):
     else:
         return render(request, 'groups/show/ranks_delete.html', {'group': group,
             'rank': rank})
+
+@login_required
+def groups_show_ranks_default_rank(request, pk):
+    """Wyświetl formularz do zmiany domyślnej rangi"""
+    group = get_group_object(request, pk)
+    allow_only_leaders(group=group, user=request.user)
+    ranks = group.groupranks.all()
+    if request.method == 'POST':
+        # Pobierz wybraną rangę i sprawdź czy istnieje.
+        try:
+            new_default_rank = ranks.get(pk=request.POST['default_rank'])
+        except GroupRank.DoesNotExist:
+            messages.error(request, _('Wybrana ranga nie istnieje.'))
+            return redirect('groups:show:ranks_default_rank', group.pk)
+
+        # Wyzeruj wszystkie domyślne rangi.
+        ranks.update(defaultrank=False)
+        # Ustaw wybraną rangę jako domyślną.
+        new_default_rank.defaultrank = True
+        new_default_rank.save()
+        messages.success(request, _('Domyślna ranga została zmieniona.'))
+        return redirect('groups:show:ranks', group.pk)
+    return render(request, 'groups/show/ranks_default_rank.html', {'group': group,
+        'ranks': ranks})

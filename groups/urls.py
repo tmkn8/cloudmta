@@ -15,5 +15,8 @@ urlpatterns = patterns('groups.views',
             name='ranks_edit'),
         url(r'^ranks/(?P<rank_id>[\d]+)/delete/$', 'groups_show_ranks_delete',
             name='ranks_delete'),
+
+        url(r'^ranks/default-rank/$', 'groups_show_ranks_default_rank',
+            name='ranks_default_rank'),
     ), namespace='show')),
 )
