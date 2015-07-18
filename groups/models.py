@@ -42,6 +42,19 @@ class Group(models.Model):
             return True
         return False
 
+    def can_user_manage_group(self, user):
+        """Sprawdź czy dana grupa może być zarządzana przez użytkownika"""
+        permissions = self.get_user_permissions(user=user)
+        try:
+            # Jeżeli użytkownik ma uprawnienie lidera
+            if permissions['leader']:
+                return True
+        # Jeżeli kluczu leader brakuje w uprawnieniach użytkownika
+        except KeyError:
+            # Puść to płazem, gdyż i tak skrypt zaraz zwróci false
+            pass
+        return False
+
     def get_user_permissions(self, user):
         """Pobierz listę uprawnień grupowych danego użytkownika"""
         user_perms = {}
@@ -90,8 +103,8 @@ class GroupMember(models.Model):
         verbose_name=_('Postać'), related_name=_('groupmembers'),
         related_query_name=_('groupmember'))
     rankid = models.ForeignKey('GroupRank', db_column='rankID',
-        verbose_name=_('Ranga'), related_name='groupsmembers',
-        related_query_name='groupmembers')
+        verbose_name=_('Ranga'), related_name='groupmembers',
+        related_query_name='groupmember')
     groupid = models.ForeignKey('Group', db_column='groupID',
         verbose_name=_('Grupa'), related_name='groupmembers',
         related_query_name='groupmember')
@@ -155,3 +168,15 @@ class GroupRank(models.Model):
                 rank_perms[key] = False
 
         return rank_perms
+
+    def convert_form_permissions_to_perms_field(self, POST, input_prefix='perm_'):
+        """Zmień uprawnienia z formularza na uprawnienia zgodne z JSONField"""
+        group_perms = self.groupid.get_group_permissions()
+        converted_perms = {}
+        for perm in group_perms:
+            if POST.get(input_prefix+perm, False):
+                converted_perms[perm] = True
+            else:
+                converted_perms[perm] = False
+
+        return [converted_perms]
