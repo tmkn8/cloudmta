@@ -36,9 +36,9 @@ def groups_show_index(request, pk):
 def groups_show_members(request, pk):
     """Podstrona wyświetla wszystkich członków grupy"""
     group = get_group_object(request, pk)
-    members = group.groupmembers.all()
+    ranks = group.groupranks.all()
     return render(request, 'groups/show/members.html', {'group': group,
-        'members': members})
+        'ranks': ranks})
 
 @login_required
 def groups_show_members_edit(request, pk, member_id):
