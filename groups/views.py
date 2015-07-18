@@ -173,6 +173,10 @@ def groups_show_invitations_create(request, pk):
         if form.is_valid():
             invitation = form.save(commit=False)
 
+            if group.groupmembers.filter(userid=invitation.character):
+                messages.error(request, _("Ta postać jest obecnie w grupie."))
+                return redirect('groups:show:invitations_create', group.pk)
+
             if group.groupinvitations.filter(character=invitation.character).count():
                 messages.error(request, _("Ta postać jest już zaproszona."))
                 return redirect('groups:show:invitations_create', group.pk)
