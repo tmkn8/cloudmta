@@ -4,7 +4,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.utils.translation import ugettext as _
 from .models import Group
-from .forms import RankEditForm
+from .forms import RankEditForm, MemberEditForm
 
 def get_group_object(request, pk):
     """Zwróć obiekt grupy
@@ -39,6 +39,40 @@ def groups_show_members(request, pk):
     members = group.groupmembers.all()
     return render(request, 'groups/show/members.html', {'group': group,
         'members': members})
+
+@login_required
+def groups_show_members_edit(request, pk, member_id):
+    """Podstrona wyświetla edycję członka grupy"""
+    group = get_group_object(request, pk)
+    member = get_object_or_404(group.groupmembers, pk=member_id)
+    allow_only_leaders(group=group, user=request.user)
+    if request.method == 'POST':
+        form = MemberEditForm(request.POST, instance=member)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _("Ranga członka %s została zmieniona."
+                % member.userid))
+            return redirect('groups:show:members', group.pk)
+    else:
+        form = MemberEditForm(instance=member)
+
+    return render(request, 'groups/show/members_edit.html', {'group': group,
+        'member': member, 'form': form})
+
+@login_required
+def groups_show_members_delete(request, pk, member_id):
+    """Postrona do kasowania członka z panelu"""
+    group = get_group_object(request, pk)
+    member = get_object_or_404(group.groupmembers, pk=member_id)
+    allow_only_leaders(group=group, user=request.user)
+    if request.method == 'POST':
+        member.delete()
+        messages.success(request, _("%s został(a) usunięty(a) z panelu."
+            % member.userid))
+        return redirect('groups:show:members', group.pk)
+    else:
+        return render(request, 'groups/show/members_delete.html',
+            {'group': group, 'member': member})
 
 @login_required
 def groups_show_ranks(request, pk):
