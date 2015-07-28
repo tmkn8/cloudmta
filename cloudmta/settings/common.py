@@ -21,6 +21,7 @@ INSTALLED_APPS = (
     'items',
     'vehicles',
     'groups',
+    'doors',
 
     # Third-party apps
 )
