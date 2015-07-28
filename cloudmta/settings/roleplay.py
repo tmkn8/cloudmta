@@ -1,5 +1,8 @@
 from django.utils.translation import ugettext as _
 
+# Długość serialu w MTA
+RP_SERIAL_LENGTH = 32
+
 # Link do tworzeina kont
 FORUM_REGISTER_ACCOUNT_LINK = 'http://forum.cloudmta.dev:8080/member.php?action=register'
 

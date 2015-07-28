@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext as _
-from .models import DoorPickup, Door, Shop, Clothes, InteriorDetail, Object
+from .models import DoorPickup, Door, Shop, Clothes, InteriorDetail, Object, \
+                    ThreeDText
 
 class DoorPickupInline(admin.TabularInline):
     show_change_link = True
@@ -42,3 +43,4 @@ admin.site.register(Shop)
 admin.site.register(Clothes)
 admin.site.register(InteriorDetail)
 admin.site.register(Object)
+admin.site.register(ThreeDText)

@@ -152,3 +152,23 @@ class Object(models.Model):
         db_table = '_objects'
         verbose_name = _('obiekt')
         verbose_name_plural = _('obiekty')
+
+class ThreeDText(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
+    x = models.FloatField(default=0, verbose_name=_('pozycja X'))
+    y = models.FloatField(default=0, verbose_name=_('pozycja Y'))
+    z = models.FloatField(default=0, verbose_name=_('pozycja Z'))
+    vw = models.PositiveIntegerField(default=0, verbose_name=_('wymiar'))
+    int = models.PositiveIntegerField(default=0, verbose_name=_('wnętrze'))
+    text = models.TextField(blank=True, null=True, verbose_name=_('treść'))
+    r = models.PositiveSmallIntegerField(default=0, verbose_name=_('kolor R'))
+    g = models.PositiveSmallIntegerField(default=0, verbose_name=_('kolor G'))
+    b = models.PositiveSmallIntegerField(default=0, verbose_name=_('kolor B'))
+
+    def __str__(self):
+        return self.text[:20]
+
+    class Meta:
+        db_table = '_3Dtexts'
+        verbose_name = _('etykieta 3W')
+        verbose_name_plural = _('etykiety 3W')

@@ -1,4 +1,5 @@
 import random
+import datetime
 import hashlib
 from django.db import models
 from django.utils.translation import ugettext as _
@@ -130,3 +131,22 @@ class Facecode(models.Model):
         db_table = '_faceCodes'
         verbose_name = _('kod twarzy')
         verbose_name_plural = _('kody twarzy')
+
+class LoginLog(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
+    charid = models.ForeignKey('Character', db_column='charID',
+        verbose_name=_('postać'))
+    ip = models.GenericIPAddressField(verbose_name=_('adres IP'),
+        default='127.0.0.1')
+    serial = models.CharField(blank=True, null=True, verbose_name=_('serial'),
+        max_length=settings.RP_SERIAL_LENGTH)
+    time = UnixDateTimeField(verbose_name=_('data logowania'), blank=True,
+        null=True)
+
+    def __str__(self):
+        return _("%s (%s)" % (self.charid, self.serial))
+
+    class Meta:
+        db_table = '_login_logs'
+        verbose_name = _('log logowania')
+        verbose_name_plural = _('logi logowania')
