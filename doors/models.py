@@ -1,21 +1,22 @@
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext as _
+from items.models import Item
 
 class Door(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
-    name = models.CharField(max_length=60, verbose_name=_('Nazwa'))
+    name = models.CharField(max_length=60, verbose_name=_('nazwa'))
     OWNERTYPE_CHOICES = (
         (settings.RP_DOOR_OWNER_TYPE_ID_NONE, _('Brak')),
         (settings.RP_DOOR_OWNER_TYPE_ID_CHARACTER, _('Postać')),
         (settings.RP_DOOR_OWNER_TYPE_ID_GROUP, _('Grupa')),
     )
     ownertype = models.PositiveSmallIntegerField(db_column='ownerType',
-        verbose_name=_('Typ właściciela'), choices=OWNERTYPE_CHOICES,
+        verbose_name=_('typ właściciela'), choices=OWNERTYPE_CHOICES,
         default=settings.RP_DOOR_OWNER_TYPE_ID_NONE)
     owner = models.PositiveIntegerField(verbose_name=_('ID właściciela'),
         default=0)
-    dimension = models.PositiveIntegerField(verbose_name=_('Wymiar'),
+    dimension = models.PositiveIntegerField(verbose_name=_('wymiar'),
         default=0)
 
     def __str__(self):
@@ -59,8 +60,8 @@ class DoorPickup(models.Model):
         verbose_name=_('kąt wejścia'), default=0)
     outangle = models.FloatField(db_column='outAngle', verbose_name=_('kąt '
         'wyjścia'), default=0)
-    locked = models.BooleanField(verbose_name=_('Zamknięty'), help_text=_('Czy '
-        'pickup jest zamknięty?'), default=True)
+    locked = models.BooleanField(verbose_name=_('zamknięty'), help_text=_('czy '
+        'pickup (drzwi) jest zamknięty'), default=True)
 
     def __str__(self):
         return _("Pickup drzwi %s" % self.parentid)
@@ -69,3 +70,29 @@ class DoorPickup(models.Model):
         db_table = '_doorsPickup'
         verbose_name = _('pickup drzwi')
         verbose_name_plural = _('pickupy drzwi')
+
+class Shop(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
+    shopid = models.ForeignKey('Door', db_column='shopID',
+        verbose_name=_('drzwi sklepu'))
+    price = models.PositiveIntegerField(verbose_name=_('Cena'))
+    itemname = models.CharField(db_column='itemName', max_length=255,
+        verbose_name=_('nazwa przedmiotu'))
+    itemtype = models.PositiveSmallIntegerField(db_column='itemType',
+        verbose_name=_('typ przedmiotu'), choices=Item.ITEM_TYPE_CHOICES)
+    itemval1 = models.IntegerField(db_column='itemVal1', default=0,
+        verbose_name=_('Wartość przedmiotu 1'))
+    itemval2 = models.IntegerField(db_column='itemVal2', default=0,
+        verbose_name=_('Wartość przedmiotu 2'))
+    itemval3 = models.TextField(db_column='itemVal3', blank=True, null=True,
+        verbose_name=_('Wartość przedmiotu 3'))
+    itemvolume = models.IntegerField(db_column='itemVolume', default=0,
+        verbose_name=_('Objętość przedmiotu'))
+
+    def __str__(self):
+        return _("%s w %s" % (self.itemname, self.shopid))
+
+    class Meta:
+        db_table = '_shops'
+        verbose_name = _('produkt na /kup')
+        verbose_name_plural = _('produkty na /kup')

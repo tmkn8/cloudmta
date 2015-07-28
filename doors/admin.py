@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import ugettext as _
-from .models import DoorPickup, Door
+from .models import DoorPickup, Door, Shop
 
 class DoorPickupInline(admin.TabularInline):
     show_change_link = True
@@ -8,8 +8,13 @@ class DoorPickupInline(admin.TabularInline):
     extra = 0
     fields = ('name', 'locked', 'parentid')
 
+class ShopInline(admin.TabularInline):
+    show_change_link = True
+    model = Shop
+    extra = 0
+
 class DoorAdmin(admin.ModelAdmin):
-    inlines = [DoorPickupInline]
+    inlines = [DoorPickupInline, ShopInline]
 
 class DoorPickupAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -28,3 +33,4 @@ class DoorPickupAdmin(admin.ModelAdmin):
 
 admin.site.register(Door, DoorAdmin)
 admin.site.register(DoorPickup, DoorPickupAdmin)
+admin.site.register(Shop)

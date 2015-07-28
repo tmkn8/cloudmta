@@ -18,7 +18,30 @@ class Item(models.Model):
         choices=OWNERTYPE_CHOICES, db_index=True)
     owner = models.IntegerField(db_index=True, verbose_name=_('ID właściciela'),
         blank=True, null=True)
-    type = models.PositiveSmallIntegerField(choices=settings.ITEM_TYPE_CHOICES,
+    ITEM_TYPE_CHOICES = (
+        (1, _('broń')),
+        (2, _('amunicja')),
+        (3, _('ubranie')),
+        (4, _('megafon')),
+        (5, _('kamizelka kuloodporna')),
+        (6, _('jedzenie')),
+        (7, _('ciało')),
+        (8, _('telefon')),
+        (9, _('rękawiczki')),
+        (10, _('odznaka')),
+        (11, _('identyfikator')),
+        (12, _('płyta CD')),
+        (13, _('narkotyki')),
+        (14, _('paralizator')),
+        (15, _('obiekt przyczepialny')),
+        (16, _('maska')),
+        (17, _('prawo jazdy')),
+        (18, _('kajdanki')),
+        (19, _('boombox')),
+        (20, _('syrena policyjna')),
+        (22, _('kostka do gry')),
+    )
+    type = models.PositiveSmallIntegerField(choices=ITEM_TYPE_CHOICES,
     verbose_name=_('Typ przedmiotu'))
     slotid = models.IntegerField(db_column='slotID', verbose_name=_('Numer '
         'slotu w ekwipunku'), default=0)
