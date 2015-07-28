@@ -72,6 +72,9 @@ class Vehicle(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('vehicles:show', kwargs={'pk': self.pk})
+
     def check_permissions(self, user):
         """Czy dany użytkownik może przeglądać pojazd"""
         if user is None:

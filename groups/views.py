@@ -33,6 +33,22 @@ def groups_show_index(request, pk):
         'user_permissions': user_permissions})
 
 @login_required
+def groups_show_vehicles(request, pk):
+    """Podstrona wyświetla pojazdy grupy."""
+    group = get_group_object(request, pk)
+    vehicles = group.vehicles
+    return render(request, 'groups/show/vehicles.html', {'group': group,
+        'vehicles': vehicles})
+
+@login_required
+def groups_show_doors(request, pk):
+    """Podstrona wyświetla drzwi grupy."""
+    group = get_group_object(request, pk)
+    doors = group.doors
+    return render(request, 'groups/show/doors.html', {'group': group,
+        'doors': doors})
+
+@login_required
 def groups_show_members(request, pk):
     """Podstrona wyświetla wszystkich członków grupy"""
     group = get_group_object(request, pk)

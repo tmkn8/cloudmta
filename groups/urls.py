@@ -5,6 +5,8 @@ urlpatterns = patterns('groups.views',
         url(r'^$', 'groups_show_index', name='index'),
 
         url(r'^members/$', 'groups_show_members', name='members'),
+        url(r'^vehicles/$', 'groups_show_vehicles', name='vehicles'),
+        url(r'^doors/$', 'groups_show_doors', name='doors'),
         url(r'^members/(?P<member_id>[\d]+)$', 'groups_show_members_edit',
             name='members_edit'),
         url(r'^members/(?P<member_id>[\d]+)/delete/$',

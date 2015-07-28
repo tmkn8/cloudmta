@@ -29,7 +29,7 @@ class Door(models.Model):
         verbose_name_plural = _('drzwi')
 
     def get_absolute_url(self):
-        return reverse('doors:show', self.pk)
+        return reverse('doors:show', kwargs={'pk': self.pk})
 
     def check_permissions(self, user):
         """Sprawdź czy użytkownik ma dostęp do drzwi"""
@@ -41,9 +41,9 @@ class Door(models.Model):
 
         # Grupa
         if self.ownertype == settings.RP_DOOR_OWNER_TYPE_ID_GROUP:
-            if apps.get_model(app_label='groups', model_name='GroupMember').objects.filter(
-                    userid__in=user.characters.all(), groupid=self.owner) \
-                    .count():
+            if apps.get_model(app_label='groups', model_name='GroupMember') \
+                    .objects.filter(userid__in=user.characters.all(),
+                    groupid=self.owner).count():
                 return True
         return False
 
@@ -117,7 +117,7 @@ class DoorPickup(models.Model):
 class Shop(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     shopid = models.ForeignKey('Door', db_column='shopID',
-        verbose_name=_('drzwi sklepu'))
+        verbose_name=_('drzwi sklepu'), related_name='shop')
     price = models.PositiveIntegerField(verbose_name=_('Cena'))
     itemname = models.CharField(db_column='itemName', max_length=255,
         verbose_name=_('nazwa przedmiotu'))
@@ -146,7 +146,7 @@ class Shop(models.Model):
 class Clothes(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     shopid = models.ForeignKey('Door', db_column='shopID',
-        verbose_name=_('drzwi'))
+        verbose_name=_('drzwi'), related_name='clothes')
     skinid = models.PositiveSmallIntegerField(db_column='skinID',
         verbose_name=_('ID skinu'), default=0)
     skinname = models.CharField(db_column='skinName', max_length=100,
