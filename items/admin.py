@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Item, Order, OrderCategory, OrderType, Deposite, Delivery
+from .models import Item, Order, OrderCategory, OrderType, Deposite, Delivery, \
+                    PhoneContact
 
 class OrderInline(admin.TabularInline):
     model = Order
@@ -14,3 +15,4 @@ admin.site.register(Order)
 admin.site.register(Deposite)
 admin.site.register(Delivery)
 admin.site.register(OrderType)
+admin.site.register(PhoneContact)

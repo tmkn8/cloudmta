@@ -198,3 +198,18 @@ class Delivery(models.Model):
         db_table = '_delivers'
         verbose_name = _('dostawa')
         verbose_name_plural = _('dostawy')
+
+class PhoneContact(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
+    phoneid = models.PositiveIntegerField(db_column='phoneID',
+        verbose_name=_('ID telefonu'))
+    number = models.PositiveIntegerField(verbose_name=_('numer kontaktu'))
+    name = models.CharField(max_length=100, verbose_name=_('nazwa kontaktu'))
+
+    def __str__(self):
+        return _("Kontakt %s w telefonie o ID %d" % (self.name, self.phoneid))
+
+    class Meta:
+        db_table = '_phone_contacts'
+        verbose_name = _('kontakt telefoniczny')
+        verbose_name_plural = _('kontakty telefoniczne')
