@@ -1,7 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext as _
-from items.models import Item
+from django.apps import apps
+from django.core.urlresolvers import reverse
 
 class Door(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
@@ -27,10 +28,52 @@ class Door(models.Model):
         verbose_name = _('drzwi')
         verbose_name_plural = _('drzwi')
 
+    def get_absolute_url(self):
+        return reverse('doors:show', self.pk)
+
+    def check_permissions(self, user):
+        """Sprawdź czy użytkownik ma dostęp do drzwi"""
+        # Postać
+        if self.ownertype == settings.RP_DOOR_OWNER_TYPE_ID_CHARACTER:
+            if apps.get_model(app_label='characters', model_name='Character')\
+                    .objects.filter(pk=self.ownerid, memberid=user).count():
+                return True
+
+        # Grupa
+        if self.ownertype == settings.RP_DOOR_OWNER_TYPE_ID_GROUP:
+            if apps.get_model(app_label='groups', model_name='GroupMember').objects.filter(
+                    userid__in=user.characters.all(), groupid=self.ownerid) \
+                    .count():
+                return True
+        return False
+
+    def get_owner(self):
+        """Zwróć obiekt właściciela"""
+        # Postać
+        if self.ownertype == settings.RP_DOOR_OWNER_TYPE_ID_CHARACTER:
+            try:
+                return apps.get_model(app_label='characters',
+                    model_name='Character').objects.get(pk=self.ownerid)
+            except apps.get_model(app_label='characters',
+                    model_name='Character').DoesNotExist:
+                return None
+
+        # Grupa
+        if self.ownertype == settings.RP_DOOR_OWNER_TYPE_ID_GROUP:
+            try:
+                return apps.get_model(app_label='groups', model_name='Group')\
+                    .objects.get(pk=self.ownerid)
+            except apps.get_model(app_label='groups', model_name='Group')\
+                    .DoesNotExist:
+                return None
+
+        return None
+
 class DoorPickup(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     parentid = models.ForeignKey('Door', db_column='parentID',
-        verbose_name=_('drzwi'))
+        verbose_name=_('drzwi'), related_name='doorpickups',
+        related_query_name='doorpickup')
     name = models.CharField(max_length=255, verbose_name=_('nazwa'))
     inx = models.FloatField(db_column='inX', verbose_name=_('pozycja wejścia '
         'X'), default=0)
@@ -78,8 +121,11 @@ class Shop(models.Model):
     price = models.PositiveIntegerField(verbose_name=_('Cena'))
     itemname = models.CharField(db_column='itemName', max_length=255,
         verbose_name=_('nazwa przedmiotu'))
+    def get_item_type_choices():
+        from items.models import Item
+        return Item.ITEM_TYPE_CHOICES
     itemtype = models.PositiveSmallIntegerField(db_column='itemType',
-        verbose_name=_('typ przedmiotu'), choices=Item.ITEM_TYPE_CHOICES)
+        verbose_name=_('typ przedmiotu'), choices=get_item_type_choices())
     itemval1 = models.IntegerField(db_column='itemVal1', default=0,
         verbose_name=_('Wartość przedmiotu 1'))
     itemval2 = models.IntegerField(db_column='itemVal2', default=0,

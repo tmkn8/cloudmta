@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils.translation import ugettext as _
 from jsonfield import JSONField
-from django.db.models import get_model
+from django.apps import apps
 
 
 class Vehicle(models.Model):
@@ -79,15 +79,17 @@ class Vehicle(models.Model):
 
         # Sprawdź czy postać jest właścicielem pojazdu
         if self.ownertype == settings.RP_VEHICLE_OWNER_TYPE_ID_CHARACTER:
-            if get_model('characters', 'Character').objects.filter(
+            if apps.get_model(app_label='characters',
+                    model_name='Character').objects.filter(
                     pk=self.ownerid, memberid=user).count():
                 return True
 
         # Sprwadź czy gracz należy do grupy, która jest właścicielem pojazdu
         if self.ownertype == settings.RP_VEHICLE_OWNER_TYPE_ID_GROUP:
-            if get_model('groups', 'GroupMember').objects.filter(
-                    userid__in=user.characters.all(), groupid=self.ownerid) \
-                    .count():
+            if apps.get_model(app_label='groups',
+                    model_name='GroupMember').objects.filter(
+                    userid__in=user.characters.all(),
+                    groupid=self.ownerid).count():
                 return True
 
         return False
@@ -97,16 +99,19 @@ class Vehicle(models.Model):
         # Postać
         if self.ownertype == settings.RP_VEHICLE_OWNER_TYPE_ID_CHARACTER:
             try:
-                return get_model('characters', 'Character').objects\
-                    .get(pk=self.ownerid)
-            except get_model('characters', 'Character').DoesNotExist:
+                return apps.get_model(app_label='characters',
+                    model_name='Character').objects.get(pk=self.ownerid)
+            except apps.get_model(app_label='characters',
+                    model_name='Character').DoesNotExist:
                 return None
 
         # Grupa
         if self.ownertype == settings.RP_VEHICLE_OWNER_TYPE_ID_GROUP:
             try:
-                return get_model('groups', 'Group').objects.get(pk=self.ownerid)
-            except get_model('groups', 'Group').DoesNotExist:
+                return apps.get_model(app_label='groups',
+                    model_name='Group').objects.get(pk=self.ownerid)
+            except apps.get_model(app_label='groups',
+                    model_name='Group').DoesNotExist:
                 return None
 
         return None

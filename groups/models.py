@@ -3,7 +3,7 @@ from django.utils.translation import ugettext as _
 from jsonfield import JSONField
 from django_unixdatetimefield import UnixDateTimeField
 from django.conf import settings
-from django.db.models import get_model
+from django.apps import apps
 from django.core.urlresolvers import reverse
 
 class Group(models.Model):
@@ -107,12 +107,12 @@ class Group(models.Model):
 
     def vehicles(self):
         """Pobierz pojazdy grupy"""
-        return get_model('vehicles', 'Vehicle').objects.filter(ownerid=self.pk,
-            ownertype=settings.RP_VEHICLE_OWNER_TYPE_ID_GROUP)
+        return apps.get_model('vehicles', 'Vehicle').objects.filter(
+            ownerid=self.pk,ownertype=settings.RP_VEHICLE_OWNER_TYPE_ID_GROUP)
 
     def doors(self):
         """Pobierz drzwi grupy"""
-        return get_model('doors', 'Door').objects.filter(owner=self.pk,
+        return apps.get_model('doors', 'Door').objects.filter(owner=self.pk,
             ownertype=settings.RP_DOOR_OWNER_TYPE_ID_GROUP)
 
     def get_absolute_url(self):
