@@ -6,8 +6,8 @@ from django.utils.translation import ugettext as _
 from django_unixdatetimefield import UnixDateTimeField
 from django.conf import settings
 from django.core.validators import RegexValidator
-from items.models import Item
-from vehicles.models import Vehicle
+from django.core.urlresolvers import reverse
+from django.db.models import get_model
 
 class Character(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
@@ -86,17 +86,26 @@ class Character(models.Model):
         return self.name
 
     def get_skin_static_url(self):
-        return "%s/%d.%s" % (settings.RP_SKINS_STATIC_DIRECTORY, self.skin_id, settings.RP_SKINS_IMG_FORMAT)
+        return "%s/%d.%s" % (settings.RP_SKINS_STATIC_DIRECTORY,
+            self.skin_id, settings.RP_SKINS_IMG_FORMAT)
 
     def items(self):
         """Pobierz obiekty przedmiotów tej postaci"""
-        return Item.objects.filter(owner=self.pk,
+        return get_model('items', 'Item').objects.filter(owner=self.pk,
             ownertype=settings.RP_ITEM_OWNER_TYPE_ID_CHARACTER)
 
     def vehicles(self):
         """Pobierz pojazdy postaci"""
-        return Vehicle.objects.filter(ownerid=self.pk,
+        return get_model('vehicles', 'Vehicle').objects.filter(ownerid=self.pk,
             ownertype=settings.RP_VEHICLE_OWNER_TYPE_ID_CHARACTER)
+
+    def doors(self):
+        """Pobierz drzwi postaci"""
+        return get_model('doors', 'Door').objects.filter(owner=self.pk,
+            ownertype=settings.RP_DOOR_OWNER_TYPE_ID_CHARACTER)
+
+    def get_absolute_url(self):
+        return reverse('characters:show:index', kwargs={'pk': self.pk})
 
     class Meta:
         db_table = '_characters'

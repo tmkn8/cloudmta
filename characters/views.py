@@ -61,6 +61,15 @@ def characters_show_vehicles(request, pk):
         {'character': character, 'vehicles': vehicles})
 
 @login_required
+def characters_show_doors(request, pk):
+    """Pokaż pojazdy postaci"""
+    character = get_character_object(request, pk)
+    doors = character.doors
+    return render(request, 'characters/show/doors.html',
+        {'character': character, 'doors': doors})
+
+
+@login_required
 def characters_show_groups(request, pk):
     """Pokaż pojazdy postaci"""
     character = get_character_object(request, pk)

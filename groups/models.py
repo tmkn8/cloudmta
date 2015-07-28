@@ -3,6 +3,8 @@ from django.utils.translation import ugettext as _
 from jsonfield import JSONField
 from django_unixdatetimefield import UnixDateTimeField
 from django.conf import settings
+from django.db.models import get_model
+from django.core.urlresolvers import reverse
 
 class Group(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True,
@@ -24,6 +26,8 @@ class Group(models.Model):
         """Pobierz listę uprawnień grupy jako listę"""
         try:
             perms = self.perms[0]
+        except TypeError:
+            return None
         except ValueError:
             return None
         except KeyError:
@@ -52,7 +56,7 @@ class Group(models.Model):
             if permissions['leader']:
                 return True
         # Jeżeli kluczu leader brakuje w uprawnieniach użytkownika
-        except KeyError:
+        except:
             # Puść to płazem, gdyż i tak skrypt zaraz zwróci false
             pass
         return False
@@ -100,6 +104,19 @@ class Group(models.Model):
         new_member = GroupMember(userid=character,
             rankid=self.get_default_rank(), groupid=self)
         new_member.save()
+
+    def vehicles(self):
+        """Pobierz pojazdy grupy"""
+        return get_model('vehicles', 'Vehicle').objects.filter(ownerid=self.pk,
+            ownertype=settings.RP_VEHICLE_OWNER_TYPE_ID_GROUP)
+
+    def doors(self):
+        """Pobierz drzwi grupy"""
+        return get_model('doors', 'Door').objects.filter(owner=self.pk,
+            ownertype=settings.RP_DOOR_OWNER_TYPE_ID_GROUP)
+
+    def get_absolute_url(self):
+        return reverse('groups:show:index', kwargs={'pk': self.pk})
 
     class Meta:
         db_table = '_groups'
@@ -159,6 +176,8 @@ class GroupRank(models.Model):
                 perms = self.perms[0]
             else:
                 perms = {}
+        except TypeError:
+            return None
         except ValueError:
             return None
         except KeyError:
@@ -166,6 +185,8 @@ class GroupRank(models.Model):
 
         # Pobierz uprawnienia grupy
         group_perms = self.groupid.get_group_permissions()
+        if not group_perms:
+            return None
 
         # Wyzeruj wszystkie uprawnienia rangi
         rank_perms = {}

@@ -1,7 +1,10 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils.translation import ugettext as _
 from jsonfield import JSONField
+from django.db.models import get_model
+
 
 class Vehicle(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True,
@@ -76,18 +79,37 @@ class Vehicle(models.Model):
 
         # Sprawdź czy postać jest właścicielem pojazdu
         if self.ownertype == settings.RP_VEHICLE_OWNER_TYPE_ID_CHARACTER:
-            from characters.models import Character
-            owner_character = Character.objects.get(pk=self.ownerid)
-            if owner_character.memberid == user.member_id:
+            if get_model('characters', 'Character').objects.filter(
+                    pk=self.ownerid, memberid=user).count():
                 return True
 
-        # Sprwadź czy postać należy do grupy
+        # Sprwadź czy gracz należy do grupy, która jest właścicielem pojazdu
         if self.ownertype == settings.RP_VEHICLE_OWNER_TYPE_ID_GROUP:
-            # TODO: Jak będzie dodany model grupy, to sprawdź to
-            # return True
-            return False
+            if get_model('groups', 'GroupMember').objects.filter(
+                    userid__in=user.characters.all(), groupid=self.ownerid) \
+                    .count():
+                return True
 
         return False
+
+    def get_owner(self):
+        """Zwróć obiekt właściciela"""
+        # Postać
+        if self.ownertype == settings.RP_VEHICLE_OWNER_TYPE_ID_CHARACTER:
+            try:
+                return get_model('characters', 'Character').objects\
+                    .get(pk=self.ownerid)
+            except get_model('characters', 'Character').DoesNotExist:
+                return None
+
+        # Grupa
+        if self.ownertype == settings.RP_VEHICLE_OWNER_TYPE_ID_GROUP:
+            try:
+                return get_model('groups', 'Group').objects.get(pk=self.ownerid)
+            except get_model('groups', 'Group').DoesNotExist:
+                return None
+
+        return None
 
     class Meta:
         db_table = '_vehicles'
