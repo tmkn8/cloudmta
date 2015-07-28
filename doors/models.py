@@ -96,3 +96,59 @@ class Shop(models.Model):
         db_table = '_shops'
         verbose_name = _('produkt na /kup')
         verbose_name_plural = _('produkty na /kup')
+
+class Clothes(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
+    shopid = models.ForeignKey('Door', db_column='shopID',
+        verbose_name=_('drzwi'))
+    skinid = models.PositiveSmallIntegerField(db_column='skinID',
+        verbose_name=_('ID skinu'), default=0)
+    skinname = models.CharField(db_column='skinName', max_length=100,
+        verbose_name=_('nazwa ubrania'))
+    price = models.PositiveSmallIntegerField(default=0, verbose_name=_('cena'))
+
+    def __str__(self):
+        return _("Skin %d (%s) w %s" % (self.skinid, self.skinname,
+            self.shopid))
+
+    class Meta:
+        db_table = '_clothes'
+        verbose_name = _('skin na /ubrania')
+        verbose_name = _('skiny na /ubrania')
+
+class InteriorDetail(models.Model):
+    uid = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=32, verbose_name=_('nazwa'))
+    x = models.FloatField(default=0, verbose_name=_('pozycja X'))
+    y = models.FloatField(default=0, verbose_name=_('pozycja Y'))
+    z = models.FloatField(default=0, verbose_name=_('pozycja Z'))
+    a = models.FloatField(default=0, verbose_name=_('kąt'))
+    int = models.PositiveIntegerField(default=0, verbose_name=_('wnętrze'))
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = '_intlist'
+        verbose_name = _('dane interioru GTA')
+        verbose_name_plural = _('dane interiorów GTA')
+
+class Object(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
+    model = models.PositiveIntegerField(verbose_name=_('ID modelu'))
+    x = models.FloatField(default=0, verbose_name=_('pozycja X'))
+    y = models.FloatField(default=0, verbose_name=_('pozycja Y'))
+    z = models.FloatField(default=0, verbose_name=_('pozycja Z'))
+    rx = models.FloatField(default=0, verbose_name=_('rotacja X'))
+    ry = models.FloatField(default=0, verbose_name=_('rotacja Y'))
+    rz = models.FloatField(default=0, verbose_name=_('rotacja Z'))
+    interior = models.PositiveIntegerField(default=0, verbose_name=_('wnętrze'))
+    dimension = models.PositiveIntegerField(default=0, verbose_name=_('wymiar'))
+
+    def __str__(self):
+        return _("Obiekt %d" % self.id)
+
+    class Meta:
+        db_table = '_objects'
+        verbose_name = _('obiekt')
+        verbose_name_plural = _('obiekty')
