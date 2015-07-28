@@ -36,13 +36,13 @@ class Door(models.Model):
         # Postać
         if self.ownertype == settings.RP_DOOR_OWNER_TYPE_ID_CHARACTER:
             if apps.get_model(app_label='characters', model_name='Character')\
-                    .objects.filter(pk=self.ownerid, memberid=user).count():
+                    .objects.filter(pk=self.owner, memberid=user).count():
                 return True
 
         # Grupa
         if self.ownertype == settings.RP_DOOR_OWNER_TYPE_ID_GROUP:
             if apps.get_model(app_label='groups', model_name='GroupMember').objects.filter(
-                    userid__in=user.characters.all(), groupid=self.ownerid) \
+                    userid__in=user.characters.all(), groupid=self.owner) \
                     .count():
                 return True
         return False
@@ -53,7 +53,7 @@ class Door(models.Model):
         if self.ownertype == settings.RP_DOOR_OWNER_TYPE_ID_CHARACTER:
             try:
                 return apps.get_model(app_label='characters',
-                    model_name='Character').objects.get(pk=self.ownerid)
+                    model_name='Character').objects.get(pk=self.owner)
             except apps.get_model(app_label='characters',
                     model_name='Character').DoesNotExist:
                 return None
@@ -62,7 +62,7 @@ class Door(models.Model):
         if self.ownertype == settings.RP_DOOR_OWNER_TYPE_ID_GROUP:
             try:
                 return apps.get_model(app_label='groups', model_name='Group')\
-                    .objects.get(pk=self.ownerid)
+                    .objects.get(pk=self.owner)
             except apps.get_model(app_label='groups', model_name='Group')\
                     .DoesNotExist:
                 return None
