@@ -1,0 +1,13 @@
+<div class="pagination-centered">
+  <ul class="pagination">
+    <li class="arrow{% if not items.has_previous %} unavailable{% endif %}">
+      <a href="{% if items.has_previous %}{% url 'blog:index' items.previous_page_number %}{% endif %}">&laquo;</a>
+    </li>
+    <li class="unavailable"><a href="{% url 'blog:index' items.number %}">{{ items.number }}</a></li>
+    <li class="unavailable"><a href="">of</a></li>
+    <li><a href="{% url 'blog:index' items.paginator.num_pages %}">{{ items.paginator.num_pages }}</a></li>
+    <li class="arrow{% if not items.has_next %} unavailable{% endif %}">
+      <a href="{% if items.has_next %}{% url 'blog:index' items.next_page_number %}{% endif %}">&raquo;</a>
+    </li>
+  </ul>
+</div>

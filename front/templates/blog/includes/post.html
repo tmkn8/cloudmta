@@ -1,0 +1,14 @@
+{% load humanize %}
+
+<h1><a href="{{ post.get_absolute_url }}">{{ post }}</a></h1>
+<p>
+  <i class="fa fa-user"></i>
+  <a href="{{ post.author.get_absolute_url }}">
+    {{ post.author }}
+  </a>
+  &nbsp;
+  <span data-tooltip aria-haspopup="true" title="{{ post.publish_date }}">
+    <i class="fa fa-calendar"></i> {{ post.publish_date|naturaltime }}
+  </span>
+</p>
+{{ post.format_content|safe }}

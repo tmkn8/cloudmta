@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+  {% for post in posts %}
+    {% include 'blog/includes/post.html' %}
+  {% endfor %}
+
+  {% include 'includes/pagination.html' with items=posts %}
+{% endblock %}
