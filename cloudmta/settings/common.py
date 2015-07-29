@@ -16,6 +16,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 
+    # Third-party apps
+
     # My apps
     'characters',
     'accounts',
@@ -25,8 +27,7 @@ INSTALLED_APPS = (
     'doors',
     'pages',
     'wiki',
-
-    # Third-party apps
+    'blog',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -61,6 +62,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # My own context processors
                 'cloudmta.context_processors.settings_context_processor',
+                'characters.context_processors.characters',
             ],
         },
     },
