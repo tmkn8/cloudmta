@@ -10,8 +10,13 @@
 
 {% block content %}
   <div class="row">
-    <div class="4-small columns">
+    <div class="small-12 large-3 medium-6 columns">
       <ul class="side-nav">
+        <li>
+          <a href="{% url 'wiki:index' %}">
+            <i class="fa fa-home"></i> {% trans 'Wiki' %}
+          </a>
+        </li>
         {% for category in categories %}
           <li class="heading">
             {{ category }}
@@ -29,7 +34,7 @@
         {% endfor %}
       </ul>
     </div>
-    <div class="8-small columns">
+    <div class="small-12 large-9 medium-6 columns">
       {% block wiki_content %}{% endblock %}
     </div>
   </div>
