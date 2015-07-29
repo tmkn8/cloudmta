@@ -19,7 +19,10 @@
     <a href="{{ article.author.get_absolute_url }}">
       {{ article.author }}
     </a>
-    &nbsp; <i class="fa fa-calendar"></i> {{ article.datetime|naturaltime }}
+    &nbsp;
+    <span data-tooltip aria-haspopup="true" title="{{ article.datetime }}">
+      <i class="fa fa-calendar"></i> {{ article.datetime|naturaltime }}
+    </span>
     &nbsp; <i class="fa fa-archive"></i> {{ article.category }}
   </p>
   {{ article.format_content|safe }}
