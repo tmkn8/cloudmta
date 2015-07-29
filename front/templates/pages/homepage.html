@@ -2,20 +2,33 @@
 {% load staticfiles %}
 {% block container %}
   <div id="homepage">
-    <ul class="example-orbit" data-orbit>
+    <div class="content-panel title-panel">
+      <img class="title-panel-logo"
+        alt="CloudMTA" src="{% static 'img/logo-white.svg' %}">
+      <h1>Serwer roleplay jakiego jeszcze nie widziałeś</h1>
+      <h2>
+    </div>
+    <ul class="large-block-grid-4 small-block-grid-2" id="homepage-gateway-buttons-list" data-equalizer>
       <li>
-        <img src="{% static 'img/slider/1.png' %}" alt="Screenshot 1" />
-        <div class="orbit-caption">
-          <strong>System przedmiotów</strong>
-          <p>super duper cool</p>
-        </div>
+        <a class="gateway-button-1" data-equalizer-watch href="{% url 'pages:gui' %}">
+          <h2>Interfejs graficzny</h2>
+        </a>
       </li>
       <li>
-        <img class="title-panel-logo" src="{% static 'img/slider/2.png' %}" alt="Screenshot 2" />
+        <a class="gateway-button-2" data-equalizer-watch href="{% url 'pages:gui' %}">
+          <h2>Ficzer #2</h2>
+        </a>
+      </li>
+      <li>
+        <a class="gateway-button-3" data-equalizer-watch href="{% url 'pages:gui' %}">
+          <h2>Ficzer #3</h2>
+        </a>
+      </li>
+      <li>
+        <a class="gateway-button-4" data-equalizer-watch href="{% url 'pages:gui' %}">
+          <h2>Ficzer #4</h2>
+        </a>
       </li>
     </ul>
-    <div class="content-panel title-panel">
-      <img alt="CloudMTA" src="{% static 'img/logo-white.svg' %}">
-    </div>
   </div>
 {% endblock %}

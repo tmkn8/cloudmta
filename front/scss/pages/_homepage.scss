@@ -2,13 +2,70 @@
   .title-panel {
     background-image: url(../img/homepage/bg.png);
     background-size: cover;
-    height: 400px;
+    height: 600px;
 
     img.title-panel-logo {
-      height: 100px;
+      height: 250px;
       width: auto;
       margin: 50px auto;
       display: block;
+    }
+
+    text-align: center;
+  }
+
+  .gui-panel {
+    background-color: $cloudmta-1-red;
+    padding-top: 50px;
+
+    h1 {
+      font-size: $h2-font-size;
+    }
+  }
+
+  ul#homepage-gateway-buttons-list {
+    li {
+      &, a, h2 {
+        color: $white;
+      }
+      padding: 0;
+
+      a {
+        min-height: 200px;
+        padding: 50px;
+        font-weight: $font-weight-lighter;
+        text-align: center;
+        display: block;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .gateway-button-1 {
+        background-color: $cloudmta-1-blue;
+        &:hover {
+          background-color: scale-color($cloudmta-1-blue, $lightness: 30%);
+        }
+      }
+      .gateway-button-2 {
+        background-color: $cloudmta-1-red;
+        background-image: url(../img/homepage/gui-1.png);
+        &:hover {
+          background-color: scale-color($cloudmta-1-red, $lightness: 30%);
+        }
+      }
+      .gateway-button-3 {
+        background-color: $cloudmta-1-green;
+        background-image: url(../img/homepage/gui-2.png);
+        &:hover {
+          background-color: scale-color($cloudmta-1-green, $lightness: 30%);
+        }
+      }
+      .gateway-button-4 {
+        background-color: $cloudmta-1-pink;
+        &:hover {
+          background-color: scale-color($cloudmta-1-pink, $lightness: 30%);
+        }
+      }
     }
   }
 }

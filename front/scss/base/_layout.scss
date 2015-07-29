@@ -29,6 +29,10 @@
   h1, a {
     color: $white;
   }
+
+  h1 {
+    font-weight: $font-weight-lighter;
+  }
 }
 
 footer#cloudmta-footer {
@@ -103,6 +107,7 @@ footer#cloudmta-footer {
 
     #copyright-column {
       padding-top: 30px;
+      padding-bottom: 30px;
     }
 
     #powered-by-column {
@@ -116,6 +121,9 @@ footer#cloudmta-footer {
         margin-top: 10px;
         margin-right: 20px;
         margin-bottom: 5px;
+        @media #{$small-only} {
+          display: none;
+        }
       }
 
       .powered-by-img {
