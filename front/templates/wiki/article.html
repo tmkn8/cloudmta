@@ -1,0 +1,26 @@
+{% extends 'wiki/base.html' %}
+{% load i18n %}
+{% load humanize %}
+
+{% block title %}{{ article }}{% endblock %}
+
+{% block wiki_content %}
+  <h1>
+    <a href="{{ article.get_absolute_url }}">
+      {% if article.visible_only_for_staff %}
+        <i data-tooltip aria-haspopup="true" class="fa fa-lock has-tip"
+          title="{% trans 'Artykuł ukryty przed użytkownikami' %}"></i>
+      {% endif %}
+      {{ article }}
+    </a>
+  </h1>
+  <p>
+    <i class="fa fa-user"></i>
+    <a href="{{ article.author.get_absolute_url }}">
+      {{ article.author }}
+    </a>
+    &nbsp; <i class="fa fa-calendar"></i> {{ article.datetime|naturaltime }}
+    &nbsp; <i class="fa fa-archive"></i> {{ article.category }}
+  </p>
+  {{ article.format_content|safe }}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'Wiki' %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="4-small columns">
+      <ul class="side-nav">
+        {% for category in categories %}
+          <li class="heading">
+            {{ category }}
+          </li>
+          {% for article in category.articles.all %}
+            {% if not article.visible_only_for_staff %}
+              <li>
+                <a href="{{ article.get_absolute_url }}">
+                  {{ article }}
+                </a>
+              </li>
+            {% endif %}
+          {% endfor %}
+          <li class="divider"></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="8-small columns">
+      {% block wiki_content %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}

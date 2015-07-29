@@ -1,0 +1,19 @@
+{% extends 'wiki/base.html' %}
+{% load i18n %}
+
+{% block wiki_content %}
+  <h1>{% trans 'Wiki' %}</h1>
+  {% for category in categories %}
+    <h2>{{ category }}</h2>
+    {% for article in category.articles.all %}
+      {% if not article.visible_only_for_staff %}
+        <a href="{{ article.get_absolute_url }}">
+          {{ article }}
+        </a>
+      {% endif %}
+    {% endfor %}
+  {% empty %}
+    {% trans 'Obecnie nasza Wiki jest pusta. Zapraszamy ponownie później.' %}
+    &nbsp;<i class="fa fa-frown-o"></i>
+  {% endfor %}
+{% endblock %}

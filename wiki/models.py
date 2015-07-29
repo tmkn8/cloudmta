@@ -15,16 +15,15 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return reverse('wiki:category', kwargs={'cat': self.slug})
-
 class Article(models.Model):
     name = models.CharField(max_length=50, verbose_name=_('Nazwa'))
     slug = models.SlugField(max_length=30, unique=True, verbose_name=_('Nazwa w'
         ' URL'))
-    category = models.ForeignKey('Category', verbose_name=_('Kategoria'))
+    category = models.ForeignKey('Category', verbose_name=_('Kategoria'),
+        related_name='articles', related_query_name='article')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('Autor'))
-    content = models.TextField(null=True, blank=True, verbose_name=_('Treść'))
+    content = models.TextField(null=True, blank=True, verbose_name=_('Treść'),
+        help_text=_('Markdown'))
     datetime = models.DateTimeField(verbose_name=_('Data publikacji'))
     visible_only_for_staff = models.BooleanField(default=False,
         verbose_name=_('Widoczne tylko dla administracji'))
@@ -37,5 +36,9 @@ class Article(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('wiki:article', kwargs={'cat': self.category,
+        return reverse('wiki:article', kwargs={'cat': self.category.slug,
             'article': self.slug})
+
+    def format_content(self):
+        import markdown
+        return markdown.markdown(self.content)

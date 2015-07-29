@@ -19,6 +19,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     passed_rp_test = models.BooleanField(default=False, verbose_name=_('Zdał '
         'test RP'))
 
+    def get_absolute_url(self):
+        return 'nothing yet'
+
     def member(self):
         """Pobierz obiekt użytkownika forum"""
         return Member.objects.get(pk=self.pk)
