@@ -8,8 +8,117 @@
     $adjust:true
   );
   margin: 0;
+  margin-bottom: 50px;
   border: 0;
   h1, a {
     color: $white;
+  }
+}
+
+footer#cloudmta-footer {
+  margin-top: 50px;
+  font-weight: $font-weight-lighter;
+  font-size: 80%;
+
+  #footer-menu {
+    &, a {
+      color: $white;
+    }
+
+    h2 {
+      font-size: 150%;
+    }
+    @include panel(
+      // Sets the panel background color. Default: $panel-pg
+      $bg: $primary-color,
+      // Sets the panel padding amount. Default: $panel-padding
+      $padding:30px,
+      // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+      $adjust:true
+    );
+    border: 0;
+    margin: 0;
+  }
+
+  #footer-credits {
+    @include panel(
+      // Sets the panel background color. Default: $panel-pg
+      $bg: $oil,
+      // Sets the panel padding amount. Default: $panel-padding
+      $padding:30px,
+      // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+      $adjust:true
+    );
+    border: 0;
+    margin: 0;
+    &, a, p {
+      color: scale-color($oil, $lightness: 40%);
+    }
+
+    .cloudmta-footer-logo {
+      height: 90px;
+      width: auto;
+      margin-bottom: 30px;
+
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+
+    #social-columns {
+      ul{
+        padding-top: 30px;
+        float: right;
+        text-align: right;
+        @media #{$small-only} {
+          float: left;
+          text-align: left;
+        }
+      }
+      i.fa{
+        font-size: 300%;
+        color: $white;
+
+        &:hover {
+          opacity: 0.6;
+        }
+      }
+    }
+
+    #copyright-column {
+      padding-top: 30px;
+    }
+
+    #powered-by-column {
+      text-align: right;
+      @media #{$small-only} {
+        text-align: left;
+      }
+
+      .powered-by-label {
+        font-size: 50%;
+        margin-top: 10px;
+        margin-right: 20px;
+        margin-bottom: 5px;
+      }
+
+      .powered-by-img {
+        opacity: 0.3;
+        height: 20px;
+        width: auto;
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      ul {
+        float: right;
+        text-align: right;
+        @media #{$small-only} {
+          float: left;
+          text-align: left;
+        }
+      }
+    }
   }
 }

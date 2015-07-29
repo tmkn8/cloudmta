@@ -1,0 +1,104 @@
+{% load i18n %}
+{% load staticfiles %}
+<footer id="cloudmta-footer">
+  <div id="footer-menu">
+    <div class="row">
+      <div class="medium-4 columns">
+        <h2>{% trans 'Menu #1' %}</h2>
+        <ul class="no-bullet">
+          <li><a href="#">Link</a></li>
+          <li><a href="#">Link</a></li>
+          <li><a href="#">Link</a></li>
+        </ul>
+      </div>
+      <div class="medium-4 columns">
+        <h2>{% trans 'Menu #2' %}</h2>
+        <ul class="no-bullet">
+          <li><a href="#">Link</a></li>
+          <li><a href="#">Link</a></li>
+          <li><a href="#">Link</a></li>
+        </ul>
+      </div>
+      <div class="medium-4 columns">
+        <h2>{% trans 'Menu #3' %}</h2>
+        <ul class="no-bullet">
+          <li><a href="#">Link</a></li>
+          <li><a href="#">Link</a></li>
+          <li><a href="#">Link</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="footer-credits">
+    <div class="row">
+      <div class="medium-5 columns">
+        <a href="{% url 'homepage' %}">
+          <img src="{% static 'img/logo-white.svg' %}" alt="Logo CloudMTA"
+            class="cloudmta-footer-logo">
+        </a>
+      </div>
+      <div class="medium-7 columns" id="social-columns">
+        <ul class="inline-list">
+          <li>
+            <a href="http://fb.com/cloudmta">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a href="http://twitter.com">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a href="http://steam.com">
+              <i class="fa fa-steam"></i>
+            </a>
+          </li>
+          <li>
+            <a href="http://youtube.com">
+              <i class="fa fa-youtube"></i>
+            </a>
+          </li>
+      </div>
+    </div>
+    <div class="row">
+      <div class="medium-6 columns" id="copyright-column">
+        {% trans '&copy; 2015 CloudMTA' %}
+      </div>
+      <div class="medium-6 columns" id="powered-by-column">
+        <p class="powered-by-label">{% trans 'Projekt istnieje dzięki' %}</p>
+        <ul class="inline-list">
+          <li>
+            <a href="http://multitheftauto.com">
+              <img class="powered-by-img"
+                src="{% static 'img/powered-by/mta-logo.png' %}"
+                alt="Multi Theft Auto San Andreas"
+                title="Multi Theft Auto San Andreas">
+            </a>
+          </li>
+          <li>
+            <a href="http://djangoproject.com">
+              <img class="powered-by-img"
+                src="{% static 'img/powered-by/django-logo-white.svg' %}"
+                alt="Django web framework" title="Django web framework">
+            </a>
+          </li>
+          <li>
+            <a href="http://mysql.com">
+              <img class="powered-by-img"
+                src="{% static 'img/powered_by/mysql-logo.svg' %}"
+                alt="MySQL" title="MySQL">
+            </a>
+          </li>
+          <li>
+            <a href="http://nginx.org">
+              <img class="powered-by-img"
+                src="{% static 'img/powered-by/nginx-logo.svg' %}"
+                alt="nginx" title="nginx">
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>

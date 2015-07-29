@@ -11,28 +11,30 @@
 {% block content %}
   <div class="row">
     <div class="small-12 large-3 medium-6 columns">
-      <ul class="side-nav">
-        <li>
-          <a href="{% url 'wiki:index' %}">
-            <i class="fa fa-home"></i> {% trans 'Wiki' %}
-          </a>
-        </li>
-        {% for category in categories %}
-          <li class="heading">
-            {{ category }}
+      <nav>
+        <ul class="side-nav">
+          <li>
+            <a href="{% url 'wiki:index' %}">
+              <i class="fa fa-home"></i> {% trans 'Wiki' %}
+            </a>
           </li>
-          {% for article in category.articles.all %}
-            {% if not article.visible_only_for_staff %}
-              <li{% if article.get_absolute_url == request.path %} class="active"{% endif %}>
-                <a href="{{ article.get_absolute_url }}">
-                  {{ article }}
-                </a>
-              </li>
-            {% endif %}
+          {% for category in categories %}
+            <li class="heading">
+              {{ category }}
+            </li>
+            {% for article in category.articles.all %}
+              {% if not article.visible_only_for_staff %}
+                <li{% if article.get_absolute_url == request.path %} class="active"{% endif %}>
+                  <a href="{{ article.get_absolute_url }}">
+                    {{ article }}
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
+            <li class="divider"></li>
           {% endfor %}
-          <li class="divider"></li>
-        {% endfor %}
-      </ul>
+        </ul>
+      </nav>
     </div>
     <div class="small-12 large-9 medium-6 columns">
       {% block wiki_content %}{% endblock %}
