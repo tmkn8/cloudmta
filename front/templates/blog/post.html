@@ -1,6 +1,24 @@
-{% extends 'base.html' %}
+{% extends 'blog/base.html' %}
 {% load humanize %}
 
-{% block content %}
-  {% include 'blog/includes/post.html' %}
+{% block title %}
+  {{ post }}
+{% endblock %}
+
+{% block blog_content %}
+<h1 class="blog-post-title">{{ post }}</h1>
+<p>
+  <i class="fa fa-user"></i>
+  <a href="{{ post.author.get_absolute_url }}">
+    {{ post.author }}
+  </a>
+  &nbsp;
+  <span data-tooltip aria-haspopup="true" title="{{ post.publish_date }}">
+    <i class="fa fa-calendar"></i> {{ post.publish_date|naturaltime }}
+  </span>
+</p>
+<div class="blog-post-content">
+  {{ post.format_content|safe }}
+</div>
+
 {% endblock %}

@@ -6,13 +6,11 @@
 
 {% block wiki_content %}
   <h1>
-    <a href="{{ article.get_absolute_url }}">
-      {% if article.visible_only_for_staff %}
-        <i data-tooltip aria-haspopup="true" class="fa fa-lock has-tip"
-          title="{% trans 'Artykuł ukryty przed użytkownikami' %}"></i>
-      {% endif %}
-      {{ article }}
-    </a>
+    {% if article.visible_only_for_staff %}
+      <i data-tooltip aria-haspopup="true" class="fa fa-lock has-tip"
+        title="{% trans 'Artykuł ukryty przed użytkownikami' %}"></i>
+    {% endif %}
+    {{ article }}
   </h1>
   <p>
     <i class="fa fa-user"></i>

@@ -2,18 +2,27 @@
 {% load i18n %}
 
 {% block wiki_content %}
-  <h1>{% trans 'Wiki' %}</h1>
-  {% for category in categories %}
-    <h2>{{ category }}</h2>
-    {% for article in category.articles.all %}
-      {% if not article.visible_only_for_staff %}
-        <a href="{{ article.get_absolute_url }}">
-          {{ article }}
-        </a>
-      {% endif %}
+  <ul class="large-block-grid-2 medium-block-grid-1 small-block-grid-1" data-equalizer>
+    {% for category in categories %}
+      <li>
+        <h2 data-equalizer-watch>{{ category }}</h2>
+        <ul class="no-bullet">
+          {% for article in category.articles.all %}
+            {% if not article.visible_only_for_staff %}
+              <li>
+                <a href="{{ article.get_absolute_url }}">
+                  {{ article }}
+                </a>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </li>
+    {% empty %}
+      <li>
+        {% trans 'Obecnie nasza Wiki jest pusta. Zapraszamy ponownie później.' %}
+        &nbsp;<i class="fa fa-frown-o"></i>
+      </li>
     {% endfor %}
-  {% empty %}
-    {% trans 'Obecnie nasza Wiki jest pusta. Zapraszamy ponownie później.' %}
-    &nbsp;<i class="fa fa-frown-o"></i>
-  {% endfor %}
+  </ul>
 {% endblock %}

@@ -1,0 +1,15 @@
+.header-banner {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+    $bg: $primary-color,
+    // Sets the panel padding amount. Default: $panel-padding
+    $padding:20px,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+    $adjust:true
+  );
+  margin: 0;
+  border: 0;
+  h1, a {
+    color: $white;
+  }
+}

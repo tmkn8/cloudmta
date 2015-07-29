@@ -1,5 +1,5 @@
 from django.conf.urls import url, patterns
 urlpatterns = patterns('wiki.views',
     url(r'^$', 'index', name='index'),
-    url(r'^(?P<cat>[\w]+)/(?P<article>[\w]+)/$', 'article', name='article'),
+    url(r'^(?P<cat>[-\w]+)/(?P<article>[-\w]+)/$', 'article', name='article'),
 )

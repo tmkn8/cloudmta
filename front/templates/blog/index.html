@@ -1,9 +1,25 @@
-{% extends 'base.html' %}
+{% extends 'blog/base.html' %}
 {% load humanize %}
+{% load i18n %}
 
-{% block content %}
+{% block blog_content %}
   {% for post in posts %}
-    {% include 'blog/includes/post.html' %}
+    <h1 class="blog-post-title"><a href="{{ post.get_absolute_url }}">{{ post }}</a></h1>
+    <p>
+      <i class="fa fa-user"></i>
+      <a href="{{ post.author.get_absolute_url }}">
+        {{ post.author }}
+      </a>
+      &nbsp;
+      <span data-tooltip aria-haspopup="true" title="{{ post.publish_date }}">
+        <i class="fa fa-calendar"></i> {{ post.publish_date|naturaltime }}
+      </span>
+    </p>
+    <div class="blog-post-content">
+      {{ post.format_content_short|safe }}
+      <p><a href="{{ post.get_absolute_url }}">{% trans 'Czytaj dalej' %} &raquo;</a>
+    </div>
+    <hr>
   {% endfor %}
 
   {% include 'includes/pagination.html' with items=posts %}

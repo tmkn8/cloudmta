@@ -27,3 +27,7 @@ class Post(models.Model):
     def format_content(self):
         import markdown
         return markdown.markdown(self.content)
+
+    def format_content_short(self):
+        import markdown
+        return markdown.markdown("%s..." % self.content[:400])

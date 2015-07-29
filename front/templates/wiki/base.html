@@ -3,6 +3,11 @@
 
 {% block title %}{% trans 'Wiki' %}{% endblock %}
 
+{% block under_header %}
+  {% url 'wiki:index' as wiki_url %}
+  {% include 'includes/header_banner.html' with text='Wiki' url=wiki_url %}
+{% endblock %}
+
 {% block content %}
   <div class="row">
     <div class="4-small columns">
@@ -13,7 +18,7 @@
           </li>
           {% for article in category.articles.all %}
             {% if not article.visible_only_for_staff %}
-              <li>
+              <li{% if article.get_absolute_url == request.path %} class="active"{% endif %}>
                 <a href="{{ article.get_absolute_url }}">
                   {{ article }}
                 </a>
