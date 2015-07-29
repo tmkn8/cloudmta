@@ -1,28 +1,21 @@
 {% extends 'base.html' %}
-
-{% block under_header %}
-<ul class="example-orbit" data-orbit>
-  <li>
-    <img src="{% static 'img/slider/1.png'}" alt="Screenshot 1" />
-    <div class="orbit-caption">
-      Screenshot 1
+{% load staticfiles %}
+{% block container %}
+  <div id="homepage">
+    <ul class="example-orbit" data-orbit>
+      <li>
+        <img src="{% static 'img/slider/1.png' %}" alt="Screenshot 1" />
+        <div class="orbit-caption">
+          <strong>System przedmiotów</strong>
+          <p>super duper cool</p>
+        </div>
+      </li>
+      <li>
+        <img class="title-panel-logo" src="{% static 'img/slider/2.png' %}" alt="Screenshot 2" />
+      </li>
+    </ul>
+    <div class="content-panel title-panel">
+      <img alt="CloudMTA" src="{% static 'img/logo-white.svg' %}">
     </div>
-  </li>
-  <li>
-    <img src="{% static 'img/slider/2.png'}" alt="Screenshot 2" />
-    <div class="orbit-caption">
-      Screenshot 2
-    </div>
-  </li>
-  <li>
-    <img src="{% static 'img/slider/3.png'}" alt="Screenshot 3" />
-    <div class="orbit-caption">
-      Screenshot 3
-    </div>
-  </li>
-</ul>
-{% endblock %}
-
-{% block content %}
-
+  </div>
 {% endblock %}

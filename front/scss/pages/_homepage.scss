@@ -1,0 +1,14 @@
+#homepage {
+  .title-panel {
+    background-image: url(../img/homepage/bg.png);
+    background-size: cover;
+    height: 400px;
+
+    img.title-panel-logo {
+      height: 100px;
+      width: auto;
+      margin: 50px auto;
+      display: block;
+    }
+  }
+}

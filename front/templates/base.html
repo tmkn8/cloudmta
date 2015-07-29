@@ -13,13 +13,16 @@
     {% include 'includes/header.html' %}
     {% block under_header %}{% endblock %}
     {% include 'includes/messages.html' %}
-    <div class="row">
-      <div class="large-12 columns">
-        {% block content %}{% endblock %}
-      </div>
-    </div>
+    {% block container %}{% endblock %}
     {% include 'includes/footer.html' %}
     <script src="{% static 'js/output_footer.js' %}"></script>
-    <script>$(document).foundation();</script>
+    <script>
+    $(document).foundation({
+      orbit: {
+        bullets: false,
+        slide_number: false,
+      },
+    });
+    </script>
   </body>
 </html>
