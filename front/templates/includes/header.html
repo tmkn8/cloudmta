@@ -64,7 +64,7 @@
         </a>
       </li>
       <li{% if 'wiki' in request.path %} class="active"{% endif %}>
-        <a href="{# url 'wiki:index' #}">
+        <a href="{% url 'wiki:index' %}">
           {% trans 'Wiki' %}
         </a>
       </li>

@@ -22,6 +22,8 @@ INSTALLED_APPS = (
     'vehicles',
     'groups',
     'doors',
+    'pages',
+    'wiki',
 
     # Third-party apps
 )

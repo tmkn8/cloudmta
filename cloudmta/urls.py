@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^groups/', include('groups.urls', namespace='groups')),
     url(r'^doors/', include('doors.urls', namespace='doors')),
     url(r'^page/$', include('pages.urls', namespace='pages')),
+    url(r'^wiki/$', include('wiki.urls', namespace='wiki')),
 ]
