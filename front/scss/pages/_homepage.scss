@@ -23,49 +23,60 @@
     }
   }
 
-  ul#homepage-gateway-buttons-list {
-    li {
-      &, a, h2 {
-        color: $white;
-      }
+  .buttons-panel {
+    padding: 0;
+    margin: 0;
+
+    ul#homepage-gateway-buttons-list {
       padding: 0;
+      margin: 0;
+      li {
+        padding: 0;
+        margin: 0;
 
-      a {
-        min-height: 200px;
-        padding: 50px;
-        font-weight: $font-weight-lighter;
-        text-align: center;
-        display: block;
-        background-size: cover;
-        background-position: center;
-      }
+        &, a, h2 {
+          color: $white;
+        }
 
-      .gateway-button-1 {
-        background-color: $cloudmta-1-blue;
-        &:hover {
-          background-color: scale-color($cloudmta-1-blue, $lightness: 30%);
+        a {
+          min-height: 200px;
+          font-weight: $font-weight-lighter;
+          text-align: center;
+          display: block;
+          padding: 50px;
+          margin: 0;
+          background-size: cover;
+          background-position: center;
         }
-      }
-      .gateway-button-2 {
-        background-color: $cloudmta-1-red;
-        background-image: url(../img/homepage/gui-1.png);
-        &:hover {
-          background-color: scale-color($cloudmta-1-red, $lightness: 30%);
+
+        .gateway-button-1 {
+          background-color: $cloudmta-1-blue;
+          &:hover {
+            background-color: scale-color($cloudmta-1-blue, $lightness: 30%);
+          }
         }
-      }
-      .gateway-button-3 {
-        background-color: $cloudmta-1-green;
-        background-image: url(../img/homepage/gui-2.png);
-        &:hover {
-          background-color: scale-color($cloudmta-1-green, $lightness: 30%);
+        .gateway-button-2 {
+          background-color: $cloudmta-1-red;
+          background-image: url(../img/homepage/gui-1.png);
+          &:hover {
+            background-color: scale-color($cloudmta-1-red, $lightness: 30%);
+          }
         }
-      }
-      .gateway-button-4 {
-        background-color: $cloudmta-1-pink;
-        &:hover {
-          background-color: scale-color($cloudmta-1-pink, $lightness: 30%);
+        .gateway-button-3 {
+          background-color: $cloudmta-1-green;
+          background-image: url(../img/homepage/gui-2.png);
+          &:hover {
+            background-color: scale-color($cloudmta-1-green, $lightness: 30%);
+          }
+        }
+        .gateway-button-4 {
+          background-color: $cloudmta-1-pink;
+          &:hover {
+            background-color: scale-color($cloudmta-1-pink, $lightness: 30%);
+          }
         }
       }
     }
+
   }
 }
