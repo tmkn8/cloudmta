@@ -1,0 +1,6 @@
+{% extends 'groups/base_show.html' %}
+{% load i18n %}
+{% block group_content %}
+  <p>{% trans 'Uprawnienia obecnego użytkownika' %} - {{ user_permissions }}</p>
+  {% lorem 5 %}
+{% endblock %}

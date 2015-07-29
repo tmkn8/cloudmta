@@ -1,0 +1,21 @@
+{% extends 'groups/base_show.html' %}
+{% load i18n %}
+{% block group_content %}
+  <h2>{% blocktrans %}Edycja rangi {{ rank }}{% endblocktrans %}</h2>
+  <form action="{% url 'groups:show:ranks_edit' group.pk rank.pk %}"
+    method="post">
+    {% csrf_token %}
+    {{ form.name }}<br>
+    {{ form.cash }}<br>
+    {% for k, v in rank.get_rank_permissions.items %}
+      <label for="perm_{{ k }}_id">{{ k }}
+        <input id="perm_{{ k }}_id" type="checkbox" name="perm_{{ k }}" value="1"{% if v %} checked{% endif %}>
+      </label>
+      <br>
+    {% empty %}
+      {% trans 'Grupa nie ma żadnych uprawnień' %}
+    {% endfor %}
+    {{ form.perms.errors|join:', ' }}
+    <input type="submit" value="{% trans 'Zapisz rangę' %}">
+  </form>
+{% endblock %}

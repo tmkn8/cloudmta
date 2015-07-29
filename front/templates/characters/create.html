@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'Stwórz postać' %}{% endblock %}
+
+{% block content %}
+  <h1>{% trans 'Stwórz postać' %}</h1>
+  <form action="{% url 'characters:create' %}" method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="{% trans 'Stwórz postać' %}">
+  </form>
+{% endblock %}

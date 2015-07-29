@@ -1,0 +1,11 @@
+{% extends 'groups/base_show.html' %}
+{% load i18n %}
+{% block group_content %}
+  <h2>{% blocktrans with member=member.userid %}Edycja członkostwa {{ member }}{% endblocktrans %}</h2>
+  <form action="{% url 'groups:show:members_edit' group.pk member.pk %}"
+    method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="{% trans 'Zapisz członka' %}">
+  </form>
+{% endblock %}

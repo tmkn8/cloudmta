@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}
+  {% blocktrans %}Drzwi {{ door }}{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+  <h1>{{ door }}</h1>
+  <dl>
+    <dt>{% trans 'Właściciel' %}</dt>
+    <dd>
+      <a href="{{ door.get_owner.get_absolute_url }}">
+        {{ door.get_owner }}
+      </a>
+    </dd>
+    <dt>{% trans 'Typ właściciela' %}</dt>
+    <dd>{{ door.get_ownertype_display }}</dd>
+    <dt>{% trans 'Wymiar' %}</dt>
+    <dd>{{ door.dimension }}</dd>
+  </dl>
+
+  {% trans 'Zamknięte' as locked %}
+  {% trans 'Otwarte' as open %}
+
+
+  <h2>{% trans 'Pickupy' %}</h2>
+  <ul>
+    {% for pickup in door.doorpickups.all %}
+      <li>
+        {{ pickup }}
+         - {% if pickup.locked %}{% trans 'Zamknięte' %}{% else %}{% trans 'Otwarte' %}{% endif %}
+     </li>
+    {% empty %}
+      <li>{% trans 'Brak pickupów' %}</li>
+    {% endfor %}
+  </ul>
+
+  <h2>{% trans 'Produkty (/kup)' %}</h2>
+  <ul>
+    {% for product in door.shop.all %}
+      <li>
+        {{ product }}
+     </li>
+    {% empty %}
+      <li>{% trans 'Brak poduktów.' %}</li>
+    {% endfor %}
+  </ul>
+
+<h2>{% trans 'Ubrania (/ubrania)' %}</h2>
+<ul>
+  {% for outfit in door.clothes.all %}
+    <li>
+      {{ outfit }}
+   </li>
+  {% empty %}
+    <li>{% trans 'Brak ubrań.' %}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

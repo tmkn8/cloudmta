@@ -1,3 +1,0 @@
-[submodule "front"]
-	path = front
-	url = git@gitlab.com:cloudmta/cloudmta-www-front.git

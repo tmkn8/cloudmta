@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}
+  {% blocktrans %}Pojazd {{ vehicle }}{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+  <h1>{{ vehicle }}</h1>
+  <dl>
+    <dt>{% trans 'Właściciel' %}</dt>
+    <dd>
+      <a href="{{ vehicle.get_owner.get_absolute_url }}">
+        {{ vehicle.get_owner }}
+      </a>
+    </dd>
+    <dt>{% trans 'Typ właściciela' %}</dt>
+    <dd>{{ vehicle.get_ownertype_display }}</dd>
+  </dl>
+  <p>{% trans 'To jest strona z pojazdem, trolololo' %}</p>
+{% endblock %}

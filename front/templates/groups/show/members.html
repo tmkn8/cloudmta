@@ -1,0 +1,27 @@
+{% extends 'groups/base_show.html' %}
+{% load i18n %}
+{% block group_content %}
+  <h2>{% trans 'Członkowie' %}</h2>
+    {% for rank in ranks %}
+      <h3>#{{ rank.id }} {{ rank }} <small>{{ rank.get_rank_permissions }} - ${{ rank.cash }}</small></h3>
+      <ul>
+      {% for member in rank.groupmembers.all %}
+        <li>
+          {{ member.userid }}
+          - {{ member.userid.memberid }}
+          - {{ member.rankid }}
+          - <a href="{% url 'groups:show:members_edit' group.pk member.pk %}">
+              {% trans 'Edytuj' %}
+            </a>
+            - <a href="{% url 'groups:show:members_delete' group.pk member.pk %}">
+                {% trans 'Wyrzuć' %}
+              </a>
+        </li>
+      {% empty %}
+        <li>{% trans 'Brak członków w tej randze' %}</li>
+      {% endfor %}
+      </ul>
+    {% empty %}
+      <p>{% trans 'Brak rang w grupie' %}</p>
+    {% endfor %}
+{% endblock %}

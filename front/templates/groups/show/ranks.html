@@ -1,0 +1,22 @@
+{% extends 'groups/base_show.html' %}
+{% load i18n %}
+{% block group_content %}
+  <h2>{% trans 'Rangi' %}</h2>
+  <ul>
+    {% for rank in ranks %}
+      <li>
+        {{ rank }}{% if rank.defaultrank %} ({% trans 'Domyślna' %}){% endif %} -
+        {{ rank.get_rank_permissions }} -
+        <a href="{% url 'groups:show:ranks_edit' group.pk rank.pk %}">{% trans 'Edytuj' %}</a> -
+        <a href="{% url 'groups:show:ranks_delete' group.pk rank.pk %}">{% trans 'Usuń' %}</a>
+      </li>
+    {% empty %}
+      <li>{% trans 'Brak członków w grupie' %}</li>
+    {% endfor %}
+
+    <p>
+      <a href="{% url 'groups:show:ranks_default_rank' group.pk %}">
+        {% trans 'Zmień domyślną rangę' %}
+      </a>
+    </p>
+{% endblock %}

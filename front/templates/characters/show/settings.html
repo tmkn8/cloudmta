@@ -1,0 +1,11 @@
+{% extends 'characters/base_show.html' %}
+{% load i18n %}
+
+{% block character_content %}
+  <h2>{% trans 'Ustawienia' %}</h2>
+  <form action="{% url 'characters:show:settings' character.pk %}" method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="{% trans 'Zapisz' %}">
+  </form>
+{% endblock %}

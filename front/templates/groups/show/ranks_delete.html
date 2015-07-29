@@ -1,0 +1,14 @@
+{% extends 'groups/base_show.html' %}
+{% load i18n %}
+{% block group_content %}
+  <h2>{% blocktrans %}Kasowanie rangi {{ rank }}{% endblocktrans %}</h2>
+  <p>{% trans 'Potwierdź skasowanie rangi lub anuluj.' %}</p>
+  <form action="{% url 'groups:show:ranks_delete' group.pk rank.pk %}"
+    method="post">
+    {% csrf_token %}
+    <input type="submit" value="{% trans 'Potwierdź' %}">
+    <a href="{% url 'groups:show:ranks' group.pk %}">
+      {% trans 'Anuluj' %}
+    </a>
+  </form>
+{% endblock %}

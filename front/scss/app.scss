@@ -1,0 +1,13 @@
+// Foundation variables
+@import 'base/foundation_settings';
+
+// Import Normalize, Foundation and Font Awesome
+@import '../bower_components/foundation/scss/normalize';
+@import '../bower_components/foundation/scss/foundation';
+@import '../bower_components/font-awesome/scss/font-awesome';
+
+// Import website layout
+@import 'base/layout';
+
+// Import specific pages style
+@import 'pages/homepage';

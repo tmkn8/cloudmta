@@ -1,0 +1,25 @@
+{% extends 'characters/base_show.html' %}
+{% load i18n %}
+
+{% block character_content %}
+  <h2>{% trans 'Zaproszenia do grup' %}</h2>
+  <ul>
+    {% for invitation in invitations %}
+      <li>
+        {{ invitation.group }} -
+        {{ invitation.invited_by }} -
+        {{ invitation.date }} -
+        <a href="{% url 'characters:show:group_invitations_accept' character.pk invitation.pk %}">
+          {% trans 'Akceptuj' %}
+        </a> -
+        <a href="{% url 'characters:show:group_invitations_decline' character.pk invitation.pk %}">
+          {% trans 'Odrzuć' %}
+        </a>
+      </li>
+    {% empty %}
+      <li>
+        {% trans 'Postać nie dostała żadnych zaproszeń do grupy.' %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

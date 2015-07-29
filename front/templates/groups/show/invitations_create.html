@@ -1,0 +1,11 @@
+{% extends 'groups/base_show.html' %}
+{% load i18n %}
+{% block group_content %}
+  <h2>{% trans 'Stwórz zaproszenie do grupy' %}</h2>
+  <form action="{% url 'groups:show:invitations_create' group.pk %}"
+    method="post">
+    {% csrf_token %}
+    {{ form  }}
+    <input type="submit" value="{% trans 'Wyślij zaproszenie' %}"
+  </form>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'Lista postaci' %}{% endblock %}
+
+{% block content %}
+  <h1>{% trans 'Lista postaci' %}</h1>
+  <ul>
+    {% for character in characters %}
+      <li>
+        <a href="{% url 'characters:show:index' character.pk %}">
+          {{ character }}
+        </a>
+      </li>
+      {% empty %}
+      <li>
+        {% trans 'Nie masz żadnych postaci.' %}
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% if request.user.can_create_character %}
+    <a href="{% url 'characters:create' %}">
+      {% trans 'Stwórz postać' %}
+    </a>
+  {% else %}
+    {% trans 'Nie możesz obecnie tworzyć nowych postaci.' %}
+  {% endif %}
+  {% if not request.user.has_passed_rp_test %}
+    {% url 'accounts:roleplay-test' as test_url %}
+    <p>
+      {% blocktrans %}
+        Żeby założyć postać, najpierw musisz zdać <a href="{{ test_url }}">test roleplay</a>.
+      {% endblocktrans %}
+    </p>
+  {% endif %}
+
+{% endblock %}

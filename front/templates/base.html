@@ -1,0 +1,23 @@
+{% load staticfiles %}
+{% load i18n %}
+<!DOCTYPE HTML>
+<html lang="pl-PL">
+  <head>
+  	<meta charset="utf-8">
+  	<title>{% block title %}{% trans 'Serwer role play na MTA' %}{% endblock %} | CloudMTA</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <script src="{% static 'js/output_header.js' %}"></script>
+  </head>
+  <body>
+    {% include 'includes/header.html' %}
+    {% include 'includes/messages.html' %}
+    <div class="row">
+      <div class="12-large columns">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+    {% include 'includes/footer.html' %}
+    <script src="{% static 'js/output_footer.js' %}"></script>
+    <script>$(document).foundation();</script>
+  </body>
+</html>

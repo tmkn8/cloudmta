@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{{ character }}{% endblock %}
+
+{% block content %}
+  <h1>{{ character }}</h1>
+  <ul>
+    {% url 'characters:show:index' character.pk as index_url %}
+    <li{% if request.path == index_url %} class="active"{% endif %}>
+      <a href="{% url 'characters:show:index' character.pk %}">
+        {% trans 'Szczegóły' %}
+      </a>
+    </li>
+    <li{% if 'items' in request.path %} class="active"{% endif %}>
+      <a href="{% url 'characters:show:items' character.pk %}">
+        {% trans 'Przedmioty' %}
+      </a>
+    </li>
+    <li{% if 'vehicles' in request.path %} class="active"{% endif %}>
+      <a href="{% url 'characters:show:vehicles' character.pk %}">
+        {% trans 'Pojazdy' %}
+      </a>
+    </li>
+    <li{% if 'doors' in request.path %} class="active"{% endif %}>
+      <a href="{% url 'characters:show:doors' character.pk %}">
+        {% trans 'Drzwi' %}
+      </a>
+    </li>
+    <li{% if 'groups' in request.path %} class="active"{% endif %}>
+      <a href="{% url 'characters:show:groups' character.pk %}">
+        {% trans 'Grupy' %}
+      </a>
+    </li>
+    <li{% if 'group_invitations' in request.path %} class="active"{% endif %}>
+      <a href="{% url 'characters:show:group_invitations' character.pk %}">
+        {% trans 'Zaproszenia do grupy' %}
+      </a>
+    </li>
+    <li{% if 'settings' in request.path %} class="active"{% endif %}>
+      <a href="{% url 'characters:show:settings' character.pk %}">
+        {% trans 'Ustawienia' %}
+      </a>
+    </li>
+  </ul>
+
+  {% block character_content %}{% endblock %}
+
+{% endblock %}

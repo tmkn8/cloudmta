@@ -1,0 +1,14 @@
+{% extends 'groups/base_show.html' %}
+{% load i18n %}
+{% block group_content %}
+  <h2>{% blocktrans with member=member.userid %}Kasowanie członka {{ member }}{% endblocktrans %}</h2>
+  <p>{% trans 'Potwierdź skasowanie członka lub anuluj.' %}</p>
+  <form action="{% url 'groups:show:members_delete' group.pk member.pk %}"
+    method="post">
+    {% csrf_token %}
+    <input type="submit" value="{% trans 'Potwierdź' %}">
+    <a href="{% url 'groups:show:members' group.pk %}">
+      {% trans 'Anuluj' %}
+    </a>
+  </form>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+  <h1>{% blocktrans %}Grupa {{ group }}{% endblocktrans %}</h1>
+  <ul>
+    {% url 'groups:show:index' group.pk as index_url %}
+    <li{% if request.path == index_url %} class="active"{% endif %}>
+      <a href="{% url 'groups:show:index' group.pk %}">
+        {% trans 'Szczegóły' %}
+      </a>
+    </li>
+    <li{% if 'members' in request.path %} class="active"{% endif %}>
+      <a href="{% url 'groups:show:members' group.pk %}">
+        {% trans 'Członkowie' %}
+      </a>
+    </li>
+    <li{% if 'vehicles' in request.path %} class="active"{% endif %}>
+      <a href="{% url 'groups:show:vehicles' group.pk %}">
+        {% trans 'Pojazdy' %}
+      </a>
+    </li>
+    <li{% if 'doors' in request.path %} class="active"{% endif %}>
+      <a href="{% url 'groups:show:doors' group.pk %}">
+        {% trans 'Drzwi' %}
+      </a>
+    </li>
+    <li{% if 'ranks' in request.path %} class="active"{% endif %}>
+      <a href="{% url 'groups:show:ranks' group.pk %}">
+        {% trans 'Rangi' %}
+      </a>
+    </li>
+    <li{% if 'invitations' in request.path %} class="active"{% endif %}>
+      <a href="{% url 'groups:show:invitations' group.pk %}">
+        {% trans 'Zaproszenia' %}
+      </a>
+    </li>
+  </ul>
+
+  {% block group_content %}{% endblock %}
+{% endblock %}

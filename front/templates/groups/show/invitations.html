@@ -1,0 +1,23 @@
+{% extends 'groups/base_show.html' %}
+{% load i18n %}
+{% block group_content %}
+  <h2>{% trans 'Zaproszenia do grupy' %}</h2>
+  <ul>
+    {% for invitation in invitations %}
+      <li>
+        {{ invitation.character }} -
+        {{ invitation.character.memberid }} -
+        {{ invitation.invited_by }} -
+        <a href="{% url 'groups:show:invitations_delete' group.pk invitation.pk %}">{% trans 'Usuń' %}</a>
+      </li>
+    {% empty %}
+      <li>{% trans 'Nie wysłano jeszcze żadnych zaproszeń do grupy.' %}</li>
+    {% endfor %}
+  </ul>
+  
+  <p>
+    <a href="{% url 'groups:show:invitations_create' group.pk %}">
+      {% trans 'Stwórz nowe zaproszenie' %}
+    </a>
+  </p>
+{% endblock %}

@@ -1,0 +1,15 @@
+{
+  "name": "cloudmta-www",
+  "version": "0.1.0",
+  "authors": [
+    "Tomasz Knapik"
+  ],
+  "license": "MIT",
+  "homepage": "http://cloudmta.pl/",
+  "dependencies": {
+    "foundation": "~5.5.2"
+  },
+  "devDependencies": {
+    "font-awesome": "~4.4.0"
+  }
+}

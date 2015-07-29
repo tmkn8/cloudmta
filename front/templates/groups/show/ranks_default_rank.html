@@ -1,0 +1,17 @@
+{% extends 'groups/base_show.html' %}
+{% load i18n %}
+{% block group_content %}
+  <h2>{% blocktrans %}Edycja domyślnej rangi{% endblocktrans %}</h2>
+  <form action="{% url 'groups:show:ranks_default_rank' group.pk %}"
+    method="post">
+    {% csrf_token %}
+    <select name="default_rank">
+      {% for rank in ranks %}
+        <option value="{{ rank.pk }}"{% if rank.defaultrank %} selected{% endif %}>
+          #{{ rank.pk }} {{ rank }}
+        </option>
+      {% endfor %}
+    </select>
+    <input type="submit" value="{% trans 'Zapisz domyślną rangę' %}">
+  </form>
+{% endblock %}

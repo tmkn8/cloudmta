@@ -1,0 +1,83 @@
+{% load i18n %}
+<nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    <li class="name">
+      <h1><a href="{% url 'homepage' %}">CloudMTA</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#"><span>{% trans 'Menu' %}</span></a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    {# Right Nav Section #}
+    <ul class="right">
+      <li class="has-form">
+        <a class="button">
+          {% blocktrans %}15 graczy online{% endblocktrans %}
+        </a>
+      </li>
+      {% if not request.user.is_authenticated %}
+        <li{% if 'register' in request.path %} class="active"{% endif %}>
+          <a href="{% url 'accounts:register' %}">
+            {% trans 'Rejestracja' %}
+          </a>
+        </li>
+        <li{% if 'login' in request.path %} class="active"{% endif %}>
+          <a href="{% url 'accounts:login' %}">
+            {% trans 'Logowanie' %}
+          </a>
+        </li>
+      {% else %}
+      <li class="has-dropdown{% if request.user.username in request.path %} active{% endif %}">
+        <a href="{# url 'accounts:profile:index' request.user.username #}">
+          {{ user.username }}
+        </a>
+        <ul class="dropdown">
+          <li{% if request.user.username in request.path %} class=" active"{% endif %}>
+            <a href="{# url 'accounts:profile:index' request.user.username #}">
+              {% trans 'Profil' %}
+            </a>
+          </li>
+          <li{% if 'characters' in request.path %} class="active"{% endif %}>
+            <a href="{% url 'characters:index' %}">
+              {% trans 'Twoje postacie' %}
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'accounts:logout' %}">
+              {% trans 'Wyloguj' %}
+              <span class="right">
+                <i class="fa fa-sign-out"></i>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {% endif %}
+    </ul>
+
+    <!-- Left Nav Section -->
+    <ul class="left">
+      {% url 'homepage' as homepage_url %}
+      <li{% if request.path == homepage_url %} class="active"{% endif %}>
+        <a href="{% url 'homepage' %}">
+          <i class="fa fa-home"></i>
+        </a>
+      </li>
+      <li{% if 'wiki' in request.path %} class="active"{% endif %}>
+        <a href="{# url 'wiki:index' #}">
+          {% trans 'Wiki' %}
+        </a>
+      </li>
+      <li{% if 'blog' in request.path %} class="active"{% endif %}>
+        <a href="{# url 'blog:index' #}">
+          {% trans 'Blog' %}
+        </a>
+      </li>
+      <li>
+        <a href="http://forum.cloudmta.dev:8080/">
+          {% trans 'Forum' %}
+        </a>
+      </li>
+    </ul>
+  </section>
+</nav>

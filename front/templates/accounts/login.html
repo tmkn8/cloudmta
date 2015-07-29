@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+  <h1>{% trans 'Zaloguj się' %}</h1>
+  <form action="{% url 'accounts:login' %}" method="POST">
+    {% csrf_token %}
+    <div class="row">
+      <div class="12-large columns">
+        <label {% if form.username.errors %}class="error"{% endif %} for="{{ form.username.id_for_label }}">
+          {{ form.username.label }}
+          {{ form.username }}
+        </label>
+        {% if form.username.errors %}
+          <small class="error">{{ form.username.errors|join:', ' }}</small>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="12-large columns">
+        <label {% if form.password.errors %}class="error"{% endif %} for="{{ form.password.id_for_label }}">
+          {{ form.password.label }}
+          {{ form.password }}
+        </label>
+        {% if form.password.errors %}
+          <small class="error">{{ form.password.errors|join:', ' }}</small>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="12-large columns">
+        <input class="button large expand" type="submit" value="{% trans 'Zaloguj' %}">
+      </div>
+    </div>
+  </form>
+{% endblock %}

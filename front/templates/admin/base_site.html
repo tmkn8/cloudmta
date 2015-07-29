@@ -1,0 +1,16 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }} | {% trans 'CloudMTA' %}{% endblock %}
+
+{% block branding %}
+<style type="text/css">
+  #header
+  {
+
+  }
+</style>
+<h1 id="site-name">{% trans 'CloudMTA' %}</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

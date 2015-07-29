@@ -1,0 +1,17 @@
+{% extends 'characters/base_show.html' %}
+{% load i18n %}
+
+{% block character_content %}
+  <h2>{% trans 'Przedmioty' %}</h2>
+  <ul>
+    {% for item in items %}
+      <li>
+        {{ item }}
+      </li>
+    {% empty %}
+      <li>
+        {% trans 'Postać nie posiada żadnych przedmiotów' %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
