@@ -16,3 +16,8 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+
+# URL do forum
+FORUM_LINK = 'http://forum.cloudmta.dev:8080'
+# Link do tworzenia kont
+FORUM_REGISTER_ACCOUNT_LINK = FORUM_LINK + '/member.php?action=register'

@@ -28,6 +28,7 @@ def accounts_login(request):
 
 def accounts_logout(request):
     logout(request)
+    messages.success(request, _('Nastąpiło poprawne wylogowanie.'))
     return redirect('homepage')
 
 def accounts_register(request):
