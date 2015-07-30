@@ -1,18 +1,59 @@
 # Informacje
 Repozytorium zawiera stronę internetową CloudMTA napisaną w Pythonie z użyciem Django. Po stronie front-endu używamy technologii takich jak Sass, Bower oraz Grunt.
 
-# Instalacja
-1. Sklonuj repozytorium. ``git clone git@gitlab.com:cloudmta/cloudmta-www.git``
-2. Zainstaluj aplikacje Pythona wymagane przez ten projekt. ``pip install -r requiremenets.txt``
-3. Ustaw szczegóły połączenia z bazą danych MySQL w ``cloudmta/settings/secrets.json``.
-4. Zmigruj bazę danych komendą ``./mng_dev.py migrate`` lub ``./mng_prod.py``.
-5. Wejdź w folder ``front`` i wykonaj komendy ``npm install``, ``bower install`` oraz ``grunt``.
-6. Zainstaluj MyBB na tej samej bazie danych oraz stwórz użytkownika.
-7. Wykonaj poniższy kod w ``./mng_dev.py shell`` lub ``./mng_prod.py shell``:
- ```
- from accounts.models import User
- u = User.objects.get(pk=1)
- u.is_staff = True
- u.is_superuser = True
- u.save()
- ```
+# Instalacja w środowisku programistycznym
+Sklonuj dwa repozytoria - wirtualną maszynę oraz stronę WWW. Obydwa repozytoria muszą być sklonowane w jednym folderze.
+```
+git clone git@gitlab.com:cloudmta/vm-www.git
+git clone git@gitlab.com:cloudmta/www.git
+```
+
+Wejdź w folder `vm-cloudmta-www` i pobierz moduły Puppeta.
+```
+cd vm-cloudmta-www
+git submodule init
+git submodule update
+```
+
+Włącz Vagranta. Proces zajmie trochę czasu, gdyż musi skonfigurować maszynę.
+```
+vagrant up
+```
+
+W razie wystąpienia błędów przy poprzednim, wpisz poniższą komendę.
+```
+vagrant reload --provision
+```
+
+Zaloguj się do maszyny przez SSH oraz przejdź do folderu projektu w maszynie wirtualnej.
+```
+vagrant ssh
+cd /cloudmta
+```
+
+Odpal środowisko wirtualnej.
+```
+source env/bin/activate
+```
+
+Przeprowadź migrację bazy danych.
+```
+./mng_dev.py migrate
+```
+
+Jeżeli nie poprosiło Cię o stworzenie użytkownika, zrób to teraz.
+```
+./mng_dev.py createsuperuser
+```
+
+Zrestartuj serwer WSGI.
+```
+sudo service gunicorn restart
+```
+
+Zedytuj plik `etc/hosts`, żeby dodać domenę.
+```
+127.0.0.1   cloudmta.dev
+```
+
+Strona powinna działać jak należy pod adresem `http://cloudmta.dev:8080/`
