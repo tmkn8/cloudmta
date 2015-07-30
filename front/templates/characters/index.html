@@ -33,12 +33,14 @@
   <ul class="characters-list small-block-grid-1 medium-block-grid-2 large-block-grid-3" data-equalizer>
     {% for character in characters %}
       <li>
-        <a href="{% url 'characters:show:index' character.pk %}"
-          style="background-image: url({% static character.get_skin_static_url %})"
-          data-equalizer-watch>
+        <a {% if character.blocked %}class="blocked"{% endif %}
+            href="{% url 'characters:show:index' character.pk %}"
+            style="background-image: url({% static character.get_skin_static_url %})"
+            data-equalizer-watch>
+          <h2>{{ character }} <small>{% if character.blocked %}<i class="fa fa-ban"></i>{% endif %} {%if character.hide %}<i class="fa fa-eye-slash"></i>{% endif %}</small></h2>
           <ul class="no-bullet">
-            <h2>{{ character }}</h2>
-            <li>{{ character.format_onlinetime }}</li>
+            <li>{{ character.facecode }}</li>
+            <li>{{ character.format_online_time }}</li>
             <li>${{ character.money }}</li>
           </ul>
         </a>

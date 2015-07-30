@@ -1,17 +1,28 @@
 .button-create-character {
-  background-color: $cloudmta-1-pink;
+  background-color: $cloudmta-1-red;
   &:hover {
-    background-color: scale-color($cloudmta-1-pink, $lightness: -30%);
+    background-color: scale-color($cloudmta-1-red, $lightness: -30%);
   }
 }
 
 ul.characters-list {
   li {
     a {
-      &, h2 {
+      &, h2, i {
         color: $white;
       }
-      min-height: 200px;
+
+      &.blocked {
+        opacity: 0.6;
+        background-color: $cloudmta-1-pink;
+      }
+
+      &.blocked:hover {
+        opacity: 1;
+        background-color: scale-color($cloudmta-1-pink, $lightness: -30%);
+      }
+
+      min-height: 230px;
       background-color: $cloudmta-1-green;
       text-align: right;
       background-repeat: no-repeat;
