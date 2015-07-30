@@ -15,7 +15,7 @@ ul.characters-list {
       background-color: $cloudmta-1-green;
       text-align: right;
       background-repeat: no-repeat;
-      background-position: left;
+      background-position: left center;
       background-size: contain;
       &:hover {
         background-color: scale-color($cloudmta-1-green, $lightness: -30%);
@@ -31,6 +31,9 @@ ul.characters-list {
   background-repeat: no-repeat;
   background-size: contain;
   background-position: 5% center;
+  @media #{$small-only}, #{$medium-only} {
+    background-position: right top;
+  }
   &, a, h1, h1 small {
     color: $white;
   }
