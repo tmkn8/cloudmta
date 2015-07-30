@@ -5,19 +5,25 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext as _
+from django.utils import timezone
 from django.contrib.auth.models import UserManager
 from characters.models import Character
 import hashlib
 
 class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_VALIDATOR = RegexValidator(r'^([A-Za-z0-9]{3,})$')
-    username = models.CharField(verbose_name=_('Nazwa użytkownika'),
+    username = models.CharField(verbose_name=_('nazwa użytkownika'),
         max_length=20, validators=[USERNAME_VALIDATOR], unique=True)
-    email = models.EmailField(verbose_name=_('Adres e-mail'), unique=True)
+    email = models.EmailField(verbose_name=_('adres e-mail'), unique=True)
     USERNAME_FIELD = 'email'
-    is_staff = models.BooleanField(default=False, verbose_name=_('Ekipa'),
-        help_text=_('Ma dostęp do strony administracji.'))
-    passed_rp_test = models.BooleanField(default=False, verbose_name=_('Zdał '
+    REQUIRED_FIELDS = ['username']
+    is_active = models.BooleanField(default=True, verbose_name=_('czy konto '
+        'jest aktywne'))
+    is_staff = models.BooleanField(default=False, verbose_name=_('ekipa'),
+        help_text=_('ma dostęp do strony administracji.'))
+    date_joined = models.DateTimeField(_('data dołączenia'),
+        default=timezone.now)
+    passed_rp_test = models.BooleanField(default=False, verbose_name=_('zdał '
         'test RP'))
 
     objects = UserManager()
