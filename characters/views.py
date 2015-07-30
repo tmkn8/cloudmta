@@ -87,6 +87,8 @@ def characters_show_settings(request, pk):
         form = CharacterSettingsForm(request.POST, instance=character)
         if form.is_valid():
             form.save()
+            messages.success(request, _("Ustawienia postaci %s zostały "
+                "zapisane." % character))
     else:
         form = CharacterSettingsForm(instance=character)
     return render(request, 'characters/show/settings.html',

@@ -1,6 +1,62 @@
 {% extends 'characters/base_show.html' %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block character_content %}
-  <h2>{% trans 'Szczegóły' %}</h2>
+  <div class="row">
+    <div class="large-4 medium-6 small-12 columns">
+      <dl>
+        <dt>{% trans 'Imię i nazwisko' %}<dt>
+        <dd>{{ character.name }}</dd>
+        <dt>{% trans 'Kod twarzy' %}
+        <dd>{{ character.facecode }}</dd>
+        <dt>{% trans 'Punkty życia' %}</dt>
+        <dd>{{ character.hp|floatformat }}</dd>
+        <dt>{% trans 'Skin' %}</dt>
+        <dd>
+          {{ character.skin }}&nbsp;
+          <a class="button tiny" href="#" data-reveal-id="skinModal">
+            {% trans 'Podgląd' %}
+          </a>
+        </dd>
+        <dt>{% trans 'Gotówka' %}</dt>
+        <dd>${{ character.money }}</dd>
+      </dl>
+    </div>
+    <div class="large-4 medium-6 small-12 columns">
+      <dl>
+        <dt>{% trans 'Czas spędzony w grze' %}
+        <dd>{{ character.format_online_time }}</dd>
+        <dt>{% trans 'Data urodzenia' %}
+        <dd>{{ character.dob }}</dd>
+        <dt>{% trans 'Postać zablokowana' %}</dt>
+        <dd>{{ character.blocked|yesno:'Zablokowana,Niezablokowana' }}</dd>
+        <dt>{% trans 'Płeć' %}</dt>
+        <dd>{{ character.get_sex_display }}</dd>
+        <dt>{% trans 'Postać online' %}</dt>
+        <dd>{{ character.ingame|yesno:'Online,Offline' }}</dd>
+      </dl>
+    </div>
+    <div class="large-4 medium-12 small-12 columns">
+      <dl>
+        <dt>{% trans 'Ostatnia wizyta w grze' %}</dt>
+        <dd>{{ character.lastvisit|default:'Nigdy nie był w grze' }}</dd>
+        <dt>{% trans 'Pozostały czas BW' %}</dt>
+        <dd>{{ character.format_bw_time }}</dd>
+        <dt>{% trans 'Pozostały czas AJ' %}</dt>
+        <dd>{{ character.format_aj_time }}</dd>
+        <dt>{% trans 'Czas spędzony w grze na AFK' %}</dt>
+        <dd>{{ character.format_afk_time }}</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div id="skinModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+  <h2 id="modalTitle">{% trans 'Podgląd skinu' %}</h2>
+  <div class="text-center">
+    <img src="{% static character.get_skin_static_url %}"
+      alt="Skin {{ character.skin }}">
+  </div>
+  <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
 {% endblock %}

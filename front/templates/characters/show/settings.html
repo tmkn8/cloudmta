@@ -2,10 +2,21 @@
 {% load i18n %}
 
 {% block character_content %}
-  <h2>{% trans 'Ustawienia' %}</h2>
   <form action="{% url 'characters:show:settings' character.pk %}" method="POST">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="{% trans 'Zapisz' %}">
+    <div class="row">
+      <div class="12-large columns">
+        <h5>{% trans 'Postać ukryta' %}</h5>
+        <div class="switch">
+          {{ form.hide }}
+          <label for="{{ form.hide.id_for_label }}"></label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="12-large columns">
+        <input class="button" type="submit" value="{% trans 'Zapisz' %}">
+      </div>
+    </div>
   </form>
 {% endblock %}

@@ -1,17 +1,71 @@
 {% extends 'characters/base_show.html' %}
 {% load i18n %}
+{% load humanize %}
 
 {% block character_content %}
-  <h2>{% trans 'Przedmioty' %}</h2>
-  <ul>
-    {% for item in items %}
-      <li>
-        {{ item }}
-      </li>
-    {% empty %}
-      <li>
-        {% trans 'Postać nie posiada żadnych przedmiotów' %}
-      </li>
-    {% endfor %}
-  </ul>
+  {% if items %}
+    <table class="table-full-width">
+      <thead>
+        <th>{% trans '#' %}</th>
+        <th>{% trans 'Nazwa przedmiotu' %}</th>
+        <th>{% trans 'Wartości' %}</th>
+        <th>
+          <span class="show-for-medium-up">{% trans 'Objętość' %}</span>
+          <span class="hide-for-medium-up">{% trans 'Obj.' %}</span>
+        </th>
+        <th>{% trans 'Szczegóły' %}</th>
+      </thead>
+      <tbody>
+        {% for item in items %}
+          <tr>
+            <td>{{ item.pk }}</td>
+            <td>
+              {{ item }}
+              <br>
+              <small>{{ item.get_type_display|title }}</small>
+            </td>
+            <td>{{ item.val1 }}, {{ item.val2 }}</td>
+            <td>{{ item.volume|intcomma }}</td>
+            <td>
+              <a class="button tiny" href="#"
+                data-reveal-id="itemModal{{ item.pk }}">
+                <i class="fa fa-info"></i>
+              </a>
+              <div id="itemModal{{ item.pk }}" class="reveal-modal"
+                data-reveal aria-labelledby="modalTitle" aria-hidden="true"
+                role="dialog">
+                <h2 id="modalTitle">{{ item }} ({{ item.pk }})</h2>
+                <dl>
+                  <dt>{% trans 'W użytku' %}</dt>
+                  <dd>{{ item.used|yesno:'tak,nie'|title }}</dd>
+                  <dt>{% trans 'Typ przedmiotu' %}</dt>
+                  <dd>{{ item.type }} ({{ item.get_type_display }})</dd>
+                  <dt>{% trans 'Wartość 1' %}</dt>
+                  <dd>{{ item.val1 }}</dd>
+                  <dt>{% trans 'Wartość 2' %}</dt>
+                  <dd>{{ item.val2 }}</dd>
+                  <dt>{% trans 'Wartość 3' %}</dt>
+                  <dd>
+                    <textarea rows="5" disabled>{{ item.val3 }}</textarea>
+                  </dd>
+                  <dt>{% trans 'Czas ostatniego użycia' %}</dt>
+                  <dd>{{ item.lastused|default:'Nigdy' }}</dd>
+                  <dt>{% trans 'Ostatnio użwany' %}</dt>
+                  <dd>
+                    <textarea rows="5" disabled>{{ item.lastuseddata }}</textarea>
+                  </dd>
+                </dl>
+                <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+              </div>
+
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="alert-box warning">
+      {% trans 'Postać nie posiada żadnych przedmiotów' %}
+    </div>
+  {% endif %}
 {% endblock %}

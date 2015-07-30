@@ -80,7 +80,8 @@ class Character(models.Model):
     blocked = models.BooleanField(default=False, verbose_name=_('Zablokowana'))
     hide = models.BooleanField(default=False, verbose_name=_('Ukryta'))
     dob = models.DateField(verbose_name=_('Data urodzenia'))
-    activated = models.BooleanField(default=False, verbose_name=_('Aktywowana'))
+    activated = models.BooleanField(default=True, verbose_name=_('Aktywowana'),
+        help_text=_('Stare, nie tykać'))
 
     def __str__(self):
         return self.name
@@ -97,11 +98,24 @@ class Character(models.Model):
         return "%s/%d.%s" % (settings.RP_SKINS_STATIC_DIRECTORY,
             self.skin, settings.RP_SKINS_IMG_FORMAT)
 
-    def format_onlinetime(self):
-        seconds = self.onlinetime
+    @staticmethod
+    def format_time(seconds):
+        seconds = int(seconds)
         m, s = divmod(seconds, 60)
         h, m = divmod(m, 60)
         return "%dh %02dmin." % (h, m)
+
+    def format_online_time(self):
+        return self.format_time(self.onlinetime)
+
+    def format_afk_time(self):
+        return self.format_time(self.afktime)
+
+    def format_bw_time(self):
+        return self.format_time(self.bwtime)
+
+    def format_aj_time(self):
+        return self.format_time(self.ajtime)
 
     def items(self):
         """Pobierz obiekty przedmiotów tej postaci"""

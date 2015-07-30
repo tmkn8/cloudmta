@@ -30,10 +30,7 @@ ul.characters-list {
   background-color: $primary-color;
   background-repeat: no-repeat;
   background-size: contain;
-  background-position: 5% center;
-  @media #{$small-only}, #{$medium-only} {
-    background-position: right top;
-  }
+  background-position: right top;
   &, a, h1, h1 small {
     color: $white;
   }

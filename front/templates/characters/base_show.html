@@ -10,10 +10,10 @@
     <div class="row">
       <div class="large-12 columns">
         <h1>
-          <a href="{{ character.url }}">
+          <a href="{{ character.get_absolute_url }}">
             {{ character }}
           </a>
-           <small>{{ character.format_onlinetime }}</small>
+           <small>{{ character.format_online_time }}</small>
         </h1>
       </div>
       <ul class="tabs">

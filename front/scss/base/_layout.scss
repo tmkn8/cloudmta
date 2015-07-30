@@ -1,3 +1,7 @@
+.table-full-width {
+  width: 100%;
+}
+
 .header-banner {
   @include panel(
     // Sets the panel background color. Default: $panel-pg
