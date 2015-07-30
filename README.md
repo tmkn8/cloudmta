@@ -63,4 +63,18 @@ Zedytuj plik `etc/hosts`, żeby dodać domenę.
 127.0.0.1   cloudmta.dev
 ```
 
-Strona powinna działać jak należy pod adresem `http://cloudmta.dev:8080/`
+Strona powinna odpowiadać jak należy pod adresem `http://cloudmta.dev:8080/`.
+
+Teraz należy skompilować SCSS. Aby to zrobić udaj się do folderu z plikami frontu strony oraz zainstaluj wszystkie zależności.
+```
+cd /cloudmta/front
+npm install
+bower install
+```
+
+Uruchom Grunt w celu skompilowania wszystkich potrzebnych plików.
+```
+grunt
+```
+
+Front strony powinien działać jak należy.
