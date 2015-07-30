@@ -2,6 +2,13 @@
 Repozytorium zawiera stronę internetową CloudMTA napisaną w Pythonie z użyciem Django. Po stronie front-endu używamy technologii takich jak Sass, Bower oraz Grunt.
 
 # Instalacja w środowisku programistycznym
+Jeżeli chcesz pokodzić na swoim hoście lokalnym, to możesz skorzystać z poniższej instrukcji, żeby skonfigurować środowisko.
+## Wymagania
+* Vagrant
+* VirtualBox
+* Git
+
+## Proces
 Sklonuj dwa repozytoria - wirtualną maszynę oraz stronę WWW. Obydwa repozytoria muszą być sklonowane w jednym folderze.
 ```
 git clone git@gitlab.com:cloudmta/vm-www.git
