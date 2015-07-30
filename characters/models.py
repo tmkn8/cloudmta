@@ -148,6 +148,10 @@ class StartSkin(models.Model):
         verbose_name = _('skin startowy')
         verbose_name_plural = _('skiny startowe')
 
+    def get_static_url(self):
+        return "%s/%d.%s" % (settings.RP_SKINS_STATIC_DIRECTORY,
+            self.skin_id, settings.RP_SKINS_IMG_FORMAT)
+
 class Facecode(models.Model):
     charid = models.ForeignKey('Character', db_column='charID',
         verbose_name=_('Postać'), related_name='facecodes')

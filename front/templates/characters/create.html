@@ -1,5 +1,6 @@
 {% extends 'base_content.html' %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block title %}{% trans 'Stwórz postać' %}{% endblock %}
 
@@ -56,10 +57,59 @@
     </div>
 
     <div class="row">
+      <div class="large-12 columns" id="skins"
+          style="display: {% if request.POST.sex %}block{% else %}none{% endif %}">
+        {% for k, v in skins.items %}
+          <div id="skins_{{ k }}"
+              style="display: {% if request.POST.sex|floatformat == k|floatformat %}block{% else %}none{% endif %}">
+            <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
+              {% for skin in v %}
+                <li class="text-center skin-list-item" rel="{{ skin.skin_id }}">
+                  <img src="{% static skin.get_static_url %}" alt="Skin {{ skin }}">
+                  <br>
+                  <input name="skin" type="radio" id="input_radio_skin_{{ skin.skin_id }}" value="{{ skin.skin_id }}" {% if skin.skin_id|floatformat == request.POST.skin|floatformat %}checked{% endif %}>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="row">
       <div class="large-12 columns">
-        <input type="hidden" name="skinid" value="{{ request.POST.skinid }}">
         <input class="button" type="submit" value="{% trans 'Stwórz postać' %}">
       </div>
     </div>
   </form>
+{% endblock %}
+
+{% block before_end_of_body %}
+  <script>
+    var skin_id = 0
+
+    $('.skin-list-item').click(function() {
+      skin_id = $(this).attr('rel');
+      $('#input_radio_skin_' + skin_id).prop('checked', true);
+    });
+
+    var val = {{ request.POST.sex|default:0 }}
+
+    $("#{{ form.sex.id_for_label }}").change(function() {
+      val = $("#{{ form.sex.id_for_label }}").val()
+      if (val == 1) {
+        $('#skins').show();
+        $('#skins_1').show();
+        $('#skins_2').hide();
+      } else if (val == 2) {
+        $('#skins').show();
+        $('#skins_1').hide();
+        $('#skins_2').show();
+      } else {
+        $('#skins').hide();
+        $('#skins_1').hide();
+        $('#skins_2').hide();
+      }
+    });
+  </script>
 {% endblock %}

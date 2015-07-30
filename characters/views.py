@@ -20,12 +20,14 @@ def characters_index(request):
 def characters_create(request):
     """Stwórz postać"""
     # Zapisz skiny startowe i podziel je na płci
+    skins_1 = []
+    skins_2 = []
     for s in StartSkin.objects.all():
         if s.sex == 1:
-            skins_1 = s
+            skins_1.append(s)
         else:
-            skins_2 = s
-    start_skins = [skins_1, skins_2]
+            skins_2.append(s)
+    start_skins = {1: skins_1, 2: skins_2}
 
     if request.method == 'POST':
         form = CreateCharacterForm(request.POST)
@@ -37,7 +39,7 @@ def characters_create(request):
     else:
         form = CreateCharacterForm()
     return render(request, 'characters/create.html', {'form': form,
-        'skins': skins})
+        'skins': start_skins})
 
 def get_character_object(request, pk):
     """Zwróć obiekt postaci
