@@ -20,37 +20,38 @@
         {% url 'characters:show:index' character.pk as index_url %}
         <li class="tab-title{% if request.path == index_url%} active{% endif %}">
           <a href="{% url 'characters:show:index' character.pk %}">
-            {% trans 'Szczegóły' %}
+            <i class="fa fa-info"></i>
+            <span class="right show-for-large-up">{% trans 'Szczegóły' %}</span>
           </a>
         </li>
         <li class="tab-title{% if 'items' in request.path%} active{% endif %}">
           <a href="{% url 'characters:show:items' character.pk %}">
-            {% trans 'Przedmioty' %}
+            <i class="fa fa-archive"></i>
+            <span class="right show-for-large-up">{% trans 'Przedmioty' %}</span>
           </a>
         </li>
         <li class="tab-title{% if 'vehicles' in request.path%} active{% endif %}">
           <a href="{% url 'characters:show:vehicles' character.pk %}">
-            {% trans 'Pojazdy' %}
+            <i class="fa fa-car"></i>
+            <span class="right show-for-large-up">{% trans 'Pojazdy' %}</span>
           </a>
         </li>
         <li class="tab-title{% if 'doors' in request.path%} active{% endif %}">
           <a href="{% url 'characters:show:doors' character.pk %}">
-            {% trans 'Drzwi' %}
+            <i class="fa fa-sign-in"></i>
+            <span class="right show-for-large-up">{% trans 'Drzwi' %}</span>
           </a>
         </li>
         <li class="tab-title{% if 'groups' in request.path%} active{% endif %}">
           <a href="{% url 'characters:show:groups' character.pk %}">
-            {% trans 'Grupy' %}
-          </a>
-        </li>
-        <li class="tab-title{% if 'group-invitations' in request.path%} active{% endif %}">
-          <a href="{% url 'characters:show:group_invitations' character.pk %}">
-            {% trans 'Zaproszenia do grupy' %}
+            <i class="fa fa-users"></i>
+            <span class="right show-for-large-up">{% trans 'Grupy' %}</span>
           </a>
         </li>
         <li class="tab-title{% if 'settings' in request.path%} active{% endif %}">
           <a href="{% url 'characters:show:settings' character.pk %}">
-            {% trans 'Ustawienia' %}
+            <i class="fa fa-cog"></i>
+            <span class="right show-for-large-up">{% trans 'Ustawienia' %}</span>
           </a>
         </li>
       </ul>

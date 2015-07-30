@@ -37,4 +37,14 @@ ul.characters-list {
   &, a, h1, h1 small {
     color: $white;
   }
+
+  .tabs {
+    li {
+      i.fa {
+        @media #{$large-up} {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
 }

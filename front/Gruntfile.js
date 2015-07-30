@@ -58,13 +58,9 @@ module.exports = function(grunt) {
     },
 
     watch: {
-      js: {
-        files: [bower_components + '/**.js', bower_components + '/**.map'],
-        tasks: ['concat', 'copy'],
-      },
       sass: {
         files: [scss_files + '/**.scss', scss_files + '/**/*.scss', bower_components + 'foundation/scss/**.scss'],
-        tasks: ['sass'],
+        tasks: ['sass', 'cssmin'],
       },
     },
 
