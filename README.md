@@ -22,7 +22,7 @@ git submodule init
 git submodule update
 ```
 
-Włącz Vagranta. Proces zajmie trochę czasu, gdyż musi skonfigurować maszynę.
+Włącz Vagranta. Proces zajmie trochę czasu (z 10-15 minut), gdyż Puppet musi skonfigurować maszynę.
 ```
 vagrant up
 ```
@@ -38,7 +38,7 @@ vagrant ssh
 cd /cloudmta
 ```
 
-Odpal środowisko wirtualnej.
+Odpal środowisko wirtualne Pythona.
 ```
 source env/bin/activate
 ```
