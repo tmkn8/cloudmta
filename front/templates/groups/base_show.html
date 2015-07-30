@@ -1,40 +1,62 @@
 {% extends 'base_content.html' %}
 {% load i18n %}
+{% block under_header %}
+<div class="group-header-banner">
+  <div class="row">
+    <div class="large-12 columns">
+      <h1>
+        <a href="{{ group.get_absolute_url }}">
+          {{ group }}
+        </a>
+         <small>{{ group.format_online_time }}</small>
+      </h1>
+    </div>
+    <ul class="tabs">
+      {% url 'groups:show:index' group.pk as index_url %}
+      <li class="tab-title {% if request.path == index_url %} active{% endif %}">
+        <a href="{% url 'groups:show:index' group.pk %}">
+          <i class="fa fa-info"></i>
+          <span class="right show-for-large-up">{% trans 'Szczegóły' %}</span>
+        </a>
+      </li>
+      <li class="tab-title {% if 'members' in request.path %} active{% endif %}">
+        <a href="{% url 'groups:show:members' group.pk %}">
+          <i class="fa fa-users"></i>
+          <span class="right show-for-large-up">{% trans 'Członkowie' %}</span>
+        </a>
+      </li>
+      <li class="tab-title {% if 'vehicles' in request.path %} active{% endif %}">
+        <a href="{% url 'groups:show:vehicles' group.pk %}">
+          <i class="fa fa-car"></i>
+          <span class="right show-for-large-up">{% trans 'Pojazdy' %}</span>
+        </a>
+      </li>
+      <li class="tab-title {% if 'doors' in request.path %} active{% endif %}">
+        <a href="{% url 'groups:show:doors' group.pk %}">
+          <i class="fa fa-sign-in"></i>
+          <span class="right show-for-large-up">{% trans 'Drzwi' %}</span>
+        </a>
+      </li>
+      <li class="tab-title {% if 'ranks' in request.path %} active{% endif %}">
+        <a href="{% url 'groups:show:ranks' group.pk %}">
+          <i class="fa fa-filter"></i>
+          <span class="right show-for-large-up">{% trans 'Rangi' %}</span>
+        </a>
+      </li>
+      <li class="tab-title {% if 'invitations' in request.path %} active{% endif %}">
+        <a href="{% url 'groups:show:invitations' group.pk %}">
+          <i class="fa fa-user-plus"></i>
+          <span class="right show-for-large-up">{% trans 'Zaproszenia' %}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
 {% block content %}
-  <h1>{% blocktrans %}Grupa {{ group }}{% endblocktrans %}</h1>
-  <ul>
-    {% url 'groups:show:index' group.pk as index_url %}
-    <li{% if request.path == index_url %} class="active"{% endif %}>
-      <a href="{% url 'groups:show:index' group.pk %}">
-        {% trans 'Szczegóły' %}
-      </a>
-    </li>
-    <li{% if 'members' in request.path %} class="active"{% endif %}>
-      <a href="{% url 'groups:show:members' group.pk %}">
-        {% trans 'Członkowie' %}
-      </a>
-    </li>
-    <li{% if 'vehicles' in request.path %} class="active"{% endif %}>
-      <a href="{% url 'groups:show:vehicles' group.pk %}">
-        {% trans 'Pojazdy' %}
-      </a>
-    </li>
-    <li{% if 'doors' in request.path %} class="active"{% endif %}>
-      <a href="{% url 'groups:show:doors' group.pk %}">
-        {% trans 'Drzwi' %}
-      </a>
-    </li>
-    <li{% if 'ranks' in request.path %} class="active"{% endif %}>
-      <a href="{% url 'groups:show:ranks' group.pk %}">
-        {% trans 'Rangi' %}
-      </a>
-    </li>
-    <li{% if 'invitations' in request.path %} class="active"{% endif %}>
-      <a href="{% url 'groups:show:invitations' group.pk %}">
-        {% trans 'Zaproszenia' %}
-      </a>
-    </li>
-  </ul>
-
-  {% block group_content %}{% endblock %}
+  <div class="tabs-content">
+    <div class="content active">
+      {% block group_content %}{% endblock %}
+    </div>
+  </div>
 {% endblock %}
