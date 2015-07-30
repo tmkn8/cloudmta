@@ -2,22 +2,53 @@
 {% load i18n %}
 {% block group_content %}
   <h2>{% trans 'Zaproszenia do grupy' %}</h2>
-  <ul>
-    {% for invitation in invitations %}
-      <li>
-        {{ invitation.character }} -
-        {{ invitation.character.memberid }} -
-        {{ invitation.invited_by }} -
-        <a href="{% url 'groups:show:invitations_delete' group.pk invitation.pk %}">{% trans 'Usuń' %}</a>
-      </li>
-    {% empty %}
-      <li>{% trans 'Nie wysłano jeszcze żadnych zaproszeń do grupy.' %}</li>
-    {% endfor %}
-  </ul>
-  
-  <p>
-    <a href="{% url 'groups:show:invitations_create' group.pk %}">
-      {% trans 'Stwórz nowe zaproszenie' %}
-    </a>
-  </p>
+  <table class="table-full-width">
+    <thead>
+      <th>{% trans 'Zaproszona postać' %}</th>
+      <th>{% trans 'Zapraszający' %}</th>
+      <th>{% trans 'Edycja' %}</th>
+    </thead>
+    <tbody>
+      {% for invitation in invitations %}
+        <tr>
+          <td>
+            {{ invitation.character }}
+            <br>
+            <small>
+              <a href="{{ invitation.character.memberid.get_absolute_url }}">
+                {{ invitation.character.memberid }}
+              </a>
+            </small>
+          </td>
+          <td>
+            <a href="{{ invitation.invited_by.get_absolute_url }}">
+              {{ invitation.invited_by }}
+            </a>
+          </td>
+          <td>
+            <a class="button alert tiny"
+                href="{% url 'groups:show:invitations_delete' group.pk invitation.pk %}">
+              <i class="fa fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="3">
+            {% trans 'Nie wysłano jeszcze żadnych zaproszeń do grupy.' %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="row">
+    <div class="large-12 columns">
+      <a class="button success" href="{% url 'groups:show:invitations_create' group.pk %}">
+        {% trans 'Stwórz nowe zaproszenie' %}
+        &nbsp;&nbsp;
+        <i class="fa fa-user-plus"></i>
+      </a>
+    </div>
+  </div>
 {% endblock %}

@@ -5,7 +5,22 @@
   <form action="{% url 'groups:show:invitations_create' group.pk %}"
     method="post">
     {% csrf_token %}
-    {{ form  }}
-    <input type="submit" value="{% trans 'Wyślij zaproszenie' %}"
+    <div class="row">
+      <div class="large-12 columns">
+        <label {% if form.character.errors %}class="error"{% endif %}
+            for="{{ form.character.label_for_id }}">
+          {{ form.character.label }}
+          {{ form.character }}
+        </label>
+        {% if form.character.errors %}
+          <small class="error">{{ form.character.errors|join:', ' }}</small>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-12 columns">
+          <input class="button" type="submit" value="{% trans 'Wyślij zaproszenie' %}">
+      </div>
+    </div>
   </form>
 {% endblock %}
