@@ -12,7 +12,54 @@
 {% block content %}
   <form action="{% url 'characters:create' %}" method="POST">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="{% trans 'Stwórz postać' %}">
+    {% for error in form.non_field_errors %}
+      <div class="alert-box alert">
+        {{ error }}
+      </div>
+    {% endfor %}
+    <div class="row">
+      <div class="large-12 columns">
+        <label {% if form.name.errors %}class="error"{% endif %} for="{{ form.name.id_for_label }}">
+          {{ form.name.label }}
+          {{ form.name }}
+        </label>
+        {% if form.name.errors %}
+          <small class="error">{{ form.name.errors|join:', ' }}</small>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <label {% if form.dob.errors %}class="error"{% endif %} for="{{ form.dob.id_for_label }}">
+          {{ form.dob.label }}
+          {# form.dob #}
+          <input type="date" name="dob" id="{{ form.dob.id_for_label }}"
+            value="{{ request.POST.dob }}">
+        </label>
+        {% if form.dob.errors %}
+          <small class="error">{{ form.dob.errors|join:', ' }}</small>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <label {% if form.sex.errors %}class="error"{% endif %} for="{{ form.sex.id_for_label }}">
+          {{ form.sex.label }}
+          {{ form.sex }}
+        </label>
+        {% if form.sex.errors %}
+          <small class="error">{{ form.sex.errors|join:', ' }}</small>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <input type="hidden" name="skinid" value="{{ request.POST.skinid }}">
+        <input class="button" type="submit" value="{% trans 'Stwórz postać' %}">
+      </div>
+    </div>
   </form>
 {% endblock %}

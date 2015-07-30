@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.contrib import messages
 from django.utils.translation import ugettext as _
-from .models import Character
+from .models import Character, StartSkin
 from .forms import CreateCharacterForm, CharacterSettingsForm
 
 @login_required
@@ -19,6 +19,14 @@ def characters_index(request):
     'characters:index')
 def characters_create(request):
     """Stwórz postać"""
+    # Zapisz skiny startowe i podziel je na płci
+    for s in StartSkin.objects.all():
+        if s.sex == 1:
+            skins_1 = s
+        else:
+            skins_2 = s
+    start_skins = [skins_1, skins_2]
+
     if request.method == 'POST':
         form = CreateCharacterForm(request.POST)
         if form.is_valid():
@@ -28,7 +36,8 @@ def characters_create(request):
             return redirect('characters:show:index', pk=character.pk)
     else:
         form = CreateCharacterForm()
-    return render(request, 'characters/create.html', {'form': form})
+    return render(request, 'characters/create.html', {'form': form,
+        'skins': skins})
 
 def get_character_object(request, pk):
     """Zwróć obiekt postaci

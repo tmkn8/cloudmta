@@ -50,6 +50,8 @@
         <dd>{{ character.format_aj_time }}</dd>
         <dt>{% trans 'Czas spędzony w grze na AFK' %}</dt>
         <dd>{{ character.format_afk_time }}</dd>
+        <dt>{% trans 'Postać ukryta' %}</dt>
+        <dd>{{ character.hide|yesno:'Tak,Nie' }}</dd>
       </dl>
     </div>
   </div>
