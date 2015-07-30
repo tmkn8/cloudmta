@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext as _
+from django.contrib.auth.models import UserManager
 from characters.models import Character
 import hashlib
 
@@ -18,6 +19,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('Ma dostęp do strony administracji.'))
     passed_rp_test = models.BooleanField(default=False, verbose_name=_('Zdał '
         'test RP'))
+
+    objects = UserManager()
 
     def get_absolute_url(self):
         return 'nothing yet'

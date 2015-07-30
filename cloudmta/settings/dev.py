@@ -1,5 +1,8 @@
 from .common import *
 
+# Nie używaj MyBB jako backendu
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
+
 DEBUG = True
 
 USE_X_FORWARDED_HOST = True
