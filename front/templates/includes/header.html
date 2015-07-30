@@ -28,12 +28,12 @@
         </li>
       {% else %}
       <li class="has-dropdown{% if request.user.username in request.path %} active{% endif %}">
-        <a href="{# url 'accounts:profile:index' request.user.username #}">
+        <a href="{{ request.user.get_absolute_url }}">
           {{ user.username }}
         </a>
         <ul class="dropdown">
-          <li{% if request.user.username in request.path %} class=" active"{% endif %}>
-            <a href="{# url 'accounts:profile:index' request.user.username #}">
+          <li{% if request.path == request.user.get_absolute_url %} class=" active"{% endif %}>
+            <a href="{{ request.user.get_absolute_url }}">
               {% trans 'Profil' %}
             </a>
           </li>
