@@ -2,18 +2,11 @@
 {% load i18n %}
 
 {% block character_content %}
-  <h2>{% trans 'Pojazdy' %}</h2>
-  <ul>
-    {% for vehicle in vehicles %}
-      <li>
-        <a href="{{ vehicle.get_absolute_url }}">
-          {{ vehicle }}
-        </a>
-      </li>
-    {% empty %}
-      <li>
-        {% trans 'Postać nie posiada żadnych pojazdów' %}
-      </li>
-    {% endfor %}
-  </ul>
+  {% if vehicles %}
+    {% include 'vehicles/includes/vehicles_table.html' %}
+  {% else %}
+    <div class="alert-box warning">
+      {% trans 'Postać nie ma pojazdów.' %}
+    </div>
+  {% endif %}
 {% endblock %}
