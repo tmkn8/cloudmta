@@ -3,47 +3,65 @@
 
 {% block title %}{{ character }}{% endblock %}
 
+{% block under_header %}
+  <div class="character-header-banner"
+    style="background-image: url(http://ls-rp.net/public/style_images/LS_RP/samp/skins_new/{{ character.skin }}.png)">
+    <div class="row">
+      <div class="large-12 columns">
+        <h1>
+          <a href="{{ character.url }}">
+            {{ character }}
+          </a>
+           <small>128h 12min.</small>
+        </h1>
+      </div>
+      <ul class="tabs">
+        {% url 'characters:show:index' character.pk as index_url %}
+        <li class="tab-title{% if request.path == index_url%} active{% endif %}">
+          <a href="{% url 'characters:show:index' character.pk %}">
+            {% trans 'Szczegóły' %}
+          </a>
+        </li>
+        <li class="tab-title{% if 'items' in request.path%} active{% endif %}">
+          <a href="{% url 'characters:show:items' character.pk %}">
+            {% trans 'Przedmioty' %}
+          </a>
+        </li>
+        <li class="tab-title{% if 'vehicles' in request.path%} active{% endif %}">
+          <a href="{% url 'characters:show:vehicles' character.pk %}">
+            {% trans 'Pojazdy' %}
+          </a>
+        </li>
+        <li class="tab-title{% if 'doors' in request.path%} active{% endif %}">
+          <a href="{% url 'characters:show:doors' character.pk %}">
+            {% trans 'Drzwi' %}
+          </a>
+        </li>
+        <li class="tab-title{% if 'groups' in request.path%} active{% endif %}">
+          <a href="{% url 'characters:show:groups' character.pk %}">
+            {% trans 'Grupy' %}
+          </a>
+        </li>
+        <li class="tab-title{% if 'group-invitations' in request.path%} active{% endif %}">
+          <a href="{% url 'characters:show:group_invitations' character.pk %}">
+            {% trans 'Zaproszenia do grupy' %}
+          </a>
+        </li>
+        <li class="tab-title{% if 'settings' in request.path%} active{% endif %}">
+          <a href="{% url 'characters:show:settings' character.pk %}">
+            {% trans 'Ustawienia' %}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+{% endblock %}
+
 {% block content %}
-  <h1>{{ character }}</h1>
-  <ul>
-    {% url 'characters:show:index' character.pk as index_url %}
-    <li{% if request.path == index_url %} class="active"{% endif %}>
-      <a href="{% url 'characters:show:index' character.pk %}">
-        {% trans 'Szczegóły' %}
-      </a>
-    </li>
-    <li{% if 'items' in request.path %} class="active"{% endif %}>
-      <a href="{% url 'characters:show:items' character.pk %}">
-        {% trans 'Przedmioty' %}
-      </a>
-    </li>
-    <li{% if 'vehicles' in request.path %} class="active"{% endif %}>
-      <a href="{% url 'characters:show:vehicles' character.pk %}">
-        {% trans 'Pojazdy' %}
-      </a>
-    </li>
-    <li{% if 'doors' in request.path %} class="active"{% endif %}>
-      <a href="{% url 'characters:show:doors' character.pk %}">
-        {% trans 'Drzwi' %}
-      </a>
-    </li>
-    <li{% if 'groups' in request.path %} class="active"{% endif %}>
-      <a href="{% url 'characters:show:groups' character.pk %}">
-        {% trans 'Grupy' %}
-      </a>
-    </li>
-    <li{% if 'group_invitations' in request.path %} class="active"{% endif %}>
-      <a href="{% url 'characters:show:group_invitations' character.pk %}">
-        {% trans 'Zaproszenia do grupy' %}
-      </a>
-    </li>
-    <li{% if 'settings' in request.path %} class="active"{% endif %}>
-      <a href="{% url 'characters:show:settings' character.pk %}">
-        {% trans 'Ustawienia' %}
-      </a>
-    </li>
-  </ul>
-
-  {% block character_content %}{% endblock %}
-
+  <div class="tabs-content">
+    <div class="content active">
+        {% block character_content %}{% endblock %}
+    </div>
+  </div>
 {% endblock %}

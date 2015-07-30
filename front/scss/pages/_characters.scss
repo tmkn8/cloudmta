@@ -1,0 +1,37 @@
+.button-create-character {
+  background-color: $cloudmta-1-pink;
+  &:hover {
+    background-color: scale-color($cloudmta-1-pink, $lightness: -30%);
+  }
+}
+
+ul.characters-list {
+  li {
+    a {
+      &, h2 {
+        color: $white;
+      }
+      min-height: 200px;
+      background-color: $cloudmta-1-green;
+      text-align: right;
+      background-repeat: no-repeat;
+      background-position: left;
+      background-size: contain;
+      &:hover {
+        background-color: scale-color($cloudmta-1-green, $lightness: -30%);
+      }
+      padding: 20px;
+      display: block;
+    }
+  }
+}
+
+.character-header-banner {
+  background-color: $primary-color;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 5% center;
+  &, a, h1, h1 small {
+    color: $white;
+  }
+}

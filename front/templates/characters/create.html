@@ -3,8 +3,13 @@
 
 {% block title %}{% trans 'Stwórz postać' %}{% endblock %}
 
+{% block under_header %}
+  {% trans 'Stwórz postać' as create_character %}
+  {% url 'characters:create' as create_character_url %}
+  {% include 'includes/header_banner.html' with text=create_character url=create_character_url %}
+{% endblock %}
+
 {% block content %}
-  <h1>{% trans 'Stwórz postać' %}</h1>
   <form action="{% url 'characters:create' %}" method="POST">
     {% csrf_token %}
     {{ form }}

@@ -1,11 +1,12 @@
 {% extends 'base_content.html' %}
 {% load i18n %}
 
-{% block title %}{% trans 'Lista postaci' %}{% endblock %}
+{% block title %}{% trans 'Twoje postacie' %}{% endblock %}
 
 {% block under_header %}
   {% url 'characters:index' as characters_url %}
-  {% include 'includes/header_banner.html' with text='Twoje postacie' url=characters_url %}
+  {% trans 'Twoje postacie' as characters_trans %}
+  {% include 'includes/header_banner.html' with text=characters_trans url=characters_url %}
 {% endblock %}
 
 {% block content %}
