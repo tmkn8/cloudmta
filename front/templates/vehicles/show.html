@@ -5,17 +5,58 @@
   {% blocktrans %}Pojazd {{ vehicle }}{% endblocktrans %}
 {% endblock %}
 
+{% block under_header %}
+  {% url 'vehicles:show' vehicle.pk as vehicle_url %}
+  {% include 'includes/header_banner.html' with text=vehicle url=vehicle_url %}
+{% endblock %}
+
 {% block content %}
-  <h1>{{ vehicle }}</h1>
-  <dl>
-    <dt>{% trans 'Właściciel' %}</dt>
-    <dd>
-      <a href="{{ vehicle.get_owner.get_absolute_url }}">
-        {{ vehicle.get_owner }}
-      </a>
-    </dd>
-    <dt>{% trans 'Typ właściciela' %}</dt>
-    <dd>{{ vehicle.get_ownertype_display }}</dd>
-  </dl>
-  <p>{% trans 'To jest strona z pojazdem, trolololo' %}</p>
+  <div class="row">
+    <div class="medium-6 columns">
+      <dl>
+        <dt>{% trans 'Właściciel' %}</dt>
+        <dd>
+          <a href="{{ vehicle.get_owner.get_absolute_url }}">
+            {{ vehicle.get_owner }}
+          </a>
+        </dd>
+        <dt>{% trans 'Typ właściciela' %}</dt>
+        <dd>{{ vehicle.get_ownertype_display }}</dd>
+        <dt>{% trans 'UID' %}</dt>
+        <dd>{{ vehicle.pk }}</dd>
+        <dt>{% trans 'Nazwa' %}</dt>
+        <dd>{{ vehicle }}</dd>
+        <dt>{% trans 'Kolor 1' %}</dt>
+        <dd>{{ vehicle.c1r }}, {{ vehicle.c1g }}, {{ vehicle.c1b }} </dd>
+        <dt>{% trans 'Kolor 2' %}</dt>
+        <dd>{{ vehicle.c2r }}, {{ vehicle.c2g }}, {{ vehicle.c2b }} </dd>
+        <dt>{% trans 'Model' %}</dt>
+        <dd>{{ vehicle.model }}</dd>
+        <dt>{% trans 'Alarm' %}</dt>
+        <dd>{{ vehicle.hasalarm|yesno:'Posiada,Nie posiada' }}</dd>
+        <dt>{% trans 'Blokada na koło' %}</dt>
+        <dd>{{ vehicle.tireblock|yesno:'Tak,Nie' }}</dd>
+      </dl>
+    </div>
+    <div class="medium-6 columns">
+      <dl>
+        <dt>{% trans 'Bak' %}</dt>
+        <dd>{{ vehicle.fuel|floatformat }}/{{ vehicle.maxfuel }}</dd>
+        <dt>{% trans 'Stan pojazdu' %}</dt>
+        <dd>{{ vehicle.hp|floatformat }}</dd>
+        <dt>{% trans 'Zespawnowany' %}</dt>
+        <dd>{{ vehicle.spawned|yesno:'Tak,Nie' }}</dd>
+        <dt>{% trans 'Zamknięty' %}</dt>
+        <dd>{{ vehicle.locked|yesno:'Tak,Nie' }}</dd>
+        <dt>{% trans 'Zespawnowana' %}</dt>
+        <dd>{{ vehicle.spawned|yesno:'Tak,Nie' }}</dd>
+        <dt>{% trans 'Światło emergency' %}</dt>
+        <dd>{{ vehicle.get_flashtype_display }}</dd>
+        <dt>{% trans 'Przebieg' %}</dt>
+        <dd>{{ vehicle.distance|floatformat }}</dd>
+        <dt>{% trans 'Zaciągnięty hamulec ręczny' %}</dt>
+        <dd>{{ vehicle.handbrake|yesno:'tak,nie'|title }}</dd>
+      </dl>
+    </div>
+  </div>
 {% endblock %}
