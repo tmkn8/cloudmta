@@ -3,17 +3,11 @@
 
 {% block character_content %}
   <h2>{% trans 'Drzwi' %}</h2>
-  <ul>
-    {% for door in doors %}
-      <li>
-        <a href="{{ door.get_absolute_url }}">
-          {{ door }}
-        </a>
-      </li>
-    {% empty %}
-      <li>
-        {% trans 'Postać nie posiada żadnych drzwi' %}
-      </li>
-    {% endfor %}
-  </ul>
+  {% if doors %}
+    {% include 'doors/includes/doors_table.html' %}
+  {% else %}
+    <div class="alert-box warning">
+      {% trans 'Postać nie ma przypisanych żadnych drzwi.' %}
+    </div>
+  {% endif %}
 {% endblock %}

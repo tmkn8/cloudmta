@@ -1,0 +1,23 @@
+{% load i18n %}
+{% load humanize %}
+<table class="table-full-width">
+  <thead>
+    <th>{% trans '#' %}</th>
+    <th>{% trans 'Nazwa' %}</th>
+    <th>{% trans 'Panel' %}</th>
+  </thead>
+  <tbody>
+    {% for door in doors %}
+      <tr>
+        <td>{{ door.pk }}</td>
+        <td>{{ door }}</td>
+        <td>
+          <a class="button tiny" target="_blank"
+            href="{{ door.get_absolute_url }}">
+            <i class="fa fa-external-link"></i>
+          </a>
+        </td>
+      </td>
+    {% endfor %}
+  </tbody>
+</table>

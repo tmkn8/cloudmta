@@ -2,6 +2,7 @@
 {% load i18n %}
 
 {% block character_content %}
+  <h2>{% trans 'Pojadzy' %}</h2>
   {% if vehicles %}
     {% include 'vehicles/includes/vehicles_table.html' %}
   {% else %}

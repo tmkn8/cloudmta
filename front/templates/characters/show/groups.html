@@ -1,40 +1,83 @@
 {% extends 'characters/base_show.html' %}
 {% load i18n %}
+{% load humanize %}
 
 {% block character_content %}
-  <h2>{% trans 'Grupy' %}</h2>
-  <ul>
-    {% for group in groups %}
-      <li>
-        <a href="{{ group.get_absolute_url }}">
-          {{ group }}
-        </a>
-      </li>
-    {% empty %}
-      <li>
-        {% trans 'Postać nie jest członkiem żadnych grup' %}
-      </li>
-    {% endfor %}
-  </ul>
+  <h2>{% trans 'Przynależności do grup' %}</h2>
+  {% if groups %}
+    <table class="table-full-width">
+      <thead>
+        <th>{% trans '#' %}</th>
+        <th>{% trans 'Nazwa' %}</th>
+        <th>{% trans 'Panel' %}</th>
+      </thead>
+      <tbody>
+        {% for group in groups %}
+          <tr>
+            <td>{{ group.pk }}</td>
+            <td>{{ group }}</td>
+            <td>
+              <a class="button tiny" target="_blank" href="{{ group.get_absolute_url }}">
+                <i class="fa fa-external-link"></i>
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="alert-box warning">
+      {% trans 'Postać nie przynależy do żadnej grupy.' %}
+    </div>
+  {% endif %}
+  <hr>
 
   <h2>{% trans 'Zaproszenia do grup' %}</h2>
-  <ul>
-    {% for invitation in invitations %}
-      <li>
-        {{ invitation.group }} -
-        {{ invitation.invited_by }} -
-        {{ invitation.date }} -
-        <a href="{% url 'characters:show:group_invitations_accept' character.pk invitation.pk %}">
-          {% trans 'Akceptuj' %}
-        </a> -
-        <a href="{% url 'characters:show:group_invitations_decline' character.pk invitation.pk %}">
-          {% trans 'Odrzuć' %}
-        </a>
-      </li>
-    {% empty %}
-      <li>
-        {% trans 'Postać nie dostała żadnych zaproszeń do grupy.' %}
-      </li>
-    {% endfor %}
-  </ul>
+  <table class="table-full-width">
+    <thead>
+      <th>{% trans 'Grupa' %}</th>
+      <th>{% trans 'Zaproszona(y) przez' %}</th>
+      <th>{% trans 'Data' %}</th>
+      <th>{% trans 'Akceptuj' %}</th>
+      <th>{% trans 'Odrzuć' %}</th>
+    </thead>
+    <tbody>
+      {% for invitation in invitations %}
+        <tr>
+          <td>
+            <span class="show-for-large-up">{{ invitation.group }}</span>
+            <span class="hide-for-large-up">{{ invitation.group.tag }}</span>
+          </td>
+          <td>
+            <a href="{{ invitation.invited_by.get_absolute_url }}">
+              {{ invitation.invited_by }}
+            </a>
+          </td>
+          <td>
+            {{ invitation.date|naturaltime }}
+          </td>
+          <td>
+            <a class="button success tiny"
+             href="{% url 'characters:show:group_invitations_accept' character.pk invitation.pk %}">
+              <span class="show-for-medium-up">{% trans 'Akceptuj' %}</span>
+              <span class="hide-for-medium"><i class="fa fa-check"></i></span>
+            </a>
+          </td>
+          <td>
+            <a class="button alert tiny"
+              href="{% url 'characters:show:group_invitations_decline' character.pk invitation.pk %}">
+              <span class="show-for-medium-up">{% trans 'Odrzuć' %}</span>
+              <span class="hide-for-medium"><i class="fa fa-times"></i></span>
+            </a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5">
+            {% trans 'Postać nie dostała żadnych zaproszeń do grupy.' %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

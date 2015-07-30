@@ -220,7 +220,7 @@ class GroupInvitation(models.Model):
         verbose_name=_('Postać'))
     group = models.ForeignKey('groups.Group', related_name='groupinvitations',
         related_query_name='groupinvitation', verbose_name=_('Grupa'))
-    date = UnixDateTimeField(verbose_name=_('Data zaproszenia'),
+    date = models.DateTimeField(verbose_name=_('Data zaproszenia'),
         auto_now_add=True)
     invited_by = models.ForeignKey(settings.AUTH_USER_MODEL,
         verbose_name=_('Zaproszony przez'), help_text=_('Konto globalne, nie '
