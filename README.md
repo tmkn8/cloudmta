@@ -15,9 +15,9 @@ git clone git@gitlab.com:cloudmta/vm-www.git
 git clone git@gitlab.com:cloudmta/www.git
 ```
 
-Wejdź w folder `vm-cloudmta-www` i pobierz moduły Puppeta.
+Wejdź w folder `vm-www` i pobierz moduły Puppeta.
 ```
-cd vm-cloudmta-www
+cd vm-www
 git submodule init
 git submodule update
 ```
