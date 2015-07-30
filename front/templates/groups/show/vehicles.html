@@ -2,18 +2,12 @@
 {% load i18n %}
 
 {% block group_content %}
-  <h2>{% trans 'Pojazdy' %}</h2>
-  <ul>
-    {% for vehicle in vehicles %}
-      <li>
-        <a href="{{ vehicle.get_absolute_url }}">
-          {{ vehicle }}
-        </a>
-      </li>
-    {% empty %}
-      <li>
-        {% trans 'Grupa nie posiada żadnych pojazdów' %}
-      </li>
-    {% endfor %}
-  </ul>
+<h2>{% trans 'Pojadzy' %}</h2>
+{% if vehicles %}
+  {% include 'vehicles/includes/vehicles_table.html' %}
+{% else %}
+  <div class="alert-box warning">
+    {% trans 'Grupa nie ma pojazdów.' %}
+  </div>
+{% endif %}
 {% endblock %}
