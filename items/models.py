@@ -146,7 +146,7 @@ class Deposite(models.Model):
     name = models.CharField(max_length=255, verbose_name=_('Nazwa produktu'))
     stock = models.PositiveIntegerField(verbose_name=_('Ilość'), default=1)
     itemtype = models.IntegerField(db_column='itemType', verbose_name=_('Typ '
-        'produktu'), choices=settings.ITEM_TYPE_CHOICES)
+        'produktu'), choices=Item.ITEM_TYPE_CHOICES)
     itemval1 = models.IntegerField(db_column='itemVal1', default=0,
         verbose_name=_('Wartość produktu 1'))
     itemval2 = models.IntegerField(db_column='itemVal2', default=0,

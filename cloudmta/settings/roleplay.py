@@ -19,15 +19,10 @@ RP_MIN_AGE_OF_CHARACTER = 16
 RP_MAX_AGE_OF_CHARACTER = 100
 
 # Scieżka do plików skinów w static
-RP_SKINS_STATIC_DIRECTORY = 'skins'
+RP_SKINS_STATIC_DIRECTORY = 'img/skins'
 
 # Format obrazków skinów
 RP_SKINS_IMG_FORMAT = 'png'
-
-# Typy przedmiotów
-ITEM_TYPE_CHOICES = (
-    (1, 'Jakiś typ'),
-)
 
 # Typy własności przedmiotów
 RP_ITEM_OWNER_TYPE_ID_NONE = 0

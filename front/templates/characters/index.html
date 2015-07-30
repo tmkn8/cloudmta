@@ -1,5 +1,6 @@
 {% extends 'base_content.html' %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block title %}{% trans 'Twoje postacie' %}{% endblock %}
 
@@ -33,11 +34,11 @@
     {% for character in characters %}
       <li>
         <a href="{% url 'characters:show:index' character.pk %}"
-          style="background-image: url(http://ls-rp.net/public/style_images/LS_RP/samp/skins_new/{{ character.skin }}.png)"
+          style="background-image: url({% static character.get_skin_static_url %})"
           data-equalizer-watch>
           <ul class="no-bullet">
             <h2>{{ character }}</h2>
-            <li>124h 12min.</li>
+            <li>{{ character.format_onlinetime }}</li>
             <li>${{ character.money }}</li>
           </ul>
         </a>

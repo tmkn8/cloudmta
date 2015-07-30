@@ -85,9 +85,23 @@ class Character(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('characters:show:index', kwargs={'pk': self.pk})
+
+    class Meta:
+        db_table = '_characters'
+        verbose_name = _('postać')
+        verbose_name_plural = _('postacie')
+
     def get_skin_static_url(self):
         return "%s/%d.%s" % (settings.RP_SKINS_STATIC_DIRECTORY,
-            self.skin_id, settings.RP_SKINS_IMG_FORMAT)
+            self.skin, settings.RP_SKINS_IMG_FORMAT)
+
+    def format_onlinetime(self):
+        seconds = self.onlinetime
+        m, s = divmod(seconds, 60)
+        h, m = divmod(m, 60)
+        return "%dh %02dmin." % (h, m)
 
     def items(self):
         """Pobierz obiekty przedmiotów tej postaci"""
@@ -103,14 +117,6 @@ class Character(models.Model):
         """Pobierz drzwi postaci"""
         return get_model('doors', 'Door').objects.filter(owner=self.pk,
             ownertype=settings.RP_DOOR_OWNER_TYPE_ID_CHARACTER)
-
-    def get_absolute_url(self):
-        return reverse('characters:show:index', kwargs={'pk': self.pk})
-
-    class Meta:
-        db_table = '_characters'
-        verbose_name = _('postać')
-        verbose_name_plural = _('postacie')
 
 class StartSkin(models.Model):
     skin_id = models.PositiveSmallIntegerField(verbose_name=_('ID skina'), unique=True)

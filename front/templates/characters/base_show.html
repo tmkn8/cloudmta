@@ -1,18 +1,19 @@
 {% extends 'base_content.html' %}
+{% load staticfiles %}
 {% load i18n %}
 
 {% block title %}{{ character }}{% endblock %}
 
 {% block under_header %}
   <div class="character-header-banner"
-    style="background-image: url(http://ls-rp.net/public/style_images/LS_RP/samp/skins_new/{{ character.skin }}.png)">
+    style="background-image: url({% static character.get_skin_static_url %})">
     <div class="row">
       <div class="large-12 columns">
         <h1>
           <a href="{{ character.url }}">
             {{ character }}
           </a>
-           <small>128h 12min.</small>
+           <small>{{ character.format_onlinetime }}</small>
         </h1>
       </div>
       <ul class="tabs">
