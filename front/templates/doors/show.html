@@ -1,60 +1,114 @@
 {% extends 'base_content.html' %}
 {% load i18n %}
 
+{% block under_header %}
+  {% url 'doors:show' door.pk as door_url %}
+  {% include 'includes/header_banner.html' with text=door url=door_url %}
+{% endblock %}
+
 {% block title %}
   {% blocktrans %}Drzwi {{ door }}{% endblocktrans %}
 {% endblock %}
 
 {% block content %}
-  <h1>{{ door }}</h1>
-  <dl>
-    <dt>{% trans 'Właściciel' %}</dt>
-    <dd>
-      <a href="{{ door.get_owner.get_absolute_url }}">
-        {{ door.get_owner }}
-      </a>
-    </dd>
-    <dt>{% trans 'Typ właściciela' %}</dt>
-    <dd>{{ door.get_ownertype_display }}</dd>
-    <dt>{% trans 'Wymiar' %}</dt>
-    <dd>{{ door.dimension }}</dd>
-  </dl>
-
-  {% trans 'Zamknięte' as locked %}
-  {% trans 'Otwarte' as open %}
-
-
-  <h2>{% trans 'Pickupy' %}</h2>
-  <ul>
-    {% for pickup in door.doorpickups.all %}
-      <li>
-        {{ pickup }}
-         - {% if pickup.locked %}{% trans 'Zamknięte' %}{% else %}{% trans 'Otwarte' %}{% endif %}
-     </li>
-    {% empty %}
-      <li>{% trans 'Brak pickupów' %}</li>
-    {% endfor %}
-  </ul>
-
-  <h2>{% trans 'Produkty (/kup)' %}</h2>
-  <ul>
-    {% for product in door.shop.all %}
-      <li>
-        {{ product }}
-     </li>
-    {% empty %}
-      <li>{% trans 'Brak poduktów.' %}</li>
-    {% endfor %}
-  </ul>
-
-<h2>{% trans 'Ubrania (/ubrania)' %}</h2>
-<ul>
-  {% for outfit in door.clothes.all %}
-    <li>
-      {{ outfit }}
-   </li>
-  {% empty %}
-    <li>{% trans 'Brak ubrań.' %}</li>
-  {% endfor %}
-</ul>
+  <div class="row">
+    <div class="large-12 columns">
+      <dl>
+        <dt>{% trans 'Właściciel' %}</dt>
+        <dd>
+          <a href="{{ door.get_owner.get_absolute_url }}">
+            {{ door.get_owner }}
+          </a>
+        </dd>
+        <dt>{% trans 'Typ właściciela' %}</dt>
+        <dd>{{ door.get_ownertype_display }}</dd>
+        <dt>{% trans 'Wymiar' %}</dt>
+        <dd>{{ door.dimension }}</dd>
+      </dl>
+    </div>
+  </div>
+  <div class="row">
+    <div class="medium-6 small-12 columns">
+      {% trans 'Zamknięte' as locked %}
+      {% trans 'Otwarte' as open %}
+      <h2>{% trans 'Pickupy' %}</h2>
+      {% if door.doorpickups.all %}
+        <table class="table-full-width">
+          <thead>
+            <th>{% trans 'Nazwa' %}</th>
+            <th>{% trans 'Zamknięty?' %}</th>
+          </thead>
+          <tbody>
+            {% for pickup in door.doorpickups.all %}
+              <tr>
+                <td>{{ pickup }}</td>
+                <td>{% if pickup.locked %}{% trans 'Zamknięte' %}{% else %}{% trans 'Otwarte' %}{% endif %}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    </div>
+    <div class="medium-6 small-12 columns">
+      <h2>{% trans 'Produkty (/kup)' %}</h2>
+      {% if door.shop.all %}
+        <table class="table-full-width">
+          <thead>
+            <th>{% trans 'Nazwa' %}</th>
+            <th>{% trans 'Cena' %}</th>
+          </thead>
+          <tbody>
+            {% for product in door.shop.all %}
+              <tr>
+                <td>{{ product.itemname }}</td>
+                <td>${{ product.price }}</td>
+             </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="alert-box warning">
+          {% trans 'Brak produktów w drzwiach.' %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="medium-6 small-12 columns">
+      <h2>{% trans 'Ubrania (/ubrania)' %}</h2>
+      {% if door.clothes.all %}
+        <table class="table-full-width">
+          <thead>
+            <th>{% trans 'ID skinu' %}</th>
+            <th>{% trans 'Nazwa' %}</th>
+            <th>{% trans 'Cena' %}</th>
+          </thead>
+          <tbody>
+            {% for outfit in door.clothes.all %}
+              <tr>
+                <td>{{ outfit.skinid }}</td>
+                <td>{{ outfit.skinname }}</td>
+                <td>${{ outfit.price }}</td>
+             </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="alert-box warning">
+          {% trans 'Brak przypisanych ubrań' %}
+        </div>
+      {% endif %}
+      </ul>
+    </div>
+    <div class="medium-6 small-12 columns">
+      <h2>{% trans 'Przedmioty' %}</h2>
+      {% if door.items %}
+        {% include 'items/includes/items_table.html' with items=door.items %}
+      {% else %}
+        <div class="alert-box warning">
+          {% trans 'Brak przypisanych przedmiotów.' %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}

@@ -31,6 +31,10 @@ class Door(models.Model):
     def get_absolute_url(self):
         return reverse('doors:show', kwargs={'pk': self.pk})
 
+    def items(self):
+        return apps.get_model('items', 'Item').objects.filter(
+            ownertype=settings.RP_ITEM_OWNER_TYPE_ID_DOOR, owner=self.pk)
+
     def check_permissions(self, user):
         """Sprawdź czy użytkownik ma dostęp do drzwi"""
         # Postać
