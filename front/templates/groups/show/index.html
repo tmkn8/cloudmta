@@ -1,6 +1,23 @@
 {% extends 'groups/base_show.html' %}
 {% load i18n %}
 {% block group_content %}
-  <p>{% trans 'Uprawnienia obecnego użytkownika' %} - {{ user_permissions }}</p>
-  {% lorem 5 %}
+  <h1>{% trans 'Informacje o grupie' %}</h1>
+  <div class="row">
+    <div class="small-12 medium-6 columns">
+      <dl>
+        <dt>{% trans 'UID' %}</dt>
+        <dd>{{ group.pk }}</dd>
+        <dt>{% trans 'Nazwa' %}</dt>
+        <dd>{{ group }}</dd>
+      </dl>
+    </div>
+    <div class="small-12 medium-6 columns">
+      <dl>
+        <dt>{% trans 'Tag' %}</dt>
+        <dd>{{ group.tag }}</dd>
+        <dt>{% trans 'Cash' %}</dt>
+        <dd>${{ group.cash }}</dd>
+      </dl>
+    </div>
+  </div>
 {% endblock %}
