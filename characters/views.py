@@ -74,8 +74,10 @@ def characters_show_groups(request, pk):
     """Pokaż pojazdy postaci"""
     character = get_character_object(request, pk)
     groups = character.groups.all()
+    invitations = character.groupinvitations.all()
     return render(request, 'characters/show/groups.html',
-        {'character': character, 'groups': groups})
+        {'character': character, 'groups': groups,
+        'invitations': invitations})
 
 @login_required
 def characters_show_settings(request, pk):
@@ -91,14 +93,6 @@ def characters_show_settings(request, pk):
         {'character': character, 'form': form})
 
 @login_required
-def characters_show_group_invitations(request, pk):
-    """Pokaż zaproszenia do grup"""
-    character = get_character_object(request, pk)
-    invitations = character.groupinvitations.all()
-    return render(request, 'characters/show/group_invitations.html',
-        {'character': character, 'invitations': invitations})
-
-@login_required
 def characters_show_group_invitations_accept(request, pk, invitation_id):
     """Akceptuj zaproszenie do grupy"""
     character = get_character_object(request, pk)
@@ -107,18 +101,18 @@ def characters_show_group_invitations_accept(request, pk, invitation_id):
     if character.groupmembers.all().count() >= settings.RP_MAX_GROUP_NUMBER:
         messages.error(request, _("Przekroczyłeś limit ilości grup na postać: "
             "%d" % settings.RP_MAX_GROUP_NUMBER))
-        return redirect('characters:show:group_invitations', character.pk)
+        return redirect('characters:show:groups', character.pk)
 
     # Czy gracz nie jest już w tej grupie obecnie?
     if character.groupmembers.filter(groupid=invitation.group).count():
-        messages.error(request, _("Inna Twoja postać już obecnie jest w tej "
+        messages.error(request, _("Postać już obecnie jest w tej "
             "grupie."))
-        return redirect('characters:show:group_invitations', character.pk)
+        return redirect('characters:show:groups', character.pk)
 
     invitation.group.add_new_member(character=character)
     invitation.delete()
     messages.success(request, _("Zostałeś dodany do grupy"))
-    return redirect('characters:show:group_invitations', character.pk)
+    return redirect('characters:show:groups', character.pk)
 
 @login_required
 def characters_show_group_invitations_decline(request, pk, invitation_id):
@@ -127,4 +121,4 @@ def characters_show_group_invitations_decline(request, pk, invitation_id):
     invitation = get_object_or_404(character.groupinvitations, pk=invitation_id)
     invitation.delete()
     messages.success(request, _("Skasowano zaproszenie do grupy"))
-    return redirect('characters:show:group_invitations', character.pk)
+    return redirect('characters:show:groups', character.pk)
