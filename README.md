@@ -58,7 +58,7 @@ Zrestartuj serwer WSGI.
 sudo service gunicorn restart
 ```
 
-Zedytuj plik `etc/hosts`, żeby dodać domenę.
+Zedytuj plik `etc/hosts` Twojego systemu operacyjnego (hosta, nie gościa), żeby dodać domenę.
 ```
 127.0.0.1   cloudmta.dev
 ```
