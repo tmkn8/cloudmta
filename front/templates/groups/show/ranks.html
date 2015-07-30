@@ -2,21 +2,63 @@
 {% load i18n %}
 {% block group_content %}
   <h2>{% trans 'Rangi' %}</h2>
-  <ul>
-    {% for rank in ranks %}
-      <li>
-        {{ rank }}{% if rank.defaultrank %} ({% trans 'Domyślna' %}){% endif %} -
-        {{ rank.get_rank_permissions }} -
-        <a href="{% url 'groups:show:ranks_edit' group.pk rank.pk %}">{% trans 'Edytuj' %}</a> -
-        <a href="{% url 'groups:show:ranks_delete' group.pk rank.pk %}">{% trans 'Usuń' %}</a>
-      </li>
-    {% empty %}
-      <li>{% trans 'Brak członków w grupie' %}</li>
-    {% endfor %}
+  <table class="table-full-width">
+    <thead>
+      <th>{% trans '#' %}</th>
+      <th>{% trans 'Nazwa' %}</th>
+      <th>{% trans 'Wypłata' %}</th>
+      <th>{% trans 'Uprawnienia' %}</th>
+      {% if perm.is_user_leader %}
+        <th>{% trans 'Edycja' %}</th>
+      {% endif %}
+    </thead>
+    <tbody>
+      {% for rank in ranks %}
+        <tr>
+          <td>{{ rank.pk }}</td>
+          <td>{{ rank }}{% if rank.defaultrank %} <small>{% trans 'Domyślna' %}</small>{% endif %}</td>
+          <td>$ {{ rank.cash }}</td>
+          <td>
+            <a class="button tiny" href="#"
+                data-reveal-id="rankModal{{ rank.pk }}">
+              <i class="fa fa-eye"></i>
+            </a>
+            <div id="rankModal{{ rank.pk }}" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+              <h2 id="modalTitle">
+                {% blocktrans %}
+                  Uprawnienia rangi #{{ rank.pk }} {{ rank }}
+                {% endblocktrans %}
+              </h2>
+              <ul>
+                {% for k, v in rank.get_rank_permissions.items %}
+                  <li>{{ k|title }} <i class="fa fa-{{ v|yesno:'check,times' }}"></i></li>
+                {% endfor %}
+              </ul>
+              <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+            </div>
+          </td>
+          {% if perm.is_user_leader %}
+            <td>
+              <a class="button success tiny"
+                  href="{% url 'groups:show:ranks_edit' group.pk rank.pk %}">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a class="button alert tiny"
+                  href="{% url 'groups:show:ranks_delete' group.pk rank.pk %}">
+                <i class="fa fa-trash-o"></i>
+              </a>
+            </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-    <p>
-      <a href="{% url 'groups:show:ranks_default_rank' group.pk %}">
-        {% trans 'Zmień domyślną rangę' %}
-      </a>
-    </p>
+  <hr>
+
+  <p>
+    <a class="button success right" href="{% url 'groups:show:ranks_default_rank' group.pk %}">
+      {% trans 'Zmień domyślną rangę' %}&nbsp;&nbsp;<i class="fa fa-pencil"></i>
+    </a>
+  </p>
 {% endblock %}

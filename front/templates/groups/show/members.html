@@ -3,24 +3,59 @@
 {% block group_content %}
   <h2>{% trans 'Członkowie' %}</h2>
     {% for rank in ranks %}
-      <h3>#{{ rank.id }} {{ rank }} <small>{{ rank.get_rank_permissions }} - ${{ rank.cash }}</small></h3>
-      <ul>
-      {% for member in rank.groupmembers.all %}
-        <li>
-          {{ member.userid }}
-          - {{ member.userid.memberid }}
-          - {{ member.rankid }}
-          - <a href="{% url 'groups:show:members_edit' group.pk member.pk %}">
-              {% trans 'Edytuj' %}
-            </a>
-            - <a href="{% url 'groups:show:members_delete' group.pk member.pk %}">
-                {% trans 'Wyrzuć' %}
+      <h3>#{{ rank.id }} {{ rank }} <small>{% if rank.get_rank_permissions.leader %}<span class="label ">{% trans 'Lider' %}</span>{% endif %}  ${{ rank.cash }}</small></h3>
+      <table class="table-full-width">
+        <thead>
+          <th>{% trans 'Postać' %}</th>
+          <th>{% trans 'Użytkownik' %}</th>
+          <th>{% trans 'Ranga' %}</th>
+          {% if perm.is_user_leader %}
+            <th>{% trans 'Edycja' %}</th>
+          {% endif %}
+        </thead>
+        {% for member in rank.groupmembers.all %}
+          <tr>
+            <td>
+              {% if not member.userid.hide %}
+                {{ member.userid }}
+              {% else %}
+                <i class="fa fa-user-secret"></i>&nbsp;
+                {% if member.userid.memberid.is_staff or perm.is_user_leader %}
+                  {{ member.userid }}
+                {% else %}
+                  {% trans 'Postać ukryta' %}
+                {% endif %}
+              {% endif %}
+            </td>
+            <td>
+              <a href="{{ member.userid.memberid.get_absolute_url }}">
+                {{ member.userid.memberid }}
               </a>
-        </li>
-      {% empty %}
-        <li>{% trans 'Brak członków w tej randze' %}</li>
-      {% endfor %}
-      </ul>
+            </td>
+            <td>#{{ member.rankid.pk }} {{ member.rankid }}</td>
+            {% if perm.is_user_leader %}
+              <td>
+                <a class="button success tiny"
+                    href="{% url 'groups:show:members_edit' group.pk member.pk %}">
+                  <i class="fa fa-pencil"></i>
+                </a>
+                <a class="button alert tiny"
+                    href="{% url 'groups:show:members_delete' group.pk member.pk %}">
+                  <i class="fa fa-trash-o"></i>
+                </a>
+              </td>
+            {% endif %}
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5">
+              {% trans 'Brak członków na tej randze.' %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <hr>
     {% empty %}
       <p>{% trans 'Brak rang w grupie' %}</p>
     {% endfor %}

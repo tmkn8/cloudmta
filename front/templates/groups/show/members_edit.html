@@ -5,7 +5,23 @@
   <form action="{% url 'groups:show:members_edit' group.pk member.pk %}"
     method="post">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="{% trans 'Zapisz członka' %}">
+    <div class="row">
+      <div class="large-12 columns">
+        <label {% if form.rankid.errors %}class="error"{% endif %}
+         for="{{ form.rankid.label_for_id }}">
+          {{ form.rankid.label }}
+          {{ form.rankid }}
+        </label>
+        {% if form.rankid.errors %}
+          <small class="error">{{ form.rankid.errors|join:', ' }}</small>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-12 columns">
+        <input class="button" type="submit"
+          value="{% trans 'Zapisz członka' %}">
+      </div>
+    </div>
   </form>
 {% endblock %}

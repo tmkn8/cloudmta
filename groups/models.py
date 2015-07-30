@@ -233,3 +233,12 @@ class GroupInvitation(models.Model):
     class Meta:
         verbose_name = _('zaproszenie do grupy')
         verbose_name_plural = _('zaproszenia do grupy')
+
+class GroupMemberPermission:
+    """Klasa stworzona na potrzeby sprawdzania uprawnień w szablonie"""
+    def __init__(self, group, user):
+        self.group = group
+        self.user = user
+
+    def is_user_leader(self):
+        return self.group.can_user_manage_group(user=self.user)

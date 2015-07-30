@@ -3,18 +3,26 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.utils.translation import ugettext as _
-from .models import Group, GroupRank
+from .models import Group, GroupRank, GroupMemberPermission
 from .forms import RankEditForm, MemberEditForm, CreateGroupInvitationForm
 
 def get_group_object(request, pk):
     """Zwróć obiekt grupy
 
     Funkcja zapobiega powtarzaniu kodu do pobierania obiektu grupy.
-    Zwraca kod HTTP 404, jeżeli użytkownik nie ma praw do przeglądania grupy."""
+    Zwraca kod HTTP 404, jeżeli użytkownik nie ma praw do przeglądania grupy.
+    """
     group = get_object_or_404(Group, pk=pk)
     if not group.can_user_access_group(user=request.user):
         raise PermissionDenied
     return group
+
+def get_group_member_perm(request, group):
+    """Zwróc obiekt zawierający metodę do sprawdzania czy gracz jest liderem
+
+    Na potrzeby szablony, gdyż tam nie można przekazywać argumentów do funkcji.
+    """
+    return GroupMemberPermission(group=group, user=request.user)
 
 def allow_only_leaders(group, user):
     """Ogranicz dostęp tylko dla liderów
@@ -52,9 +60,10 @@ def groups_show_doors(request, pk):
 def groups_show_members(request, pk):
     """Podstrona wyświetla wszystkich członków grupy"""
     group = get_group_object(request, pk)
+    perm = get_group_member_perm(request, group)
     ranks = group.groupranks.all()
     return render(request, 'groups/show/members.html', {'group': group,
-        'ranks': ranks})
+        'ranks': ranks, 'perm': perm})
 
 @login_required
 def groups_show_members_edit(request, pk, member_id):
@@ -63,14 +72,15 @@ def groups_show_members_edit(request, pk, member_id):
     member = get_object_or_404(group.groupmembers, pk=member_id)
     allow_only_leaders(group=group, user=request.user)
     if request.method == 'POST':
-        form = MemberEditForm(request.POST, instance=member)
+        form = MemberEditForm(group, request.POST,
+            instance=member)
         if form.is_valid():
             form.save()
             messages.success(request, _("Ranga członka %s została zmieniona."
                 % member.userid))
             return redirect('groups:show:members', group.pk)
     else:
-        form = MemberEditForm(instance=member)
+        form = MemberEditForm(group, instance=member)
 
     return render(request, 'groups/show/members_edit.html', {'group': group,
         'member': member, 'form': form})
@@ -94,9 +104,10 @@ def groups_show_members_delete(request, pk, member_id):
 def groups_show_ranks(request, pk):
     """Wyświetl stronę z rangami grupy"""
     group = get_group_object(request, pk)
+    perm = get_group_member_perm(request, group)
     ranks = group.groupranks.all()
     return render(request, 'groups/show/ranks.html', {'group': group,
-        'ranks': ranks})
+        'ranks': ranks, 'perm': perm})
 
 @login_required
 def groups_show_ranks_edit(request, pk, rank_id):
@@ -175,9 +186,10 @@ def groups_show_ranks_default_rank(request, pk):
 def groups_show_invitations(request, pk):
     """Wyświetl listę aktywnych zaproszeń z grupy"""
     group = get_group_object(request, pk)
+    perm = get_group_member_perm(request, group)
     invitations = group.groupinvitations.order_by('-pk').all()
     return render(request, 'groups/show/invitations.html', {'group': group,
-        'invitations': invitations})
+        'invitations': invitations, 'perm': perm})
 
 @login_required
 def groups_show_invitations_create(request, pk):

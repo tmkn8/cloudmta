@@ -5,13 +5,24 @@
   <form action="{% url 'groups:show:ranks_default_rank' group.pk %}"
     method="post">
     {% csrf_token %}
-    <select name="default_rank">
-      {% for rank in ranks %}
-        <option value="{{ rank.pk }}"{% if rank.defaultrank %} selected{% endif %}>
-          #{{ rank.pk }} {{ rank }}
-        </option>
-      {% endfor %}
-    </select>
-    <input type="submit" value="{% trans 'Zapisz domyślną rangę' %}">
+    <div class="row">
+      <div class="large-12 columns">
+        <label for="id_default_rank">
+          {% trans 'Domyślna ranga' %}
+          <select id="id_default_rank" name="default_rank">
+            {% for rank in ranks %}
+              <option value="{{ rank.pk }}"{% if rank.defaultrank %} selected{% endif %}>
+                #{{ rank.pk }} {{ rank }}
+              </option>
+            {% endfor %}
+          </select>
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-12 columns">
+        <input class="button " type="submit" value="{% trans 'Zapisz domyślną rangę' %}">
+      </div>
+    </div>
   </form>
 {% endblock %}
