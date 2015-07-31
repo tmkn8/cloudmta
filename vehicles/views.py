@@ -5,7 +5,7 @@ from .models import Vehicle
 
 @login_required
 def vehicles_show(request, pk):
-    """Wyświetl stronę o pojeździe"""
+    """Wyświetl stronę o pojeździe - panel pojazdu"""
     vehicle = get_object_or_404(Vehicle, pk=pk)
     if not vehicle.check_permissions(request.user):
         raise PermissionDenied

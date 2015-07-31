@@ -4,6 +4,7 @@ from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 
 class Category(models.Model):
+    """Kategoria na Wiki"""
     name = models.CharField(max_length=30, verbose_name=_('Nazwa'))
     slug = models.SlugField(max_length=20, unique=True, verbose_name=_('Nazwa w'
         ' URL'))
@@ -16,6 +17,7 @@ class Category(models.Model):
         return self.name
 
 class Article(models.Model):
+    """Artykuły na Wiki"""
     name = models.CharField(max_length=50, verbose_name=_('Nazwa'))
     slug = models.SlugField(max_length=30, unique=True, verbose_name=_('Nazwa w'
         ' URL'))
@@ -36,9 +38,11 @@ class Article(models.Model):
         return self.name
 
     def get_absolute_url(self):
+        """Link do artykułu na Wiki"""
         return reverse('wiki:article', kwargs={'cat': self.category.slug,
             'article': self.slug})
 
     def format_content(self):
+        """Formatuj markdown do HTML, żeby wyświetlić artykuł"""
         import markdown
         return markdown.markdown(self.content)

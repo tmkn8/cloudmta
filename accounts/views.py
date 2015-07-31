@@ -8,9 +8,11 @@ from .models import QuizQuestion
 from .forms import LoginForm
 
 def has_not_passed_rp_test(user):
+    """Dekorator sprawdzający czy użytkownik nie zdał testu RP"""
     return not user.has_passed_rp_test()
 
 def accounts_login(request):
+    """Strona logowania"""
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -27,16 +29,19 @@ def accounts_login(request):
     return render(request, 'accounts/login.html', {'form': form})
 
 def accounts_logout(request):
+    """Strona wylogowywania"""
     logout(request)
     messages.success(request, _('Nastąpiło poprawne wylogowanie.'))
     return redirect('homepage')
 
 def accounts_register(request):
+    """Przekieruj użytkownika na rejestrację konta na stronie MyBB"""
     return redirect(settings.FORUM_REGISTER_ACCOUNT_LINK)
 
 @login_required
 @user_passes_test(has_not_passed_rp_test, 'characters:index')
 def roleplay_test(request):
+    """Test RP, który użytkownik musi zdać, aby założyć postać"""
     if request.method == 'POST':
         for i in range(0, settings.RP_TEST_QUESTIONS_NUMBERS):
             question_id = request.POST.get('id_' + str(i), None)

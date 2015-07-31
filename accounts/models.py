@@ -29,22 +29,23 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def get_absolute_url(self):
+        """Pobierz link do profilu"""
         return 'nothing yet'
 
-    def member(self):
+    def mybbmember(self):
         """Pobierz obiekt użytkownika forum"""
-        return Member.objects.get(pk=self.pk)
+        return MyBBMember.objects.get(pk=self.pk)
 
     def __str__(self):
         """Zwróć nazwę użytkownika"""
         return self.username
 
     def get_full_name(self):
-        """Wymagane przez rodzica"""
+        """Wymagane przez klasę rodzica"""
         return self
 
     def get_short_name(self):
-        """Wymagane przez rodzica"""
+        """Wymagane przez klasę rodzica"""
         return self
 
     def can_create_character(self):
@@ -74,8 +75,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('użytkownik Django')
         verbose_name_plural = _('użytkownicy Django')
 
-class Member(models.Model):
-    """Ten model jest tabelą z MyBB"""
+class MyBBMember(models.Model):
+    """Ten model jest tabelą z MyBB, na cele logowania"""
     uid = models.AutoField(primary_key=True, verbose_name=_('UID'))
     username = models.CharField(max_length=120, verbose_name=_('Nazwa '
         'użytkownika'))
@@ -84,6 +85,15 @@ class Member(models.Model):
         editable=False)
     salt = models.CharField(max_length=10, verbose_name=_('Sól'),
         editable=False)
+
+    def __str__(self):
+        return self.username
+
+    class Meta:
+        managed = False # Django nie dodaje tabeli w bazie
+        db_table ='mybb_users'
+        verbose_name = _('użytkownik forum')
+        verbose_name_plural = _('użytkownicy forum')
 
     def get_django_user_model(self):
         """Znajdź model użytkownika w Django"""
@@ -112,16 +122,8 @@ class Member(models.Model):
             return True
         return False
 
-    def __str__(self):
-        return self.username
-
-    class Meta:
-        managed = False
-        db_table ='mybb_users'
-        verbose_name = _('użytkownik forum')
-        verbose_name_plural = _('użytkownicy forum')
-
 class QuizQuestion(models.Model):
+    """Model przechowuje pytania do testu RP"""
     question = models.CharField(max_length=200, verbose_name=_('Pytanie'))
     answer_a = models.CharField(max_length=200, verbose_name=_('Odpowiedź A'))
     answer_b = models.CharField(max_length=200, verbose_name=_('Odpowiedź B'))
@@ -139,6 +141,10 @@ class QuizQuestion(models.Model):
     def __str__(self):
         return _("Pytanie %s..." % self.question[:10])
 
+    class Meta:
+        verbose_name = _('pytanie z testu wiedzy RP')
+        verbose_name_plural = _('pytania z testu wiedzy RP')
+
     def is_valid_answer(self, answer):
         """Sprawdź czy podana odpowiedź jest poprawna."""
         if not isinstance(answer, str):
@@ -146,7 +152,3 @@ class QuizQuestion(models.Model):
         if self.correct_answer.lower() == answer.lower():
             return True
         return False
-
-    class Meta:
-        verbose_name = _('pytanie z testu wiedzy RP')
-        verbose_name_plural = _('pytania z testu wiedzy RP')

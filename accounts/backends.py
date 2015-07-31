@@ -1,15 +1,15 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from .models import Member
+from .models import MyBBMember
 
 class MyBBMemberBackend(object):
     """Backend compatible with MyBB"""
     def authenticate(self, username=None, password=None):
         try:
-            member = Member.objects.get(email=username)
+            member = MyBBMember.objects.get(email=username)
             if member.check_password(password):
                 return member.get_django_user_model()
-        except Member.DoesNotExist:
+        except MyBBMember.DoesNotExist:
             return None
         return None
 

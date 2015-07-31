@@ -5,6 +5,7 @@ from django.apps import apps
 from django.core.urlresolvers import reverse
 
 class Door(models.Model):
+    """Przechowuje informacje o drzwiach"""
     id = models.AutoField(db_column='ID', primary_key=True)
     name = models.CharField(max_length=60, verbose_name=_('nazwa'))
     OWNERTYPE_CHOICES = (
@@ -29,9 +30,11 @@ class Door(models.Model):
         verbose_name_plural = _('drzwi')
 
     def get_absolute_url(self):
+        """Link do panelu drzwi"""
         return reverse('doors:show', kwargs={'pk': self.pk})
 
     def items(self):
+        """Pobierz przedmioty wewnątrz drzwi"""
         return apps.get_model('items', 'Item').objects.filter(
             ownertype=settings.RP_ITEM_OWNER_TYPE_ID_DOOR, owner=self.pk)
 
@@ -74,6 +77,7 @@ class Door(models.Model):
         return None
 
 class DoorPickup(models.Model):
+    """Informacje o pickupach drzwi"""
     id = models.AutoField(db_column='ID', primary_key=True)
     parentid = models.ForeignKey('Door', db_column='parentID',
         verbose_name=_('drzwi'), related_name='doorpickups',
@@ -119,6 +123,7 @@ class DoorPickup(models.Model):
         verbose_name_plural = _('pickupy drzwi')
 
 class Shop(models.Model):
+    """Produkty na /kup"""
     id = models.AutoField(db_column='ID', primary_key=True)
     shopid = models.ForeignKey('Door', db_column='shopID',
         verbose_name=_('drzwi sklepu'), related_name='shop')
@@ -148,6 +153,7 @@ class Shop(models.Model):
         verbose_name_plural = _('produkty na /kup')
 
 class Clothes(models.Model):
+    """Produkty na /ubrania"""
     id = models.AutoField(db_column='ID', primary_key=True)
     shopid = models.ForeignKey('Door', db_column='shopID',
         verbose_name=_('drzwi'), related_name='clothes')
@@ -167,6 +173,7 @@ class Clothes(models.Model):
         verbose_name = _('skiny na /ubrania')
 
 class InteriorDetail(models.Model):
+    """Lista interiorów z GTA"""
     uid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=32, verbose_name=_('nazwa'))
     x = models.FloatField(default=0, verbose_name=_('pozycja X'))
@@ -184,6 +191,7 @@ class InteriorDetail(models.Model):
         verbose_name_plural = _('dane interiorów GTA')
 
 class Object(models.Model):
+    """Obiekty 3D"""
     id = models.AutoField(db_column='ID', primary_key=True)
     model = models.PositiveIntegerField(verbose_name=_('ID modelu'))
     x = models.FloatField(default=0, verbose_name=_('pozycja X'))
@@ -204,6 +212,7 @@ class Object(models.Model):
         verbose_name_plural = _('obiekty')
 
 class ThreeDText(models.Model):
+    """Etykiety 3D"""
     id = models.AutoField(db_column='ID', primary_key=True)
     x = models.FloatField(default=0, verbose_name=_('pozycja X'))
     y = models.FloatField(default=0, verbose_name=_('pozycja Y'))

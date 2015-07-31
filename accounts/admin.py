@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Member, QuizQuestion
+from .models import User, MyBBMember, QuizQuestion
 from characters.models import Character
 
 class CharacterInline(admin.TabularInline):
@@ -14,10 +14,10 @@ class UserAdmin(admin.ModelAdmin):
     readonly_fields = ('email', 'username', 'password', 'last_login')
     inlines = [CharacterInline]
 
-class MemberAdmin(admin.ModelAdmin):
+class MyBBMemberAdmin(admin.ModelAdmin):
     readonly_fields = ('uid', 'username', 'email')
     exclude = ('password', 'salt')
 
 admin.site.register(User, UserAdmin)
-admin.site.register(Member, MemberAdmin)
+admin.site.register(MyBBMember, MyBBMemberAdmin)
 admin.site.register(QuizQuestion)

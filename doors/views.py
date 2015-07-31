@@ -5,6 +5,7 @@ from .models import Door
 
 @login_required
 def doors_show(request, pk):
+    """Wyświetl infomacje o drzwiach - panel drzwi"""
     door = get_object_or_404(Door, pk=pk)
     if not door.check_permissions(request.user):
         raise PermissionDenied

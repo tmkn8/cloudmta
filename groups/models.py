@@ -7,6 +7,7 @@ from django.apps import apps
 from django.core.urlresolvers import reverse
 
 class Group(models.Model):
+    """Grupy z gry"""
     id = models.AutoField(db_column='ID', primary_key=True,
         verbose_name=_('ID grupy'))
     members = models.ManyToManyField('characters.Character',
@@ -116,6 +117,7 @@ class Group(models.Model):
             ownertype=settings.RP_DOOR_OWNER_TYPE_ID_GROUP)
 
     def get_absolute_url(self):
+        """Pobierz link do panelu grupy"""
         return reverse('groups:show:index', kwargs={'pk': self.pk})
 
     class Meta:
@@ -127,6 +129,7 @@ class Group(models.Model):
         return self.name
 
 class GroupMember(models.Model):
+    """Członkostwo w grupie"""
     id = models.AutoField(db_column='ID', primary_key=True)
     userid = models.ForeignKey('characters.Character', db_column='userID',
         verbose_name=_('Postać'), related_name=_('groupmembers'),
@@ -147,6 +150,7 @@ class GroupMember(models.Model):
         return _("%s w %s" % (self.userid, self.groupid))
 
 class GroupRank(models.Model):
+    """Rangi w grupie"""
     id = models.AutoField(db_column='ID', primary_key=True)
     name = models.CharField(max_length=64, verbose_name=_('Nazwa'),
         default=_('Ranga'))
@@ -168,7 +172,7 @@ class GroupRank(models.Model):
         return self.name
 
     def get_rank_permissions(self):
-        """Pobierz uprawnienia rangi z JSON do dicitonary
+        """Pobierz uprawnienia danej rangi
 
         Waliduje z listą uprawnień grupy. Nie przepuści wartości spoza uprawnień grupy."""
         try:
@@ -215,6 +219,7 @@ class GroupRank(models.Model):
         return [converted_perms]
 
 class GroupInvitation(models.Model):
+    """Zaproszenia do grupy"""
     character = models.ForeignKey('characters.Character',
         related_name='groupinvitations', related_query_name='groupinvitation',
         verbose_name=_('Postać'))

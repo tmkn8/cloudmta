@@ -5,14 +5,15 @@ from django.conf import settings
 from django.utils.translation import ugettext as _
 
 class Item(models.Model):
+    """Przedmioty"""
     id = models.AutoField(db_column='ID', primary_key=True,
         verbose_name=_('ID przedmiotu'))
-    name = models.CharField(max_length=32, verbose_name=_('Nazwa przedmiotu'))
+    name = models.CharField(max_length=32, verbose_name=_('nazwa przedmiotu'))
     OWNERTYPE_CHOICES = (
-        (int(settings.RP_ITEM_OWNER_TYPE_ID_NONE), _('Na ziemi')),
-        (int(settings.RP_ITEM_OWNER_TYPE_ID_CHARACTER), _('Postać')),
-        (int(settings.RP_ITEM_OWNER_TYPE_ID_VEHICLE), _('Pojazd')),
-        (int(settings.RP_ITEM_OWNER_TYPE_ID_DOOR), _('Drzwi')),
+        (settings.RP_ITEM_OWNER_TYPE_ID_NONE, _('na ziemi')),
+        (settings.RP_ITEM_OWNER_TYPE_ID_CHARACTER, _('postać')),
+        (settings.RP_ITEM_OWNER_TYPE_ID_VEHICLE, _('pojazd')),
+        (settings.RP_ITEM_OWNER_TYPE_ID_DOOR, _('drzwi')),
     )
     ownertype = models.PositiveSmallIntegerField(db_column='ownerType',
         choices=OWNERTYPE_CHOICES, db_index=True)
@@ -42,35 +43,33 @@ class Item(models.Model):
         (22, _('kostka do gry')),
     )
     type = models.PositiveSmallIntegerField(choices=ITEM_TYPE_CHOICES,
-    verbose_name=_('Typ przedmiotu'))
-    slotid = models.IntegerField(db_column='slotID', verbose_name=_('Numer '
+    verbose_name=_('typ przedmiotu'))
+    slotid = models.IntegerField(db_column='slotID', verbose_name=_('numer '
         'slotu w ekwipunku'), default=0)
-    val1 = models.IntegerField(default=0, verbose_name=_('Wartość '
+    val1 = models.IntegerField(default=0, verbose_name=_('wartość '
         '1'))
-    val2 = models.IntegerField(default=0, verbose_name=_('Wartość '
+    val2 = models.IntegerField(default=0, verbose_name=_('wartość '
         '2'))
-    val3 = models.TextField(verbose_name=_('Wartość '
-        '3'), blank=True, null=True)
-    volume = models.IntegerField(default=0,
-        verbose_name=_('Objętość'))
-    created = UnixDateTimeField(auto_now_add=True, verbose_name=_('Data '
+    val3 = models.TextField(verbose_name=_('wartość 3'), blank=True, null=True)
+    volume = models.IntegerField(default=0, verbose_name=_('objętość'))
+    created = UnixDateTimeField(auto_now_add=True, verbose_name=_('data '
         'stworzenia przedmiotu'))
-    lastused = UnixDateTimeField(db_column='lastUsed', verbose_name=_('Ostatnio'
+    lastused = UnixDateTimeField(db_column='lastUsed', verbose_name=_('ostatnio'
         ' użyty'), blank=True, null=True)
-    lastuseddata = JSONField(db_column='lastUsedData', verbose_name=_('Odciski '
+    lastuseddata = JSONField(db_column='lastUsedData', verbose_name=_('odciski '
         'palców'), blank=True, null=True)
-    used = models.BooleanField(default=False, verbose_name=_('W użytku'),
-        help_text=_('Obecnie używany przez gracza'))
-    x = models.FloatField(default=0, verbose_name=_('Pozycja X'))
-    y = models.FloatField(default=0, verbose_name=_('Pozycja Y'))
-    z = models.FloatField(default=0, verbose_name=_('Pozycja Z'))
-    rx = models.FloatField(default=0, verbose_name=_('Rotacja X'))
-    ry = models.FloatField(default=0, verbose_name=_('Rotacja Y'))
-    rz = models.FloatField(default=0, verbose_name=_('Rotacja Z'))
+    used = models.BooleanField(default=False, verbose_name=_('w użytku'),
+        help_text=_('obecnie używany przez gracza'))
+    x = models.FloatField(default=0, verbose_name=_('pozycja X'))
+    y = models.FloatField(default=0, verbose_name=_('pozycja Y'))
+    z = models.FloatField(default=0, verbose_name=_('pozycja Z'))
+    rx = models.FloatField(default=0, verbose_name=_('rotacja X'))
+    ry = models.FloatField(default=0, verbose_name=_('rotacja Y'))
+    rz = models.FloatField(default=0, verbose_name=_('rotacja Z'))
     interior = models.IntegerField(default=0,
-        verbose_name=_('Interior'))
+        verbose_name=_('wnętrze'))
     dimension = models.IntegerField(default=0,
-        verbose_name=_('Wymiar'))
+        verbose_name=_('wymiar'))
 
     class Meta:
         db_table = '_items'
@@ -81,6 +80,7 @@ class Item(models.Model):
         return self.name
 
 class OrderType(models.Model):
+    """Typ produktów na magazynie, np. LSPD"""
     name = models.CharField(max_length=30)
 
     def __str__(self):
@@ -91,19 +91,20 @@ class OrderType(models.Model):
         verbose_name_plural = _('typy zamówień')
 
 class Order(models.Model):
+    """Produkty na magazynie"""
     id = models.AutoField(db_column='ID', primary_key=True,
         verbose_name='ID produktu')
     ordersize = models.IntegerField(db_column='orderSize',
-        verbose_name=_('Rozmiar zamówienia'), help_text=_('W celu zapobiegania '
+        verbose_name=_('rozmiar zamówienia'), help_text=_('w celu zapobiegania '
             'dostarczania dużych zamówień w małych pojazdach'))
     catid = models.ForeignKey('OrderCategory', related_name='category',
         db_column='catID')
     data = JSONField(blank=True, null=True)
-    price = models.PositiveIntegerField(default=0, help_text=_('Pieniądze'),
-        verbose_name=_('Cena produktu'))
-    name = models.CharField(max_length=255, verbose_name=_('Nazwa produktu'))
+    price = models.PositiveIntegerField(default=0, help_text=_('pieniądze'),
+        verbose_name=_('cena produktu'))
+    name = models.CharField(max_length=255, verbose_name=_('nazwa produktu'))
     ordertype = models.ForeignKey('OrderType', db_column='orderType',
-        verbose_name=_('Typ zamówienia'), related_name='orders',
+        verbose_name=_('typ zamówienia'), related_name='orders',
         related_query_name='order')
 
     def __str__(self):
@@ -116,17 +117,16 @@ class Order(models.Model):
 
 
 class OrderCategory(models.Model):
+    """Kategoria produktów na magazynie"""
     id = models.AutoField(db_column='ID', primary_key=True, verbose_name=_('ID '
         'kategorii'))
-    name = models.CharField(max_length=255, verbose_name=_('Nazwa kategorii'))
+    name = models.CharField(max_length=255, verbose_name=_('nazwa kategorii'))
     ordertype = models.ForeignKey('OrderType', db_column='orderType',
-        verbose_name=_('Typ zamówienia'), related_name='ordercategories',
+        verbose_name=_('typ zamówienia'), related_name='ordercategories',
         related_query_name='ordercategory')
-    # TODO: Dodaj realną relację modelu po dodaniu modelu grup
-    # orderowner = models.ForeignKey('groups.Group', db_column='orderOwner',
-    #    related_name='ordercategories', related_query_name='ordercategory')
-    orderowner = models.IntegerField(db_column='orderOwner',
-        verbose_name=_('Grupa'), default=0)
+    orderowner = models.ForeignKey('groups.Group', db_column='orderOwner',
+        related_name='ordercategories', related_query_name='ordercategory',
+        verbose_name=_('grupa'))
 
     def __str__(self):
         return self.name
@@ -137,24 +137,24 @@ class OrderCategory(models.Model):
         verbose_name_plural = _('kategorie produktów')
 
 class Deposite(models.Model):
+    """Produkty w drzwiach"""
     id = models.AutoField(db_column='ID', primary_key=True, verbose_name=_('ID '
         'depozytu'))
-    intid = models.IntegerField(db_column='intID', verbose_name=_('Drzwi'))
-    # TODO: Dodaj realną relację modelu po dodaniu drzwi
-    # intid = models.ForeignField(db_column='intID', verbose_name=_('Drzwi'),
-    # related_name='deposites', related_query_name='deposite')
-    name = models.CharField(max_length=255, verbose_name=_('Nazwa produktu'))
-    stock = models.PositiveIntegerField(verbose_name=_('Ilość'), default=1)
+    intid = models.ForeignKey('doors.Door', db_column='intID',
+        verbose_name=_('drzwi'), related_name='deposites',
+        related_query_name='deposite')
+    name = models.CharField(max_length=255, verbose_name=_('nazwa produktu'))
+    stock = models.PositiveIntegerField(verbose_name=_('ilość'), default=1)
     itemtype = models.IntegerField(db_column='itemType', verbose_name=_('Typ '
         'produktu'), choices=Item.ITEM_TYPE_CHOICES)
     itemval1 = models.IntegerField(db_column='itemVal1', default=0,
-        verbose_name=_('Wartość produktu 1'))
+        verbose_name=_('wartość produktu 1'))
     itemval2 = models.IntegerField(db_column='itemVal2', default=0,
-        verbose_name=_('Wartość produktu 2'))
-    itemval3 = models.TextField(db_column='itemVal3', null=True,
-        blank=True, verbose_name=_('Wartość produktu 3'))
-    itemvolume = models.IntegerField(db_column='itemVolume',
-        verbose_name=_('Objętość produktu'), default=0)
+        verbose_name=_('wartość produktu 2'))
+    itemval3 = models.TextField(db_column='itemVal3', null=True, blank=True,
+        verbose_name=_('wartość produktu 3'))
+    itemvolume = models.IntegerField(db_column='itemVolume', default=0,
+        verbose_name=_('objętość produktu'))
 
     def __str__(self):
         return self.name
@@ -165,31 +165,29 @@ class Deposite(models.Model):
         verbose_name_plural = _('produkty w drzwiach')
 
 class Delivery(models.Model):
+    """Dostawy w trakcie"""
     id = models.AutoField(db_column='ID', primary_key=True, verbose_name=_('ID '
         'dostarczenia'))
-    intid = models.IntegerField(db_column='intID', verbose_name=_('Drzwi'),
-        help_text=_('Do których dostaczany jest towar'))
-    # TODO: Dodaj realną relację modelu po dodaniu drzwi
-    # intid = models.ForeignField(db_column='intID', verbose_name=_('Drzwi'))
-    pieces = models.IntegerField(default=1, verbose_name=_('Liczba sztuk'))
-    data = JSONField(verbose_name=_('Informacje o produkcie'), blank=True,
+    intid = models.ForeignKey('doors.Door', db_column='intID', verbose_name=_(
+        'drzwi'), help_text=_('do których dostaczany jest towar'))
+    pieces = models.IntegerField(default=1, verbose_name=_('liczba sztuk'))
+    data = JSONField(verbose_name=_('informacje o produkcie'), blank=True,
         null=True)
-    name = models.CharField(max_length=255, verbose_name=_('Nazwa zamówienia'))
+    name = models.CharField(max_length=255, verbose_name=_('nazwa zamówienia'))
     ordertype = models.ForeignKey('OrderType', db_column='orderType',
-        verbose_name=_('Typ zamówienia'), related_name='deliveries',
+        verbose_name=_('typ zamówienia'), related_name='deliveries',
         related_query_name='delivery')
     delivergroup = models.IntegerField(db_column='deliverGroup', default=0)
-    # TODO: Dodaj relację do grup jak będzie już
-    # delivergroup = models.ForeignKey('groups.Group', db_column='deliverGroup',
-    # related_name='deliveries', related_query_name='delivery',
-    # verbose_name=_('Grupa kurierska'))
+    delivergroup = models.ForeignKey('groups.Group', db_column='deliverGroup',
+        related_name='deliveries', related_query_name='delivery',
+        verbose_name=_('grupa kurierska'))
     deliverid = models.ForeignKey('characters.Character',
-        verbose_name=_('Dostawca'), related_name='deliveries',
+        verbose_name=_('dostawca'), related_name='deliveries',
         related_query_name='delivery')
-    time = UnixDateTimeField(verbose_name='Czas', help_text=_('Odebranie paczki'
+    time = UnixDateTimeField(verbose_name='czas', help_text=_('odebranie paczki'
         ' przez kuriera'), blank=True, null=True)
-    cost = models.PositiveIntegerField(verbose_name='Koszt', default=0,
-        help_text=_('Pieniądze'))
+    cost = models.PositiveIntegerField(verbose_name='koszt', default=0,
+        help_text=_('pieniądze'))
 
     def __str__(self):
         return self.name
@@ -200,6 +198,7 @@ class Delivery(models.Model):
         verbose_name_plural = _('dostawy')
 
 class PhoneContact(models.Model):
+    """Kontakty telefoniczne"""
     id = models.AutoField(db_column='ID', primary_key=True)
     phoneid = models.PositiveIntegerField(db_column='phoneID',
         verbose_name=_('ID telefonu'))

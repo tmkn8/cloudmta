@@ -4,6 +4,7 @@ from django.conf import settings
 from django.utils.translation import ugettext as _
 
 class Post(models.Model):
+    """Model przechowujący informacje o poście na blogu"""
     title = models.CharField(max_length=50, verbose_name=_('Tytuł'))
     slug = models.SlugField(max_length=30, unique=True, verbose_name=_('nazwa '
         'w URL'))
@@ -22,12 +23,15 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
+        """URL do postu"""
         return reverse('blog:post', kwargs={'slug': self.slug})
 
     def format_content(self):
+        """Użyj Markdownu, żeby sformatować tekst do HTML"""
         import markdown
         return markdown.markdown(self.content)
 
     def format_content_short(self):
+        """Sformatuj tekst Markdown -> HTML i skróć go do 400 znaków"""
         import markdown
         return markdown.markdown("%s..." % self.content[:400])

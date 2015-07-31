@@ -11,6 +11,7 @@ class CreateCharacterForm(forms.ModelForm):
         fields = ['name', 'sex', 'dob', 'skin']
 
     def clean_dob(self):
+        """Sprawdź czy postać nie jest za młoda albo za stara"""
         dob = self.cleaned_data['dob']
         max_date_to_compare = datetime.date.today() - relativedelta(years=settings.RP_MIN_AGE_OF_CHARACTER)
         min_date_to_compare = datetime.date.today() - relativedelta(years=settings.RP_MAX_AGE_OF_CHARACTER)
@@ -20,6 +21,7 @@ class CreateCharacterForm(forms.ModelForm):
         return dob
 
     def clean(self):
+        """Sprawdź czy skin jest zgodny z płcią"""
         super(CreateCharacterForm, self).clean()
         skin = self.cleaned_data.get('skin', 0)
         sex = self.cleaned_data.get('sex', 0)

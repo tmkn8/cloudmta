@@ -7,6 +7,7 @@ from django.apps import apps
 
 
 class Vehicle(models.Model):
+    """Pojazdy"""
     id = models.AutoField(db_column='ID', primary_key=True,
         verbose_name=_('ID pojazdu'))
     name = models.CharField(max_length=50, verbose_name=_('Nazwa pojazdu'))
@@ -73,6 +74,7 @@ class Vehicle(models.Model):
         return self.name
 
     def get_absolute_url(self):
+        """Link do panelu pojazdu"""
         return reverse('vehicles:show', kwargs={'pk': self.pk})
 
     def check_permissions(self, user):
