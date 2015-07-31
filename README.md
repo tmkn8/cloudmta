@@ -1,8 +1,11 @@
 # Informacje
 Repozytorium zawiera stronę internetową CloudMTA napisaną w Pythonie z użyciem Django. Po stronie front-endu używamy technologii takich jak Sass, Bower oraz Grunt.
 
-# Instalacja w środowisku programistycznym
+# Instalacja w środowisku lokalnym
 Jeżeli chcesz pokodzić na swoim hoście lokalnym, to możesz skorzystać z poniższej instrukcji, żeby skonfigurować środowisko.
+
+**W środowisku lokalnym nie używamy backendu MyBB do logowania.**
+
 ## Wymagania
 * Vagrant
 * VirtualBox
@@ -37,6 +40,16 @@ Zaloguj się do maszyny przez SSH oraz przejdź do folderu projektu w maszynie w
 vagrant ssh
 cd /cloudmta
 ```
+
+Teraz musimy dodać plik ustawień z `SECRET_KEY`, który nie jest trzymany w repozytorium. Stwórz plik `cloudmta/settings/secrets.json` o poniższej treści i wstaw w nim swój klucz.
+*Możesz użyć [generatora](http://www.miniwebtool.com/django-secret-key-generator/), żeby uzyskać klucz.*
+```
+{
+  "SECRET_KEY": "Twój klucz"
+}
+```
+
+
 
 Odpal środowisko wirtualne Pythona.
 ```
@@ -78,3 +91,6 @@ grunt
 ```
 
 Front strony powinien działać jak należy.
+
+# Ustawienia projektu
+Większość ustawień jest trzymanych w repozytorium. Ustawienia, które zawierają hasła oraz klucz aplikacji, są trzymanie poza repozytorium w pliku `cloudmta/settings/secrets.json`. Przykłady plik ustawień znajduje się w `cloudmta/settings/secrets.json.example` ([link](https://gitlab.com/cloudmta/www/blob/master/cloudmta/settings/secrets.json.example)).
