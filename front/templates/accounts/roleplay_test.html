@@ -4,7 +4,8 @@
 
 {% block under_header %}
   {% url 'accounts:roleplay-test' as test_url %}
-  {% include 'includes/header_banner.html' with text='Test wiedzy RolePlay' url=test_url %}
+  {% trans 'Test wiedzy z roleplay' as trans_text %}
+  {% include 'includes/header_banner.html' with text=trans_text url=test_url %}
 {% endblock %}
 
 {% block content %}
@@ -14,7 +15,7 @@
       {% for i, question in questions %}
       <div class="row">
         <div class="large-12 columns">
-          <h1>{{ question.question }}</h1>
+          <h2>{{ question.question }}</h2>
           <ul class="no-bullet">
             <li>
               <input type="radio" name="answer_{{ i }}" value="a" id="answer_{{ i }}_a">
