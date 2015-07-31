@@ -1,12 +1,32 @@
 import os
+import json
+from pathlib import Path
 from .roleplay import *
 from django.contrib.messages import constants as message_constants
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Zaimportuj plik z tajnymi ustawieniami
+try:
+    with Path(os.path.join(BASE_DIR, 'settings', 'secrets.json')).open() as handle:
+        SECRETS = json.load(handle)
+except IOError:
+    SECRETS = {}
+
+SECRET_KEY = SECRETS.get('SECRET_KEY')
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': SECRETS.get('DB_NAME', 'cloudmta'),
+        'USER': SECRETS.get('DB_USER', 'cloudmta'),
+        'PASSWORD': SECRETS.get('DB_PASSWORD', 'secret'),
+        'HOST': SECRETS.get('DB_HOST', 'localhost'),
+        'PORT': SECRETS.get('DB_PORT', '3306'),
+    }
+}
 
 # Application definition
-
 INSTALLED_APPS = (
     # Django apps
     'django.contrib.admin',
@@ -98,4 +118,6 @@ MESSAGE_TAGS = {
     message_constants.SUCCESS: 'success',
     message_constants.WARNING: 'warning',
     message_constants.ERROR: 'alert'
-    }
+}
+
+EMAIL_SUBJECT_PREFIX = '[CloudMTA]'

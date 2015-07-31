@@ -1,5 +1,5 @@
 from .common import *
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['cloudmta.pl']
 DEBUG = False
-SECRET_KEY = ''
+DEFAULT_FROM_EMAIL = 'webmaster@cloudmta.pl'
