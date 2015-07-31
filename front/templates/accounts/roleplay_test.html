@@ -2,34 +2,57 @@
 {% load i18n %}
 {% block title %}{% trans 'Test z wiedzy roleplay' %}{% endblock %}
 
+{% block under_header %}
+  {% url 'accounts:roleplay-test' as test_url %}
+  {% trans 'Test wiedzy z roleplay' as trans_text %}
+  {% include 'includes/header_banner.html' with text=trans_text url=test_url %}
+{% endblock %}
+
 {% block content %}
+
   <form action="{% url 'accounts:roleplay-test' %}" method="POST">
       {% csrf_token %}
       {% for i, question in questions %}
-        <h2>{{ question.question }}</h2>
-        <ul>
-          <li>
-            <input type="radio" name="answer_{{ i }}" value="a">
-            {{ question.answer_a }}
-          </li>
-          <li>
-            <input type="radio" name="answer_{{ i }}" value="b">
-            {{ question.answer_b }}
-          </li>
-          <li>
-            <input type="radio" name="answer_{{ i }}" value="c">
-            {{ question.answer_c }}
-          </li>
-          <li>
-            <input type="radio" name="answer_{{ i }}" value="d">
-            {{ question.answer_d }}
-
-            {# Hidden field: Question ID #}
-            <input type="hidden" name="id_{{ i }}"
-              value="{{ question.id }}">
-          </li>
-        </ul>
+      <div class="row">
+        <div class="large-12 columns">
+          <h2>{{ question.question }}</h2>
+          <ul class="no-bullet">
+            <li>
+              <input type="radio" name="answer_{{ i }}" value="a" id="answer_{{ i }}_a">
+              <label for="answer_{{ i }}_a">
+                {{ question.answer_a }}
+              </label>
+            </li>
+            <li>
+              <input type="radio" name="answer_{{ i }}" value="b" id="answer_{{ i }}_b">
+              <label for="answer_{{ i }}_b">
+                {{ question.answer_b }}
+              </label>
+            </li>
+            <li>
+              <input type="radio" name="answer_{{ i }}" value="c" id="answer_{{ i }}_c">
+              <label for="answer_{{ i }}_c">
+                {{ question.answer_c }}
+              </label>
+            </li>
+            <li>
+              <input type="radio" name="answer_{{ i }}" value="d" id="answer_{{ i }}_d">
+              <label for="answer_{{ i }}_d">
+                {{ question.answer_d }}
+              </label>
+              {# Hidden field: Question ID #}
+              <input type="hidden" name="id_{{ i }}"
+                value="{{ question.id }}">
+            </li>
+          </ul>
+          <hr>
+        </div>
+      </div>
       {% endfor %}
-    <input type="submit" value="{% trans 'Sprawdź odpowiedzi' %}">
+    <div class="row">
+      <div class="large-12 columns text-center">
+        <input type="submit" class="button" value="{% trans 'Sprawdź odpowiedzi' %}">
+      </div>
+    </div>
   </form>
 {% endblock %}
