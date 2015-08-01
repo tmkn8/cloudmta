@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext as _
 from django.conf import settings
 from django.contrib import messages
@@ -63,3 +63,8 @@ def roleplay_test(request):
         questions_indices = range(0, settings.RP_TEST_QUESTIONS_NUMBERS)
     return render(request, 'accounts/roleplay_test.html',
         {'questions': zip(questions_indices, questions)})
+
+def accounts_profile_index(request, slug):
+    """Główna zakładka profili użytkownika"""
+    user = get_object_or_404(get_user_model(), username=slug)
+    return render(request, 'accounts/profile/index.html', {'user': user})

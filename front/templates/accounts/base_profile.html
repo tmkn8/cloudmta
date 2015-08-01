@@ -1,5 +1,7 @@
-{% extends 'base_content.html' %}
+{% extends 'base.html' %}
 {% load i18n %}
+
+{% block body_id %}user-profile{% endblock %}
 
 {% block title %}
   {% blocktrans %}
@@ -7,13 +9,19 @@
   {% endblocktrans %}
 {% endblock %}
 
-{% block content %}
-  <h1>{{ user }}</h1>
-  <ul>
-    {% url 'accounts:profile:index' as profile_index_url %}
-    <li {% if request.path == profile_index_url %}class="active"{% endif %}>
-      <a href="{% url 'accounts:profile:index' %}">
-        {% trans 'Ogólne' %}
-      </a>
-    </li>
-  </ul>
+{% block container %}
+<h1>{{ user }}</h1>
+<ul class="tabs">
+  <li class="tab-title{% if request.path == user.get_absolute_url %} active{% endif %}">
+    <a href="{{ user.get_absolute_url }}">
+      {% trans 'Informacje' %}
+    </a>
+  </li>
+</ul>
+
+  <div class="tabs-content">
+    <div class="content active">
+      {% block profile_content %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}

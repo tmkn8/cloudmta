@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.contrib.auth.models import UserManager
 from characters.models import Character
@@ -30,7 +31,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_absolute_url(self):
         """Pobierz link do profilu"""
-        return 'nothing yet'
+        return reverse('accounts:profile:index', kwargs={'slug': self.username})
 
     def mybbmember(self):
         """Pobierz obiekt użytkownika forum"""
