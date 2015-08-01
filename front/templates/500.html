@@ -1,0 +1,10 @@
+{% extends "base_error.html" %}
+{% load i18n %}
+
+{% block error_title %}
+  <h1>500</h1>
+{% endblock %}
+{% block error_content %}
+  <p class="first-line">błąd serwera</p>
+  <p class="second-line">jest nam strasznie przykro, wybacz.</p>
+{% endblock %}
