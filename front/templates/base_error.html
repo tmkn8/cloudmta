@@ -9,8 +9,22 @@
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
     <script src="{% static 'js/output_header.js' %}"></script>
   </head>
-  <body>
+  <body id="error-page">
+    {% include 'includes/header.html' %}
     {% block content %}
+
+    {% endblock %}
+
+    <script src="{% static 'js/output_footer.js' %}"></script>
+    <script>
+    $(document).foundation({
+      orbit: {
+        bullets: false,
+        slide_number: false,
+      },
+    });
+    </script>
+    {% block before_end_of_body %}
 
     {% endblock %}
   </body>
