@@ -6,7 +6,8 @@ AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
 # Ne używaj SMTP do wysyłania emaili
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
-DEBUG = True
+DEBUG = False
+ALLOWED_HOSTS = ['*']
 
 # Żeby dodawało port do URL przy przekierowaniu przez nginx
 USE_X_FORWARDED_HOST = True

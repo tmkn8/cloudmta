@@ -1,16 +1,10 @@
 {% extends "base_error.html" %}
 {% load i18n %}
 
-{% block content %}
-<div class="error-box">
-  <div class="row">
-    <div class="large-3 medium-1 columns">
-      <h1>404</h1>
-    </div>
-    <div class="large-9 medium-3 columns">
-      <h2>tu nic nie ma</h3>
-      <h3>chcesz poszukac dalej?</h3>
-    </div>
-  </div>
-</div>
+{% block error_title %}
+  <h1>404</h1>
+{% endblock %}
+{% block error_content %}
+  <p class="first-line">tu nic nie ma</p>
+  <p class="second-line">chcesz poszukac dalej?</p>
 {% endblock %}

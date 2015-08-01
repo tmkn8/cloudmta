@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
     <script src="{% static 'js/output_header.js' %}"></script>
   </head>
-  <body>
+  <body class="{% block body_class %}{% endblock %}" id="{% block body_id %}{% endblock %}">
     {% include 'includes/header.html' %}
     {% block under_header %}{% endblock %}
     {% include 'includes/messages.html' %}
