@@ -15,7 +15,9 @@
       {% for i, question in questions %}
       <div class="row">
         <div class="large-12 columns">
-          <h2>{{ question.question }}</h2>
+          <h3>{{ question.question }}</h3>
+          </div>
+        </div>
           <ul class="no-bullet">
             <li>
               <input type="radio" name="answer_{{ i }}" value="a" id="answer_{{ i }}_a">
@@ -46,8 +48,6 @@
             </li>
           </ul>
           <hr>
-        </div>
-      </div>
       {% endfor %}
     <div class="row">
       <div class="large-12 columns text-center">
