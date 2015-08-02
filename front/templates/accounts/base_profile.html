@@ -12,18 +12,18 @@
 
 {% block container %}
 <div class="row">
-  <div class="12-columns large">
+  <div class="large-12 columns">
     <div class="panel cover-photo">
       <div class="th user-avatar">
-
       </div>
-    </div>
-    <div class="12-columns large">
-      <h1 class="user-name"> {{ user }} </h1>
     </div>
   </div>
 </div>
-
+<div class="row">
+  <div class="large-12 columns">
+    <h1 class="user-name"> {{ user }} </h1>
+  </div>
+</div>
 <!-- <ul class="tabs">
   <li class="tab-title{% if request.path == user.get_absolute_url %} active{% endif %}">
     <a href="{{ user.get_absolute_url }}">
