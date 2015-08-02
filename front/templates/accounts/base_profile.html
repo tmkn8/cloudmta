@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
+<body id="user-profile">
 {% block body_id %}user-profile{% endblock %}
 
 {% block title %}
@@ -10,8 +11,20 @@
 {% endblock %}
 
 {% block container %}
-<h1>{{ user }}</h1>
-<ul class="tabs">
+<div class="row">
+  <div class="12-columns large">
+    <div class="panel cover-photo">
+      <div class="th user-avatar">
+
+      </div>
+    </div>
+    <div class="12-columns large">
+      <h1 class="user-name"> {{ user }} </h1>
+    </div>
+  </div>
+</div>
+
+<!-- <ul class="tabs">
   <li class="tab-title{% if request.path == user.get_absolute_url %} active{% endif %}">
     <a href="{{ user.get_absolute_url }}">
       {% trans 'Informacje' %}
@@ -23,5 +36,6 @@
     <div class="content active">
       {% block profile_content %}{% endblock %}
     </div>
-  </div>
+  </div> -->
 {% endblock %}
+</body>
