@@ -12,6 +12,19 @@
 {% endblock %}
 
 {% block content %}
+  <ul>
+    {% url 'accounts:friends:index' as index_url %}
+    <li class="{% if request.path == index_url %}active{% endif %}">
+      <a href="{{ index_url }}">
+        {% trans 'Twoi znajomi' %}
+      </a>
+    </li>
+    <li class="{% if 'requests' in request.path %}active{% endif %}">
+      <a href="{% url 'accounts:friends:requests' %}">
+        {% trans 'Zaproszenia do znajomych' %}
+      </a>
+    </li>
+  </ul>
   {% block friends_content %}
 
   {% endblock %}
