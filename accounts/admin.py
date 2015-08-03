@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import User, MyBBMember, QuizQuestion
-from characters.models import Character
+from django.apps import apps
+from .models import User, MyBBMember, QuizQuestion, FriendRequest
 
 class CharacterInline(admin.TabularInline):
-    model = Character
+    model = apps.get_model('characters', 'Character')
     fields = ('name', 'facecode', 'hp', 'money', 'sex', 'ajtime', 'bwtime',
         'dob')
     can_delete = False
@@ -21,3 +21,4 @@ class MyBBMemberAdmin(admin.ModelAdmin):
 admin.site.register(User, UserAdmin)
 admin.site.register(MyBBMember, MyBBMemberAdmin)
 admin.site.register(QuizQuestion)
+admin.site.register(FriendRequest)
