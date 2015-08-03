@@ -7,7 +7,7 @@
     {% for friend in friends %}
       <li>
         <a href="{{ friend.get_absolute_url }}">{{ friend }}</a>
-        <a class="alert tiny" href="{% url 'accounts:friends:delete_friend' friend.pk %}">
+        &nbsp;<a class="button alert tiny" href="{% url 'accounts:friends:delete_friend' friend.pk %}">
           <i class="fa fa-trash"></i>
         </a>
       </li>
