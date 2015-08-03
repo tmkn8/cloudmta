@@ -1,0 +1,21 @@
+{% extends 'accounts/base_friends.html' %}
+{% load i18n %}
+
+{% block friends_content %}
+  <h1>
+    {% blocktrans %}Zaproś {{ friend }} do znajomych{% endblocktrans %}
+  </h1>
+  <p class="lead">
+    {% trans 'Potwierdż wysłanie prośby o znajomość.' %}
+  </p>
+  <form action="{% url 'accounts:friends:send_request' friend.pk %}" method="post">
+    {% csrf_token %}
+    <div class="row">
+      <div class="large-12 columns">
+        <input class="button success" type="submit" value="{% trans 'Wyślij prośbę o znajomość' %}">
+        &nbsp;{% trans 'lub'%}&nbsp;
+        <a href="{{ friend.get_absolute_url }}">{% trans 'Anuluj' %}</a>
+      </div>
+    </div>
+  </form>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'accounts/base_friends.html' %}
+{% load i18n %}
+
+{% block friends_content %}
+  <h1>
+    {% blocktrans %}Skasuj {{ friend }} z listy znajomych{% endblocktrans %}
+  </h1>
+  <p class="lead">
+    {% trans 'Potwierdż skasowanie znajomego' %}
+  </p>
+  <form action="{% url 'accounts:friends:delete_friend' friend.pk %}" method="post">
+    {% csrf_token %}
+    <div class="row">
+      <div class="large-12 columns">
+        <input class="button alert" type="submit" value="{% trans 'Usuń znajomego' %}">
+        &nbsp;{% trans 'lub'%}&nbsp;
+        <a href="{% url 'accounts:friends:index' %}">{% trans 'Anuluj' %}</a>
+      </div>
+    </div>
+  </form>
+{% endblock %}

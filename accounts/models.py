@@ -119,7 +119,8 @@ class MyBBMember(models.Model):
         """Sprawdza hasło algorytmem MyBB"""
         member_salt_hash = hashlib.md5(self.salt.encode('utf-8')).hexdigest()
         input_password = hashlib.md5(password.encode('utf-8')).hexdigest()
-        hashed_password = hashlib.md5(member_salt_hash.encode('utf-8') + input_password.encode('utf-8'))
+        hashed_password = hashlib.md5(member_salt_hash.encode('utf-8') \
+            + input_password.encode('utf-8'))
         if hashed_password.hexdigest() == self.password:
             return True
         return False
@@ -138,7 +139,7 @@ class QuizQuestion(models.Model):
         ('d', _('Odpowiedź D')),
     )
     correct_answer = models.CharField(max_length=1,
-        choices=CORRECT_ANSWER_CHOICES)
+        choices=CORRECT_ANSWER_CHOICES, verbose_name=_('poprawna odpowiedź'))
 
     def __str__(self):
         return _("Pytanie %s..." % self.question[:10])
@@ -152,5 +153,41 @@ class QuizQuestion(models.Model):
         if not isinstance(answer, str):
             return False
         if self.correct_answer.lower() == answer.lower():
+            return True
+        return False
+
+class FriendRequest(models.Model):
+    invited_by = models.ForeignKey(settings.AUTH_USER_MODEL,
+        verbose_name=_('zapraszający'), related_name='friends_invited_by',
+        related_query_name='friend_invited_by')
+    invited = models.ForeignKey(settings.AUTH_USER_MODEL,
+        verbose_name=_('zaproszony użytkownik'), related_name='friends_invited',
+        related_query_name='friend_invited')
+    sent_time = models.DateTimeField(verbose_name=_('czas zaproszenia'),
+        auto_now_add=True)
+
+    def __str__(self):
+        return _("%s zaproszony przez %s" % (self.invited, self.invited_by))
+
+    class Meta:
+        verbose_name = _('zaproszenie do znajomych')
+        verbose_name_plural = _('zaproszenia do znajomych')
+
+    def accept_friend_request(self, user):
+        """Akceptuj zaproszenie do znajomych"""
+        # Jeżeli użytkownik nie jest zaproszony, to nie pozwól mu przyjąć
+        # zaproszenia
+        if user != self.invited:
+            return False
+        # Dodaj znajomego
+        user.friends.add(self.invited_by)
+        # Skasuj zaproszenie
+        self.delete()
+        return True
+
+    def delete_friend_request(self, user):
+        """Odrzuć lub usuń zaproszenie do znajomych"""
+        if user == self.invited or user == self.invited_by:
+            self.delete()
             return True
         return False
