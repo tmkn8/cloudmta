@@ -17,7 +17,7 @@ urlpatterns = patterns('accounts.views',
         url(r'^delete_friend/(?P<friend_pk>[\d]+)/$', 'friends_delete_friend',
             name='delete_friend'),
     ), namespace='friends')),
-    url(r'^@(?P<slug>[-\w]+)/', include(patterns('accounts.views',
+    url(r'^~(?P<slug>[-\w]+)/', include(patterns('accounts.views',
         url(r'^$', 'accounts_profile_index', name='index'),
     ), namespace='profile')),
 )

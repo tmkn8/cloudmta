@@ -3,7 +3,7 @@
 
 {% block friends_content %}
   <h1>{% trans 'Lista Twoich znajomych' %}</h1>
-  <ul>
+  <ul class="small-block-grid-5">
     {% for friend in friends %}
       <li>
         <a href="{{ friend.get_absolute_url }}">{{ friend }}</a>

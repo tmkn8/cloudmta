@@ -16,7 +16,7 @@
 <div class="row">
   <div class="large-12 columns">
     <div class="cover-photo" style="background-image: url(http://i.ytimg.com/vi/wCA7Rq0EBU4/maxresdefault.jpg)">
-      <div class="th user-avatar" style="">
+      <div class="avatar avatar-large" style="">
       </div>
     </div>
   </div>
@@ -48,7 +48,7 @@
         <div class="large-12 columns">
           <ul class="characters-list large-block-grid-3 medium-block-grid-2 small-block-grid-1" data-equalizer>
             {% for character in user.characters.all %}
-              <li><a style="background-image: url({% if character.hide %} ../img/skins/hidden.png {% else %} {% static character.get_skin_static_url %}) {% endif %}">
+              <li><a style="background-image: url({%if character.hide%} ../img/skins/hidden.png {%else%} {% static character.get_skin_static_url %}) {%endif%}">
                 <ul class="no-bullet">
                   <li>
                     <h2>{% if character.hide %} ? {% else %} {{ character }} {% endif %} </h2>
@@ -69,13 +69,15 @@
       </div>
       </section>
       <section role="tabpanel" aria-hidden="true" class="content" id="panel2-4">
+        <ul class="large-block-grid-8 medium-block-grid-6 small-block-grid-4">
         {% for friend in user.friends.all %}
-          <a href="{{ friend.get_absolute_url }}">
-            {{ friend }}
-          </a>
+          <li><a href="{{ friend.get_absolute_url }}">
+            <div class="avatar avatar-medium" style=""><p class="friend-name">{{ friend }}</p></div>
+          </a></li>
         {% empty %}
           {% trans 'Gracz nie ma znajomych' %}
         {% endfor %}
+      </ul>
       </section>
       <section role="tabpanel" aria-hidden="true" class="content" id="panel2-5">
         <h2>Fourth panel content goes here...</h2>
