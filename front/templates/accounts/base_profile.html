@@ -50,23 +50,32 @@
             {% for character in user.characters.all %}
               <li><a style="background-image: url({% static character.get_skin_static_url %})">
                 <ul class="no-bullet">
-                  <li><h2>{% if character.hide %} ? {% else %} {{ character }} {% endif %} </h2></li>
-                  <li> {{ character.format_online_time }} </li>
+                  <li>
+                    <h2>{% if character.hide %} ? {% else %} {{ character }} {% endif %} </h2>
+                  </li>
+                  <li>{{ character.format_online_time }} </li>
                 </ul>
               </a></li>
-              {% empty %}
-              <li><h1>Brak postaci</h1></li>
+            {% empty %}
+              <li>
+                <h1>{% trans 'Brak postaci' %}</h1>
+              </li>
             <!-- <h1> {{ character }} </h1>
             <h2> {{ character.format_online_time }} </h2>
             <h3> {% trans 'Nigdy' as never %} {{ character.lastvisit|naturaltime|default:never }} </h3> -->
-
             {% endfor %}
           </ul>
         </div>
       </div>
       </section>
       <section role="tabpanel" aria-hidden="true" class="content" id="panel2-4">
-        <h2>Fourth panel content goes here...</h2>
+        {% for friend in user.friends.all %}
+          <a href="{{ friend.get_absolute_url }}">
+            {{ friend }}
+          </a>
+        {% empty %}
+          {% trans 'Gracz nie ma znajomych' %}
+        {% endfor %}
       </section>
       <section role="tabpanel" aria-hidden="true" class="content" id="panel2-5">
         <h2>Fourth panel content goes here...</h2>
