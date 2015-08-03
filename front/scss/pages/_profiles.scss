@@ -1,5 +1,6 @@
 #user-profile {
   .cover-photo {
+    @include panel();
     height: 200px;
     border: 0;
     background-image: url(../img/homepage/bg.png);
@@ -12,8 +13,34 @@
     width: 150px;
   }
 
-  .user-name {
+  .nav {
+    background-color: $oil;
+
+    a {
+      background-color: $oil;
+      color: white;
+
+      &:hover {
+        background-color: $jet;
+      }
+
+    }
+
+    li.active {
+      a {
+        background-color: $jet;
+      }
+    }
+
+  }
+
+  .tabs-content {
     background-color: $white;
-    padding-left: 2%;
+    height: auto;
+  }
+
+  #panel2-1 {
+    margin-left: 3%;
+    margin-right: 3%;
   }
 }

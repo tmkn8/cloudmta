@@ -13,29 +13,45 @@
 {% block container %}
 <div class="row">
   <div class="large-12 columns">
-    <div class="panel cover-photo">
-      <div class="th user-avatar">
+    <div class="cover-photo" style="background-image: url(http://i.ytimg.com/vi/wCA7Rq0EBU4/maxresdefault.jpg)">
+      <div class="th user-avatar" style="">
       </div>
     </div>
   </div>
 </div>
 <div class="row">
   <div class="large-12 columns">
-    <h1 class="user-name"> {{ user }} </h1>
+    <div class="nav">
+      <ul class="tabs" data-tab role="tablist">
+        <li class="tab-title active" role="presentation"><a href="#panel2-1" role="tab" tabindex="0" aria-selected="true" aria-controls="panel2-1">{{ user }}</a></li>
+        <li class="tab-title" role="presentation"><a href="#panel2-2" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-2">o mnie</a></li>
+        <li class="tab-title" role="presentation"><a href="#panel2-3" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-2">postacie</a></li>
+        <li class="tab-title" role="presentation"><a href="#panel2-4" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-3">znajomi</a></li>
+        <li class="tab-title" role="presentation"><a href="#panel2-5" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-4">logi</a></li>
+      </ul>
+    </div>
+    <div class="tabs-content">
+      <section role="tabpanel" aria-hidden="false" class="content active" id="panel2-1">
+        <div class="row">
+          <div class="large-4 small-12 columns">hej</div>
+          <div class="large-4 small-12 columns">hej</div>
+          <div class="large-4 small-12 columns">hej</div>
+        </div>
+      </section>
+      <section role="tabpanel" aria-hidden="true" class="content" id="panel2-2">
+        <h2>Second panel content goes here...</h2>
+      </section>
+      <section role="tabpanel" aria-hidden="true" class="content" id="panel2-3">
+        <h2>Third panel content goes here...</h2>
+      </section>
+      <section role="tabpanel" aria-hidden="true" class="content" id="panel2-4">
+        <h2>Fourth panel content goes here...</h2>
+      </section>
+      <section role="tabpanel" aria-hidden="true" class="content" id="panel2-5">
+        <h2>Fourth panel content goes here...</h2>
+      </section>
+    </div>
   </div>
 </div>
-<!-- <ul class="tabs">
-  <li class="tab-title{% if request.path == user.get_absolute_url %} active{% endif %}">
-    <a href="{{ user.get_absolute_url }}">
-      {% trans 'Informacje' %}
-    </a>
-  </li>
-</ul>
-
-  <div class="tabs-content">
-    <div class="content active">
-      {% block profile_content %}{% endblock %}
-    </div>
-  </div> -->
 {% endblock %}
 </body>
