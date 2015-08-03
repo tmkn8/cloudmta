@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load humanize %}
+{% load staticfiles %}
 
 <body id="user-profile">
 {% block body_id %}user-profile{% endblock %}
@@ -25,9 +27,9 @@
       <ul class="tabs" data-tab role="tablist">
         <li class="tab-title active" role="presentation"><a href="#panel2-1" role="tab" tabindex="0" aria-selected="true" aria-controls="panel2-1">{{ user }}</a></li>
         <li class="tab-title" role="presentation"><a href="#panel2-2" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-2">o mnie</a></li>
-        <li class="tab-title" role="presentation"><a href="#panel2-3" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-2">postacie</a></li>
-        <li class="tab-title" role="presentation"><a href="#panel2-4" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-3">znajomi</a></li>
-        <li class="tab-title" role="presentation"><a href="#panel2-5" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-4">logi</a></li>
+        <li class="tab-title" role="presentation"><a href="#panel2-3" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-3">postacie</a></li>
+        <li class="tab-title" role="presentation"><a href="#panel2-4" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-4">znajomi</a></li>
+        <li class="tab-title" role="presentation"><a href="#panel2-5" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-5">logi</a></li>
       </ul>
     </div>
     <div class="tabs-content">
@@ -42,7 +44,21 @@
         <h2>Second panel content goes here...</h2>
       </section>
       <section role="tabpanel" aria-hidden="true" class="content" id="panel2-3">
-        <h2>Third panel content goes here...</h2>
+      <ul class="characters-list large-block-grid-3 medium-block-grid-2 small-block-grid-1" data-equalizer>
+        {% for character in user.characters.all %}
+          <li><a style="background-image: url({% static character.get_skin_static_url %})">
+            <ul class="no-bullet">
+              <li><h2>{% if character.hide %} ? {% else %} {{ character }} {% endif %} </h2></li>
+              <li> {{ character.format_online_time }} </li>
+
+            </ul>
+          </a></li>
+        <!-- <h1> {{ character }} </h1>
+        <h2> {{ character.format_online_time }} </h2>
+        <h3> {% trans 'Nigdy' as never %} {{ character.lastvisit|naturaltime|default:never }} </h3> -->
+
+        {% endfor %}
+      </ul>
       </section>
       <section role="tabpanel" aria-hidden="true" class="content" id="panel2-4">
         <h2>Fourth panel content goes here...</h2>

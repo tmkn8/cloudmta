@@ -35,12 +35,39 @@
   }
 
   .tabs-content {
-    background-color: $white;
     height: auto;
   }
 
-  #panel2-1 {
-    margin-left: 3%;
-    margin-right: 3%;
+  ul.characters-list {
+    li {
+      a {
+        &, h2, i {
+          color: $white;
+        }
+
+        &.blocked {
+          opacity: 0.6;
+          background-color: $cloudmta-1-pink;
+        }
+
+        &.blocked:hover {
+          opacity: 1;
+          background-color: scale-color($cloudmta-1-pink, $lightness: -30%);
+        }
+
+        min-height: 230px;
+        background-color: $cloudmta-1-green;
+        text-align: right;
+        background-repeat: no-repeat;
+        background-position: left center;
+        background-size: contain;
+        &:hover {
+          background-color: scale-color($cloudmta-1-green, $lightness: -30%);
+        }
+        padding: 20px;
+        display: block;
+      }
+    }
   }
+
 }
