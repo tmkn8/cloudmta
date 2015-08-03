@@ -26,6 +26,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=timezone.now)
     passed_rp_test = models.BooleanField(default=False, verbose_name=_('zdał '
         'test RP'))
+    friends = models.ManyToManyField('self', verbose_name=_('Znajomi'))
 
     objects = UserManager()
 
