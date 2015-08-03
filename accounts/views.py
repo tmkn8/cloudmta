@@ -66,5 +66,47 @@ def roleplay_test(request):
 
 def accounts_profile_index(request, slug):
     """Główna zakładka profili użytkownika"""
-    user = get_object_or_404(get_user_model(), username=slug)
+    user = get_object_or_404(getappen_user_model(), username=slug)
     return render(request, 'accounts/profile/index.html', {'user': user})
+
+@login_required
+def friends_index(request):
+    """Wyświetl listę znajomych użytkownika"""
+    friends = request.user.friends.all()
+    return render(request, 'accounts/friends/index.html', {'friends': friends})
+
+@login_required
+def friends_delete_friend(request, friend_pk):
+    """Strona kasacji znajomego
+
+    Jeżeli przyjdzie GET, to wyślij zapytanie czy skasować znajomego."""
+    friend = get_object_or_404(request.user.friends, pk=friend_pk)
+    if request.method == 'POST':
+        request.user.friends.remove(friend)
+        messages.success(request, _("Pomyślnie skasowałeś znajomego %s"
+            % friend))
+        return redirect('accounts:friends:index')
+    return render(request, 'accounts/friends/delete_friend.html',
+        {'friend': friend})
+
+def friends_requests(request):
+    pass
+
+def friends_send_request(request, friend_pk):
+    """Strona wysyłania zaproszeń do znajomych
+
+    Jeżeli przyjdzie GET, to wyślij zapytanie czy dodać znajomego."""
+    friend = get_object_or_404(request.user.friends, pk=friend_pk)
+    if request.method == 'POST':
+        request.user.friends.delete(friend)
+        messages.success(request, _("Pomy znajomego %s"
+            % friend))
+        return redirect('accounts:friends:index')
+    return render(request, 'accounts/friends/send_request.html',
+        {'friend': friend})
+
+def friends_delete_request(request, pk):
+    pass
+
+def friends_accept_request(request, pk):
+    pass
