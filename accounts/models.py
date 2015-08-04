@@ -38,8 +38,33 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('markdown'), blank=True, null=True)
     public_email = models.BooleanField(verbose_name=_('adres e-mail '
         'widoczny publicznie'), default=False)
+    website = models.BooleanField(verbose_name=_('adres e-mail '
+        'widoczny publicznie'), default=False)
     skype_id = models.CharField(max_length=40, verbose_name=_('identyfikator '
         'skype'), null=True, blank=True)
+    facebook = models.CharField(max_length=100, verbose_name=_('Facebook'),
+        blank=True, null=True)
+    steam = models.CharField(max_length=100, verbose_name=_('Steam'),
+        blank=True, null=True)
+    rgsc = models.CharField(max_length=100, verbose_name=_('Rockstar Games '
+        'Social Club'), blank=True, null=True)
+    twitter = models.CharField(max_length=100, verbose_name=_('Twitter'),
+        blank=True, null=True)
+    youtube = models.CharField(max_length=100, verbose_name=_('YouTube'),
+        blank=True, null=True)
+    tumblr = models.CharField(max_length=100, verbose_name=_('Twitter'),
+        blank=True, null=True)
+    instagram = models.CharField(max_length=100, verbose_name=_('Instagram'),
+        blank=True, null=True)
+    location = models.CharField(max_length=100, verbose_name=_('miejscowość'),
+        blank=True, null=True)
+    GENDER_CHOICES = (
+        ('F', _('kobieta')),
+        ('M', _('mężczyzna')),
+        ('N', _('żadna z powyższych')),
+    )
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True,
+        null=True)
 
     objects = UserManager()
 
