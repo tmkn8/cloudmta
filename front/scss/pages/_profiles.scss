@@ -154,29 +154,50 @@
 
   .facebook {
     background-color: #4965A0;
+    &:hover {
+      background-color: scale-color(#4965A0, $lightness: -20%);
+    }
   }
 
   .twitter {
     background-color: #55ACEE;
+    &:hover {
+      background-color: scale-color(#55ACEE, $lightness: -20%);
+    }
   }
 
   .youtube {
     background-color: #E52D27;
+    &:hover {
+      background-color: scale-color(#E52D27, $lightness: -20%);
+    }
   }
 
   .tumblr {
     background-color: #35465C;
+    &:hover {
+      background-color: scale-color(#35465C, $lightness: -20%);
+    }
   }
 
   .instagram {
     background-color: #3F729B;
+    &:hover {
+      background-color: scale-color(#3F729B, $lightness: -20%);
+    }
   }
 
   .rgsc {
     background-color: #DDDDDD;
+    &:hover {
+      background-color: scale-color(#DDDDDD, $lightness: -20%);
+    }
   }
 
   .steam {
     background-color: #171A21;
+    &:hover {
+      background-color: scale-color(#171A21, $lightness: -20%);
+    }
   }
 }
