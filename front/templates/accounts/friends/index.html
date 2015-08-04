@@ -6,8 +6,10 @@
   <ul class="small-block-grid-5">
     {% for friend in friends %}
       <li>
-        <a href="{{ friend.get_absolute_url }}">{{ friend }}</a>
-        &nbsp;<a class="button alert tiny" href="{% url 'accounts:friends:delete_friend' friend.pk %}">
+        <a href="{{ friend.get_absolute_url }}">
+          <div class="avatar avatar-medium" style=""><p class="friend-name">{{ friend }}</p></div>
+        </a>
+        &nbsp;<a class="button alert tiny remove-friend" style="width: 100px; margin-left:-4px;" href="{% url 'accounts:friends:delete_friend' friend.pk %}">
           <i class="fa fa-trash"></i>
         </a>
       </li>

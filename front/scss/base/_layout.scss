@@ -150,3 +150,32 @@ footer#cloudmta-footer {
     }
   }
 }
+
+.avatar {
+  background-image: url(../img/homepage/gui-1.png);
+
+  .friend-name {
+    color: $white;
+    margin-left:10px;
+    padding-top:72px;
+  }
+}
+
+.avatar-small {
+  height: 50px;
+  width: 50px;
+}
+
+.avatar-medium {
+  height: 100px;
+  width: 100px;
+}
+
+.avatar-large {
+  height: 150px;
+  width: 150px;
+}
+
+.avatar-circle {
+  border-radius: 50%;
+}
