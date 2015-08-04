@@ -28,16 +28,23 @@
 
     #user-profile-avatar {
       float: left;
-      box-shadow: 1px 1px 5px $oil;
+      box-shadow: rem-calc(1) rem-calc(1) rem-calc(5) $oil;
+      margin: rem-calc(10);
       background-color: $monsoon;
+      @media #{$small-only} {
+        width: rem-calc(100);
+        height: rem-calc(100);
+      }
     }
 
     #user-profile-username {
-      float: left;
-      padding-top: rem-calc(95);
-      padding-left: rem-calc(15);
-      display: block;
-      text-shadow: 1px 1px 5px $oil;
+      @media #{$medium-up} {
+        float: left;
+        padding-top: rem-calc(95);
+        display: block;
+      }
+
+      text-shadow: rem-calc(1) rem-calc(1) rem-calc(5) $oil;
       color: $white;
     }
   }
