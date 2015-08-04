@@ -1,10 +1,44 @@
 #user-profile {
   .cover-photo {
     @include panel();
-    height: 200px;
+    height: rem-calc(300);
+    background-color: $cloudmta-1-mint;
+    background-size: cover;
+    background-position: center center;
     border: 0;
-    background-image: url(../img/homepage/bg.png);
     margin-bottom: 0;
+
+    @media #{$medium-only} {
+      height: rem-calc(250);
+    }
+
+    @media #{$small-only} {
+      height: rem-calc(200);
+    }
+  }
+
+  #user-profile-name-and-avatar-line {
+    @media #{$large-up} {
+      margin-top: rem-calc(100);
+    }
+
+    @media #{$medium-only} {
+      margin-top: rem-calc(50);
+    }
+
+    #user-profile-avatar {
+      float: left;
+      box-shadow: 1px 1px 5px $oil;
+    }
+
+    #user-profile-username {
+      float: left;
+      padding-top: rem-calc(95);
+      padding-left: rem-calc(15);
+      display: block;
+      text-shadow: 1px 1px 5px $oil;
+      color: $white;
+    }
   }
 
   .nav {
@@ -13,6 +47,12 @@
     a {
       background-color: $oil;
       color: white;
+
+      i {
+        @media #{$large-up} {
+          margin-right: rem-calc(10);
+        }
+      }
 
       &:hover {
         background-color: $jet;
@@ -30,6 +70,7 @@
 
   .tabs-content {
     height: auto;
+    background-color: $white;
   }
 
   ul.characters-list {
@@ -49,7 +90,7 @@
           background-color: scale-color($cloudmta-1-pink, $lightness: -30%);
         }
 
-        min-height: 230px;
+        min-height: rem-calc(230);
         background-color: $cloudmta-1-green;
         text-align: right;
         background-repeat: no-repeat;
@@ -58,7 +99,7 @@
         &:hover {
           background-color: scale-color($cloudmta-1-green, $lightness: -30%);
         }
-        padding: 20px;
+        padding: rem-calc(20);
         display: block;
       }
     }
@@ -66,8 +107,8 @@
 
   .friend-name {
     color: $white;
-    margin-left:10px;
-    padding-top:72px;
+    margin-left: rem-calc(10);
+    padding-top: rem-calc(72);
   }
 
   .warn-date {

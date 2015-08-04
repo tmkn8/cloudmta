@@ -10,6 +10,9 @@ from django.utils import timezone
 from django.contrib.auth.models import UserManager
 from characters.models import Character
 import hashlib
+import urllib
+from gravatar import Gravatar
+from django.templatetags.static import static
 
 class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_VALIDATOR = RegexValidator(r'^([A-Za-z0-9]{3,})$')
@@ -24,23 +27,48 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('ma dostęp do strony administracji.'))
     date_joined = models.DateTimeField(_('data dołączenia'),
         default=timezone.now)
+    avatar = models.ImageField(verbose_name=_('Awatar'), blank=True, null=True,
+        upload_to='user-avatars')
     passed_rp_test = models.BooleanField(default=False, verbose_name=_('zdał '
         'test RP'))
     friends = models.ManyToManyField('self', verbose_name=_('Znajomi'))
+    about_me = models.TextField(verbose_name=_('O mnie'),
+        help_text=_('markdown'), blank=True, null=True)
+    public_email = models.BooleanField(verbose_name=_('adres e-mail '
+        'widoczny publicznie'), default=False)
+    skype_id = models.CharField(max_length=40, verbose_name=_('identyfikator '
+        'skype'), null=True, blank=True)
 
     objects = UserManager()
+
+    def __str__(self):
+        """Zwróć nazwę użytkownika"""
+        return self.username
+
+    class Meta:
+        verbose_name = _('użytkownik Django')
+        verbose_name_plural = _('użytkownicy Django')
 
     def get_absolute_url(self):
         """Pobierz link do profilu"""
         return reverse('accounts:profile:index', kwargs={'slug': self.username})
 
+    def get_avatar_url(self):
+        if self.avatar:
+            return self.avatar.url
+
+        gravatar = Gravatar(self.email.lower())
+        gravatar.size = 300
+        gravatar.default = 404
+        try:
+            gravatar_url = urllib.request.urlopen(gravatar.thumb)
+        except urllib.error.URLError:
+            return static(settings.DEFAULT_AVATAR)
+        return gravatar.thumb
+
     def mybbmember(self):
         """Pobierz obiekt użytkownika forum"""
         return MyBBMember.objects.get(pk=self.pk)
-
-    def __str__(self):
-        """Zwróć nazwę użytkownika"""
-        return self.username
 
     def get_full_name(self):
         """Wymagane przez klasę rodzica"""
@@ -72,10 +100,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Zdaj test RP gracza"""
         self.passed_rp_test = True
         self.save()
-
-    class Meta:
-        verbose_name = _('użytkownik Django')
-        verbose_name_plural = _('użytkownicy Django')
 
 class MyBBMember(models.Model):
     """Ten model jest tabelą z MyBB, na cele logowania"""

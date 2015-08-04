@@ -1,22 +1,24 @@
-{% extends 'base.html' %}
+{% extends 'base_content.html' %}
 {% load i18n %}
 {% load humanize %}
 {% load staticfiles %}
 
-<body id="user-profile">
 {% block body_id %}user-profile{% endblock %}
 
 {% block title %}
-  {% blocktrans %}
-    Profil użytkownika {{ user }}
-  {% endblocktrans %}
+  ~{{ user }}
 {% endblock %}
 
-{% block container %}
+{% block content %}
 <div class="row">
   <div class="large-12 columns">
-    <div class="cover-photo" style="background-image: url(http://i.ytimg.com/vi/wCA7Rq0EBU4/maxresdefault.jpg)">
-      <div class="avatar avatar-large" style="">
+    <div class="cover-photo" {% if user.get_cover_photo_url %}style="background-image: url({{ user.get_cover_photo_url }})"{% endif %}>
+      <div id="user-profile-name-and-avatar-line">
+        <a href="{{ user.get_absolute_url }}">
+          <img class="avatar avatar-large left" id="user-profile-avatar"
+          src="{{ user.get_avatar_url }}" alt="{{ user}}">
+          <h1 id="user-profile-username">{{ user }}</h1>
+        </a>
       </div>
     </div>
   </div>
@@ -25,11 +27,36 @@
   <div class="large-12 columns">
     <div class="nav">
       <ul class="tabs" data-tab role="tablist">
-        <li class="tab-title active" role="presentation"><a href="#panel2-1" role="tab" tabindex="0" aria-selected="true" aria-controls="panel2-1">{{ user }}</a></li>
-        <li class="tab-title" role="presentation"><a href="#panel2-2" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-2">o mnie</a></li>
-        <li class="tab-title" role="presentation"><a href="#panel2-3" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-3">postacie</a></li>
-        <li class="tab-title" role="presentation"><a href="#panel2-4" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-4">znajomi</a></li>
-        <li class="tab-title" role="presentation"><a href="#panel2-5" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-5">logi</a></li>
+        <li class="tab-title active" role="presentation">
+          <a href="#panel2-1" role="tab" tabindex="0" aria-selected="true" aria-controls="panel2-1">
+            <i class="fa fa-info"></i>
+            <span class="right show-for-large-up">{{ user }}</span>
+          </a>
+        </li>
+        <li class="tab-title" role="presentation">
+          <a href="#panel2-2" role="tab" tabindex="1" aria-selected="false" aria-controls="panel2-2">
+            <i class="fa fa-info"></i>
+            <span class="right show-for-large-up">{% trans 'O mnie' %}</span>
+          </a>
+        </li>
+        <li class="tab-title" role="presentation">
+          <a href="#panel2-3" role="tab" tabindex="2" aria-selected="false" aria-controls="panel2-3">
+            <i class="fa fa-info"></i>
+            <span class="right show-for-large-up">{% trans 'Postacie' %}</span>
+          </a>
+        </li>
+        <li class="tab-title" role="presentation">
+          <a href="#panel2-4" role="tab" tabindex="3" aria-selected="false" aria-controls="panel2-4">
+            <i class="fa fa-info"></i>
+            <span class="right show-for-large-up">{% trans 'Znajomi' %}</span>
+          </a>
+        </li>
+        <li class="tab-title" role="presentation">
+          <a href="#panel2-5" role="tab" tabindex="4" aria-selected="false" aria-controls="panel2-5">
+            <i class="fa fa-info"></i>
+            <span class="right show-for-large-up">{% trans 'Logi' %}</span>
+          </a>
+        </li>
       </ul>
     </div>
     <div class="tabs-content">
@@ -44,75 +71,84 @@
         <h2>Second panel content goes here...</h2>
       </section>
       <section role="tabpanel" aria-hidden="true" class="content" id="panel2-3">
-      <div class="row">
-        <div class="large-12 columns">
-          <ul class="characters-list large-block-grid-3 medium-block-grid-2 small-block-grid-1" data-equalizer>
-            {% for character in user.characters.all %}
-              <li><a style="background-image: url({%if character.hide%} {% static 'img/skins/hidden.png' %}{%else%}{% static character.get_skin_static_url %}{%endif%})">
-                <ul class="no-bullet">
-                  <li>
-                    <h2>{% if character.hide %} ? {% else %} {{ character }} {% endif %} </h2>
-                  </li>
-                  <li>{{ character.format_online_time }} </li>
-                </ul>
-              </a></li>
-            {% empty %}
-              <li>
-                <h1>{% trans 'Brak postaci' %}</h1>
-              </li>
-            <!-- <h1> {{ character }} </h1>
-            <h2> {{ character.format_online_time }} </h2>
-            <h3> {% trans 'Nigdy' as never %} {{ character.lastvisit|naturaltime|default:never }} </h3> -->
-            {% endfor %}
-          </ul>
+        <div class="row">
+          <div class="large-12 columns">
+            <ul class="characters-list large-block-grid-3 medium-block-grid-2 small-block-grid-1" data-equalizer>
+              {% for character in user.characters.all %}
+                <li><a style="background-image: url({%if character.hide%}{% static 'img/skins/hidden.png' %}{%else%}{% static character.get_skin_static_url %}{%endif%})">
+                  <ul class="no-bullet">
+                    <li>
+                      <h2>{% if character.hide %} ? {% else %} {{ character }} {% endif %} </h2>
+                    </li>
+                    <li>{{ character.format_online_time }} </li>
+                  </ul>
+                </a></li>
+              {% empty %}
+                <li>
+                  <h1>{% trans 'Brak postaci' %}</h1>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
         </div>
-      </div>
       </section>
       <section role="tabpanel" aria-hidden="true" class="content" id="panel2-4">
         <ul class="large-block-grid-8 medium-block-grid-6 small-block-grid-4">
-        {% for friend in user.friends.all %}
-          <li><a href="{{ friend.get_absolute_url }}">
-            <div class="avatar avatar-medium" style=""><p class="friend-name">{{ friend }}</p></div>
-          </a></li>
-        {% empty %}
-          {% trans 'Gracz nie ma znajomych' %}
-        {% endfor %}
-      </ul>
+          {% for friend in user.friends.all %}
+            <li>
+              <a href="{{ friend.get_absolute_url }}">
+                <div class="avatar avatar-medium" style="">
+                  <p class="friend-name">{{ friend }}</p>
+                </div>
+              </a>
+            </li>
+          {% empty %}
+            {% trans 'Gracz nie ma znajomych' %}
+          {% endfor %}
+        </ul>
       </section>
       <section role="tabpanel" aria-hidden="true" class="content" id="panel2-5">
-      <div class="row">
-        <div class="large-12 columns">
-          <table width="100%">
-            <thead>
-              <tr>
-                <th>Nadano</th>
-                <th>Postac</th>
-                <th>Powod</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><p class="warn-date">02-02-2015</p> <p class="warn-author"> przez <a style="color: #ff0000">Wiktor</a></p></td>
-                <td>Taco Hemingway</td>
-                <td>Niewyparzona morda, glupie odzywki w moja strone(Ban)</td>
-              </tr>
-              <tr>
-                <td><p class="warn-date">02-02-2015</p> <p class="warn-author"> przez <a style="color: #ff0000">Wiktor</a></p></td>
-                <td>Taco Hemingway</td>
-                <td>Niewyparzona morda, glupie odzywki w moja strone(AJ)</td>
-              </tr>
-              <tr>
-                <td><p class="warn-date">02-02-2015</p> <p class="warn-author"> przez <a style="color: #ff0000">Wiktor</a></p></td>
-                <td>Taco Hemingway</td>
-                <td>Niewyparzona morda, glupie odzywki w moja strone(AJ)</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="row">
+          <div class="large-12 columns">
+            <table width="100%">
+              <thead>
+                <tr>
+                  <th>Nadano</th>
+                  <th>Postac</th>
+                  <th>Powod</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <p class="warn-date">02-02-2015</p>
+                    <p class="warn-author"> przez <a style="color: #ff0000">Wiktor</a></p>
+                  </td>
+                  <td>Taco Hemingway</td>
+                  <td>Niewyparzona morda, glupie odzywki w moja strone(Ban)</td>
+                </tr>
+                <tr>
+                  <td>
+                    <p class="warn-date">02-02-2015</p>
+                    <p class="warn-author"> przez <a style="color: #ff0000">Wiktor</a></p>
+                  </td>
+                  <td>Taco Hemingway</td>
+                  <td>Niewyparzona morda, glupie odzywki w moja strone(AJ)</td>
+                </tr>
+                <tr>
+                  <td>
+                    <p class="warn-date">02-02-2015</p>
+                    <p class="warn-author"> przez <a style="color: #ff0000">Wiktor</a></p>
+                  </td>
+                  <td>Taco Hemingway</td>
+                  <td>Niewyparzona morda, glupie odzywki w moja strone(AJ)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
       </section>
     </div>
   </div>
 </div>
 {% endblock %}
-</body>
