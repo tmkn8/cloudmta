@@ -151,12 +151,21 @@ footer#cloudmta-footer {
   }
 }
 
-.avatar {
-
-  .friend-name {
+.avatar-box {
+  background-color: $silver;
+  background-size: cover;
+  .avatar-box-username {
     color: $white;
-    margin-left:10px;
-    padding-top:72px;
+    background-color: scale-color($black, $alpha: -50%);
+    padding-left: rem-calc(5);
+    position: relative;
+    top: rem-calc(90);
+  }
+
+  &:hover {
+    .avatar-box-username {
+      background-color: $black;
+    }
   }
 }
 

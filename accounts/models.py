@@ -27,12 +27,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('ma dostęp do strony administracji.'))
     date_joined = models.DateTimeField(_('data dołączenia'),
         default=timezone.now)
-    avatar = models.ImageField(verbose_name=_('Awatar'), blank=True, null=True,
+    avatar = models.ImageField(verbose_name=_('awatar'), blank=True, null=True,
         upload_to='user-avatars')
+    cover_photo = models.ImageField(verbose_name=_('okładka profilu'),
+        upload_to='cover_photos', blank=True, null=True)
     passed_rp_test = models.BooleanField(default=False, verbose_name=_('zdał '
         'test RP'))
-    friends = models.ManyToManyField('self', verbose_name=_('Znajomi'))
-    about_me = models.TextField(verbose_name=_('O mnie'),
+    friends = models.ManyToManyField('self', verbose_name=_('znajomi'))
+    about_me = models.TextField(verbose_name=_('o mnie'),
         help_text=_('markdown'), blank=True, null=True)
     public_email = models.BooleanField(verbose_name=_('adres e-mail '
         'widoczny publicznie'), default=False)
@@ -53,7 +55,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Pobierz link do profilu"""
         return reverse('accounts:profile:index', kwargs={'slug': self.username})
 
+    def get_cover_photo_url(self):
+        """Zwróć URL cover photo"""
+        if self.cover_photo:
+            return self.cover_photo.url
+        return None
+
     def get_avatar_url(self):
+        """Zwróc URL awatara"""
         if self.avatar:
             return self.avatar.url
 
@@ -65,6 +74,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         except urllib.error.URLError:
             return static(settings.DEFAULT_AVATAR)
         return gravatar.thumb
+
+    def format_about_me(self):
+        if not self.about_me:
+            return None
+        import markdown
+        return markdown.markdown(self.about_me, safe_mode=True)
 
     def mybbmember(self):
         """Pobierz obiekt użytkownika forum"""

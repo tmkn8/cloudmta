@@ -127,4 +127,15 @@
     color: $iron;
     margin-top: -19%;
   }
+
+  #pane-about-me {
+    padding: rem-calc(20);
+    text-align: justify;
+
+    img {
+      display: block;
+      margin: rem-calc(20) auto;
+    }
+
+  }
 }

@@ -28,31 +28,31 @@
     <div class="nav">
       <ul class="tabs" data-tab role="tablist">
         <li class="tab-title active" role="presentation">
-          <a href="#panel2-1" role="tab" tabindex="0" aria-selected="true" aria-controls="panel2-1">
+          <a href="#pane-user" role="tab" tabindex="0" aria-selected="true" aria-controls="pane-user">
             <i class="fa fa-info"></i>
             <span class="right show-for-large-up">{{ user }}</span>
           </a>
         </li>
         <li class="tab-title" role="presentation">
-          <a href="#panel2-2" role="tab" tabindex="1" aria-selected="false" aria-controls="panel2-2">
+          <a href="#pane-about-me" role="tab" tabindex="1" aria-selected="false" aria-controls="pane-about-me">
             <i class="fa fa-info"></i>
             <span class="right show-for-large-up">{% trans 'O mnie' %}</span>
           </a>
         </li>
         <li class="tab-title" role="presentation">
-          <a href="#panel2-3" role="tab" tabindex="2" aria-selected="false" aria-controls="panel2-3">
+          <a href="#pane-characters" role="tab" tabindex="2" aria-selected="false" aria-controls="pane-characters">
             <i class="fa fa-info"></i>
             <span class="right show-for-large-up">{% trans 'Postacie' %}</span>
           </a>
         </li>
         <li class="tab-title" role="presentation">
-          <a href="#panel2-4" role="tab" tabindex="3" aria-selected="false" aria-controls="panel2-4">
+          <a href="#pane-friends" role="tab" tabindex="3" aria-selected="false" aria-controls="pane-friends">
             <i class="fa fa-info"></i>
             <span class="right show-for-large-up">{% trans 'Znajomi' %}</span>
           </a>
         </li>
         <li class="tab-title" role="presentation">
-          <a href="#panel2-5" role="tab" tabindex="4" aria-selected="false" aria-controls="panel2-5">
+          <a href="#pane-logs" role="tab" tabindex="4" aria-selected="false" aria-controls="pane-logs">
             <i class="fa fa-info"></i>
             <span class="right show-for-large-up">{% trans 'Logi' %}</span>
           </a>
@@ -60,17 +60,18 @@
       </ul>
     </div>
     <div class="tabs-content">
-      <section role="tabpanel" aria-hidden="false" class="content active" id="panel2-1">
+      <section role="tabpanel" aria-hidden="false" class="content active" id="pane-user">
         <div class="row">
           <div class="large-4 small-12 columns">hej</div>
           <div class="large-4 small-12 columns">hej</div>
           <div class="large-4 small-12 columns">hej</div>
         </div>
       </section>
-      <section role="tabpanel" aria-hidden="true" class="content" id="panel2-2">
-        <h2>Second panel content goes here...</h2>
+      <section role="tabpanel" aria-hidden="true" class="content" id="pane-about-me">
+        {% trans 'Nic tutaj nie ma...' as nothing %}
+        {{ user.format_about_me|safe|default:nothing }}
       </section>
-      <section role="tabpanel" aria-hidden="true" class="content" id="panel2-3">
+      <section role="tabpanel" aria-hidden="true" class="content" id="pane-characters">
         <div class="row">
           <div class="large-12 columns">
             <ul class="characters-list large-block-grid-3 medium-block-grid-2 small-block-grid-1" data-equalizer>
@@ -92,22 +93,22 @@
           </div>
         </div>
       </section>
-      <section role="tabpanel" aria-hidden="true" class="content" id="panel2-4">
+      <section role="tabpanel" aria-hidden="true" class="content" id="pane-friends">
         <ul class="large-block-grid-8 medium-block-grid-6 small-block-grid-4">
           {% for friend in user.friends.all %}
             <li>
               <a href="{{ friend.get_absolute_url }}">
-                <div class="avatar avatar-medium" style="">
-                  <p class="friend-name">{{ friend }}</p>
+                <div class="avatar-box avatar-medium" style="background-image: url({{ friend.get_avatar_url }})">
+                  <div class="avatar-box-username">{{ friend }}</div>
                 </div>
               </a>
             </li>
           {% empty %}
-            {% trans 'Gracz nie ma znajomych' %}
+            {% trans 'Brak znaomych...' %}
           {% endfor %}
         </ul>
       </section>
-      <section role="tabpanel" aria-hidden="true" class="content" id="panel2-5">
+      <section role="tabpanel" aria-hidden="true" class="content" id="pane-logs">
         <div class="row">
           <div class="large-12 columns">
             <table width="100%">
