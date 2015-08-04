@@ -32,5 +32,42 @@
   </div>
   <div class="large-4 small-12 columns">
     <h3>{% trans 'Sieci społecznościowe' %}</h3>
+    <ul class= "no-bullet">
+      {% if user.facebook %}
+      <li>
+        <a class="button facebook expand" href="{{ user.facebook }}"><i class="fa fa-facebook"></i> facebook </a>
+      </li>
+      {% endif %}
+      {% if user.twitter %}
+      <li>
+        <a class="button twitter expand" href="http://www.twitter.com/{{ user.twitter }}"><i class="fa fa-twitter"></i> twitter </a>
+      </li>
+      {% endif %}
+      {% if user.youtube %}
+      <li>
+        <a class="button youtube expand" href="http://www.youtube.com/{{ user.youtube }}"><i class="fa fa-youtube"></i> YouTube </a>
+      </li>
+      {% endif %}
+      {% if user.tumblr %}
+      <li>
+        <a class="button tumblr expand" href="http://www.{{ user.tumblr }}.tumblr.com"><i class="fa fa-tumblr"></i> tumblr </a>
+      </li>
+      {% endif %}
+      {% if user.instagram %}
+      <li>
+        <a class="button instagram expand" href="http://www.instagram.com/{{ user.instagram }}"><i class="fa fa-instagram"></i> Instagram  </a>
+      </li>
+      {% endif %}
+      {% if user.rgsc %}
+      <li>
+        <a class="button rgsc expand" href="http://www.socialclub.rockstargames.com/member/{{ user.rgsc }}"><i class="fa fa-star"></i> RG Social Club </a>
+      </li>
+      {% endif %}
+      {% if user.steam %}
+      <li>
+        <a class="button steam expand" href="http://steamcommunity.com/id/{{ user.wikox }}"><i class="fa fa-steam"></i> Steam </a>
+      </li>
+      {% endif %}
+    </ul>
   </div>
 </div>
