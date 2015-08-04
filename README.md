@@ -14,16 +14,14 @@ Jeżeli chcesz pokodzić na swoim hoście lokalnym, to możesz skorzystać z pon
 ## Proces
 Sklonuj dwa repozytoria - wirtualną maszynę oraz stronę WWW. Obydwa repozytoria muszą być sklonowane w jednym folderze.
 ```
-git clone git@gitlab.com:cloudmta/vm-www.git
-git clone git@gitlab.com:cloudmta/www.git
+git clone git@gitlab.com:cloudmta/vm-www.git && git clone git@gitlab.com:cloudmta/www.git
 ```
 
 
 Wejdź w folder `vm-www` i pobierz moduły Puppeta.
 ```
 cd vm-www
-git submodule init
-git submodule update
+git submodule init && git submodule update
 ```
 
 
@@ -91,8 +89,7 @@ Strona powinna odpowiadać jak należy pod adresem `http://cloudmta.dev:8080/`.
 Teraz należy skompilować SCSS. Aby to zrobić udaj się do folderu z plikami frontu strony oraz zainstaluj wszystkie zależności.
 ```
 cd /cloudmta/front
-npm install
-bower install
+npm install && bower install
 ```
 
 
