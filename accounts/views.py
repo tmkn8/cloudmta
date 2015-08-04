@@ -67,6 +67,7 @@ def roleplay_test(request):
 def get_user_object(slug):
     return get_object_or_404(get_user_model(), username=slug)
 
+
 def accounts_profile_index(request, slug):
     """Główna zakładka profili użytkownika"""
     user = get_user_object(slug)

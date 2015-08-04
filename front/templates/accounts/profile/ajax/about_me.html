@@ -1,3 +1,7 @@
 {% load i18n %}
-{% trans 'Nic tutaj nie ma...' as nothing %}
-{{ user.format_about_me|safe|default:nothing }}
+<h2>{% trans 'O mnie' %}</h2>
+{% if not user.format_about_me %}
+  {% trans 'Nic tutaj nie ma...' %}
+{% else %}
+  {{ user.format_about_me|safe }}
+{% endif %}

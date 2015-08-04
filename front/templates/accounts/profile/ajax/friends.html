@@ -1,6 +1,7 @@
 {% load staticfiles %}
 {% load i18n %}
-<ul class="large-block-grid-8 medium-block-grid-6 small-block-grid-4">
+<h2>{% trans 'Znajomi' %}</h2>
+<ul class="large-block-grid-5 medium-block-grid-3 small-block-grid-2">
   {% for friend in user.friends.all %}
     <li>
       <a href="{{ friend.get_absolute_url }}">
@@ -10,6 +11,6 @@
       </a>
     </li>
   {% empty %}
-    {% trans 'Brak znaomych...' %}
+    <li>{% trans 'Brak znajomych...' %}</li>
   {% endfor %}
 </ul>

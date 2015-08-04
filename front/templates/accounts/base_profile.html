@@ -17,7 +17,12 @@
         <a href="{{ user.get_absolute_url }}">
           <img class="avatar avatar-large left" id="user-profile-avatar"
           src="{{ user.get_avatar_url }}" alt="{{ user}}">
-          <h1 id="user-profile-username">{{ user }}</h1>
+          <h1 id="user-profile-username">
+            {{ user }}
+            {% if user.is_staff %}
+              <small><span class="label alert round">{% trans 'Administracja' %}</span></small>
+            {% endif %}
+          </h1>
         </a>
       </div>
     </div>
@@ -66,6 +71,10 @@
         </ul>
       </nav>
     </div>
+  </div>
+</div>
+<div class="row">
+  <div class="large-12 columns">
     <div class="tabs-content">
       <section role="tabpanel" aria-hidden="false" class="content {% if request.path == user.get_absolute_url %}active{% endif %}" id="pane-user">
         {% block profile_index_content %}{% endblock %}

@@ -50,6 +50,11 @@
 
       text-shadow: rem-calc(1) rem-calc(1) rem-calc(5) $oil;
       color: $white;
+
+      .label {
+        position: relative;
+        bottom: rem-calc(10);
+      }
     }
   }
 
@@ -81,8 +86,8 @@
   }
 
   .tabs-content {
-    height: auto;
     background-color: $white;
+    padding: rem-calc(20);
   }
 
   ul.characters-list {
@@ -132,8 +137,13 @@
     margin-top: -19%;
   }
 
+  #pane-friends {
+    li {
+      margin-bottom: rem-calc(20);
+    }
+  }
+
   #pane-about-me {
-    padding: rem-calc(20);
     text-align: justify;
 
     img {
