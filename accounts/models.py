@@ -38,8 +38,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('markdown'), blank=True, null=True)
     public_email = models.BooleanField(verbose_name=_('adres e-mail '
         'widoczny publicznie'), default=False)
-    website = models.BooleanField(verbose_name=_('adres e-mail '
-        'widoczny publicznie'), default=False)
+    website = models.URLField(verbose_name=_('strona internetowa'),
+        blank=True, null=True)
     skype_id = models.CharField(max_length=40, verbose_name=_('identyfikator '
         'skype'), null=True, blank=True)
     facebook = models.CharField(max_length=100, verbose_name=_('Facebook'),
