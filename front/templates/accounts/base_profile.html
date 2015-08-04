@@ -26,130 +26,94 @@
 <div class="row">
   <div class="large-12 columns">
     <div class="nav">
-      <ul class="tabs" data-tab role="tablist">
-        <li class="tab-title active" role="presentation">
-          <a href="#pane-user" role="tab" tabindex="0" aria-selected="true" aria-controls="pane-user">
-            <i class="fa fa-info"></i>
-            <span class="right show-for-large-up">{{ user }}</span>
-          </a>
-        </li>
-        <li class="tab-title" role="presentation">
-          <a href="#pane-about-me" role="tab" tabindex="1" aria-selected="false" aria-controls="pane-about-me">
-            <i class="fa fa-info"></i>
-            <span class="right show-for-large-up">{% trans 'O mnie' %}</span>
-          </a>
-        </li>
-        <li class="tab-title" role="presentation">
-          <a href="#pane-characters" role="tab" tabindex="2" aria-selected="false" aria-controls="pane-characters">
-            <i class="fa fa-info"></i>
-            <span class="right show-for-large-up">{% trans 'Postacie' %}</span>
-          </a>
-        </li>
-        <li class="tab-title" role="presentation">
-          <a href="#pane-friends" role="tab" tabindex="3" aria-selected="false" aria-controls="pane-friends">
-            <i class="fa fa-info"></i>
-            <span class="right show-for-large-up">{% trans 'Znajomi' %}</span>
-          </a>
-        </li>
-        <li class="tab-title" role="presentation">
-          <a href="#pane-logs" role="tab" tabindex="4" aria-selected="false" aria-controls="pane-logs">
-            <i class="fa fa-info"></i>
-            <span class="right show-for-large-up">{% trans 'Logi' %}</span>
-          </a>
-        </li>
-      </ul>
+      <nav>
+        <ul class="tabs" data-tab role="tablist" id="user-profile-nav-tabs">
+          <li class="tab-title active" role="presentation">
+            <a href="#pane-user" role="tab" tabindex="0" aria-selected="true" aria-controls="pane-user">
+              <i class="fa fa-info"></i>
+              <span class="right show-for-large-up">{{ user }}</span>
+            </a>
+          </li>
+          <li class="tab-title" role="presentation">
+            <a href="#pane-about-me" role="tab" tabindex="1" aria-selected="false" aria-controls="pane-about-me">
+              <i class="fa fa-info"></i>
+              <span class="right show-for-large-up">{% trans 'O mnie' %}</span>
+            </a>
+          </li>
+          <li class="tab-title" role="presentation">
+            <a href="#pane-characters" role="tab" tabindex="2" aria-selected="false" aria-controls="pane-characters">
+              <i class="fa fa-info"></i>
+              <span class="right show-for-large-up">{% trans 'Postacie' %}</span>
+            </a>
+          </li>
+          <li class="tab-title" role="presentation">
+            <a href="#pane-friends" role="tab" tabindex="3" aria-selected="false" aria-controls="pane-friends">
+              <i class="fa fa-info"></i>
+              <span class="right show-for-large-up">{% trans 'Znajomi' %}</span>
+            </a>
+          </li>
+          <li class="tab-title" role="presentation">
+            <a href="#pane-logs" role="tab" tabindex="4" aria-selected="false" aria-controls="pane-logs">
+              <i class="fa fa-info"></i>
+              <span class="right show-for-large-up">{% trans 'Logi' %}</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
     <div class="tabs-content">
       <section role="tabpanel" aria-hidden="false" class="content active" id="pane-user">
-        <div class="row">
-          <div class="large-4 small-12 columns">hej</div>
-          <div class="large-4 small-12 columns">hej</div>
-          <div class="large-4 small-12 columns">hej</div>
-        </div>
+        {% block profile_index_content %}{% endblock %}
       </section>
       <section role="tabpanel" aria-hidden="true" class="content" id="pane-about-me">
-        {% trans 'Nic tutaj nie ma...' as nothing %}
-        {{ user.format_about_me|safe|default:nothing }}
+        {% block profile_about_me_content %}{% endblock %}
       </section>
       <section role="tabpanel" aria-hidden="true" class="content" id="pane-characters">
-        <div class="row">
-          <div class="large-12 columns">
-            <ul class="characters-list large-block-grid-3 medium-block-grid-2 small-block-grid-1" data-equalizer>
-              {% for character in user.characters.all %}
-                <li><a style="background-image: url({%if character.hide%}{% static 'img/skins/hidden.png' %}{%else%}{% static character.get_skin_static_url %}{%endif%})">
-                  <ul class="no-bullet">
-                    <li>
-                      <h2>{% if character.hide %} ? {% else %} {{ character }} {% endif %} </h2>
-                    </li>
-                    <li>{{ character.format_online_time }} </li>
-                  </ul>
-                </a></li>
-              {% empty %}
-                <li>
-                  <h1>{% trans 'Brak postaci' %}</h1>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
+        {% block profile_characters_content %}{% endblock %}
       </section>
       <section role="tabpanel" aria-hidden="true" class="content" id="pane-friends">
-        <ul class="large-block-grid-8 medium-block-grid-6 small-block-grid-4">
-          {% for friend in user.friends.all %}
-            <li>
-              <a href="{{ friend.get_absolute_url }}">
-                <div class="avatar-box avatar-medium" style="background-image: url({{ friend.get_avatar_url }})">
-                  <div class="avatar-box-username">{{ friend }}</div>
-                </div>
-              </a>
-            </li>
-          {% empty %}
-            {% trans 'Brak znaomych...' %}
-          {% endfor %}
-        </ul>
+        {% block profile_friends_content %}{% endblock %}
       </section>
       <section role="tabpanel" aria-hidden="true" class="content" id="pane-logs">
-        <div class="row">
-          <div class="large-12 columns">
-            <table width="100%">
-              <thead>
-                <tr>
-                  <th>Nadano</th>
-                  <th>Postac</th>
-                  <th>Powod</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <p class="warn-date">02-02-2015</p>
-                    <p class="warn-author"> przez <a style="color: #ff0000">Wiktor</a></p>
-                  </td>
-                  <td>Taco Hemingway</td>
-                  <td>Niewyparzona morda, glupie odzywki w moja strone(Ban)</td>
-                </tr>
-                <tr>
-                  <td>
-                    <p class="warn-date">02-02-2015</p>
-                    <p class="warn-author"> przez <a style="color: #ff0000">Wiktor</a></p>
-                  </td>
-                  <td>Taco Hemingway</td>
-                  <td>Niewyparzona morda, glupie odzywki w moja strone(AJ)</td>
-                </tr>
-                <tr>
-                  <td>
-                    <p class="warn-date">02-02-2015</p>
-                    <p class="warn-author"> przez <a style="color: #ff0000">Wiktor</a></p>
-                  </td>
-                  <td>Taco Hemingway</td>
-                  <td>Niewyparzona morda, glupie odzywki w moja strone(AJ)</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+        {% block profile_logs_content %}{% endblock %}
       </section>
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block before_end_of_body %}
+  <script>
+    var href = '';
+    var already_loaded = [];
+
+    $('#user-profile-nav-tabs').on('toggled', function (event, tab) {
+      href = $(tab).children('a').attr('href');
+      if (jQuery.inArray(href, already_loaded) == -1) {
+        $(href).html('');
+        switch (href) {
+          case '#pane-user':
+            url = '{{ user.get_absolute_url }}';
+            break;
+          case '#pane-characters':
+            url = '{% url "accounts:profile:characters" user.username %}';
+            break;
+          case '#pane-logs':
+            url = '{% url "accounts:profile:logs" user.username %}';
+            break;
+          case '#pane-friends':
+            url = '{% url "accounts:profile:friends" user.username %}';
+            break;
+          case '#pane-about-me':
+            url = '{% url "accounts:profile:about_me" user.username %}';
+            break;
+          default:
+            alert('{% trans "Wystąpił błąd" %}');
+            break;
+        }
+        $(href).load(url);
+        already_loaded.push(href);
+      }
+    });
+  </script>
 {% endblock %}

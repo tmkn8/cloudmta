@@ -1,0 +1,3 @@
+{% load i18n %}
+{% trans 'Nic tutaj nie ma...' as nothing %}
+{{ user.format_about_me|safe|default:nothing }}

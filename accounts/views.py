@@ -64,10 +64,53 @@ def roleplay_test(request):
     return render(request, 'accounts/roleplay_test.html',
         {'questions': zip(questions_indices, questions)})
 
+def get_user_object(slug):
+    return get_object_or_404(get_user_model(), username=slug)
+
 def accounts_profile_index(request, slug):
     """Główna zakładka profili użytkownika"""
-    user = get_object_or_404(get_user_model(), username=slug)
-    return render(request, 'accounts/profile/index.html', {'user': user})
+    user = get_user_object(slug)
+    if request.is_ajax():
+        template = 'accounts/profile/ajax/index.html'
+    else:
+        template = 'accounts/profile/index.html'
+    return render(request, template, {'user': user})
+
+def accounts_profile_about_me(request, slug):
+    """Główna zakładka profili użytkownika"""
+    user = get_user_object(slug)
+    if request.is_ajax():
+        template = 'accounts/profile/ajax/about_me.html'
+    else:
+        template = 'accounts/profile/about_me.html'
+    return render(request, template, {'user': user})
+
+def accounts_profile_characters(request, slug):
+    """Główna zakładka profili użytkownika"""
+    user = get_user_object(slug)
+    if request.is_ajax():
+        template = 'accounts/profile/ajax/characters.html'
+    else:
+        template = 'accounts/profile/characters.html'
+    return render(request, template, {'user': user})
+
+def accounts_profile_friends(request, slug):
+    """Główna zakładka profili użytkownika"""
+    user = get_user_object(slug)
+    if request.is_ajax():
+        template = 'accounts/profile/ajax/friends.html'
+    else:
+        template = 'accounts/profile/friends.html'
+    return render(request, template, {'user': user})
+
+def accounts_profile_logs(request, slug):
+    """Główna zakładka profili użytkownika"""
+    user = get_user_object(slug)
+    if request.is_ajax():
+        template = 'accounts/profile/ajax/logs.html'
+    else:
+        template = 'accounts/profile/logs.html'
+    return render(request, template, {'user': user})
 
 @login_required
 def friends_index(request):
