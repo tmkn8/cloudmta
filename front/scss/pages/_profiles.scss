@@ -44,6 +44,10 @@
         display: block;
       }
 
+      @media #{$small-only} {
+        clear: both;
+      }
+
       text-shadow: rem-calc(1) rem-calc(1) rem-calc(5) $oil;
       color: $white;
     }
