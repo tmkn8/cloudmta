@@ -3,14 +3,18 @@
   <div class="large-4 small-12 columns">
     <h3>{% trans 'Informacje' %}</h3>
     <dl>
-      {% if user.sex %}
-        <dt>{% trans 'Płeć' %}</dt>
-        <dd>{{ user.get_sex_display }}</dd>
+      {% if user.gender %}
+        <dt><i class="fa fa-transgender"></i>{% trans 'Płeć' %}</dt>
+        <dd>{{ user.get_gender_display|title }}</dd>
       {% endif %}
       {% if user.location %}
         <dt><i class="fa fa-compass"></i> {% trans 'Lokalizacja' %}</dt>
         <dd>{{ user.location }}</dd>
       {% endif %}
+        <dt><i class="fa fa-heart"></i> {% trans 'Znajomi' %}</dt>
+        <dd>Liczba znajomych: <strong>{{ user.friends.count }}</strong></dd>
+        <dt><i class="fa fa-credit-card"></i> {% trans 'Punkty gracza' %}</dt>
+        <dd>Liczba punktow gracza: <strong>1503</strong></dd>
     </dl>
   </div>
   <div class="large-4 small-12 columns">
