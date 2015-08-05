@@ -1,8 +1,14 @@
 #friends-menu {
-  
-  .button {
+
+  .remove-friend {
+    @include button;
     width: 100px;
     margin-left:-4px;
+  }
+
+  .friends-request {
+    @include button;
+    color: white;
   }
 
 }

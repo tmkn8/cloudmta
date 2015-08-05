@@ -7,9 +7,11 @@
     {% for friend in friends %}
       <li>
         <a href="{{ friend.get_absolute_url }}">
-          <div class="avatar avatar-medium" style=""><p class="friend-name">{{ friend }}</p></div>
+          <div class="avatar-box avatar-medium" style="background-image: url({{ friend.get_avatar_url }})">
+            <div class="avatar-box-username">{{ friend }}</div>
+          </div>
         </a>
-        &nbsp;<a class="button alert tiny remove-friend" style="width: 100px; margin-left:-4px;" href="{% url 'accounts:friends:delete_friend' friend.pk %}">
+        <a class="button alert tiny remove-friend" style="width: 100px; margin-left:-4px;" href="{% url 'accounts:friends:delete_friend' friend.pk %}">
           <i class="fa fa-trash"></i>
         </a>
       </li>
