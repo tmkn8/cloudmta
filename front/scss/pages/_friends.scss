@@ -1,14 +1,27 @@
 #friends-menu {
 
   .remove-friend {
-    @include button;
     width: 100px;
-    margin-left:-4px;
+    margin-bottom: -30px;
+    opacity: 0.2;
+    top: rem-calc(-100px);
+    -webkit-transition: opacity 0.5s; /* Safari */
+    transition: opacity 0.5s;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
   .friends-request {
     @include button;
-    color: white;
+    background-color: #F04124;
+    &:hover {
+      background-color: scale-color(#F04124, $lightness: -20%);
+  }
   }
 
+  .accept {
+    margin-right: -4px;
+  }
 }

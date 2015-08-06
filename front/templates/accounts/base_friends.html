@@ -1,5 +1,4 @@
 {% extends 'base_content.html' %}
-<body id="friends-menu">
 {% load i18n %}
 
 {% block title %}
@@ -15,11 +14,6 @@
 {% block content %}
   <ul class="no-bullet">
     {% url 'accounts:friends:index' as index_url %}
-    <li class="{% if request.path == index_url %}active{% endif %}">
-      <a href="{{ index_url }}">
-        {% trans 'Twoi znajomi' %}
-      </a>
-    </li>
     <li class="{% if 'requests' in request.path %}active{% endif %}">
       <a class="friends-request alert button expand" href="{% url 'accounts:friends:requests' %}">
         {% trans 'Masz 4 nowe zaproszenia do znajomych!' %}
@@ -31,4 +25,3 @@
   {% endblock %}
 
 {% endblock %}
-</body>
