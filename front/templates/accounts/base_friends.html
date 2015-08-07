@@ -2,26 +2,26 @@
 {% load i18n %}
 
 {% block title %}
-{% trans 'Twoi znajomi' %}
+  {% trans 'Twoi znajomi' %}
 {% endblock %}
 
 {% block under_header %}
   {% trans 'Twoi znajomi' as friends_trans_text %}
-  {% url 'friends:index' as friends_url %}
+  {% url 'accounts:friends:index' as friends_url %}
   {% include 'includes/header_banner.html' with text=friends_trans_text url=friends_url %}
 {% endblock %}
 
 {% block content %}
-  <ul class="no-bullet">
-    {% url 'accounts:friends:index' as index_url %}
-    <li class="{% if 'requests' in request.path %}active{% endif %}">
-      <a class="friends-request alert button expand" href="{% url 'accounts:friends:requests' %}">
-        {% trans 'Masz 4 nowe zaproszenia do znajomych!' %}
-      </a>
-    </li>
-  </ul>
-  {% block friends_content %}
+  {% if request.user.friends_invited.count %}
+    <a class="button expand warning large" href="{% url 'accounts:friends:requests' %}">
+      {% blocktrans with requests_count=request.user.friends_invited.count %}
+        Masz {{ requests_count }} zaproszeń do znajomych.
+      {% endblocktrans %}
+    </a>
+  {% endif %}
 
+  {% block friends_content %}
+  
   {% endblock %}
 
 {% endblock %}
