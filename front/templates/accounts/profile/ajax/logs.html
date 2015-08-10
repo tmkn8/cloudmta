@@ -20,13 +20,11 @@
             {% endif %}
           </td>
           <td>
-            {% blocktrans with type=log.get_penalty_type_display reason=log.reason %}
-              <strong>{{ type }} z powodu: {{ reason }}</strong>
+            {% blocktrans with type=log.get_penalty_type_display admin=log.admin admin_url=log.admin.get_absolute_url %}
+              <strong>Nadano karę <em>{{ type }}</em> przez <a href="{{ admin_url }}">{{ admin }}</a></strong>
             {% endblocktrans %}
             <br>
-              {% blocktrans with admin=log.admin admin_url=log.admin.get_absolute_url %}
-                nadany(a) przez <a href="{{ admin_url }}">{{ admin }}</a>
-              {% endblocktrans %}
+              {{ log.reason }}
           </td>
           <td>
             <strong>{{ log.time }}</strong>
