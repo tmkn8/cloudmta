@@ -8,7 +8,7 @@ from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.contrib.auth.models import UserManager
-from characters.models import Character
+from characters.models import Character, PenaltyLog
 import hashlib
 import urllib
 from gravatar import Gravatar
@@ -109,6 +109,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     def mybbmember(self):
         """Pobierz obiekt użytkownika forum"""
         return MyBBMember.objects.get(pk=self.pk)
+
+    def penalty_logs(self):
+        """Pobierz logi kar użytkownika"""
+        return PenaltyLog.objects.filter(
+            character__in=self.characters.all())
 
     def get_full_name(self):
         """Wymagane przez klasę rodzica"""

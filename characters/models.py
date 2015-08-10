@@ -215,23 +215,28 @@ class PenaltyLog(models.Model):
         verbose_name=_('administrator'), db_column='adminID',
         related_name='admins', related_query_name='admin')
     reason = models.TextField(verbose_name=_('powód'), blank=True, null=True)
-    time = UnixDateTimeField(verbose_name=_('data nadania'))
-    expire = UnixDateTimeField(verbose_name=_('data wygaśnięcia'), blank=True,
-        null=True)
-    TYPE_CHOICES = (
+    time = models.PositiveIntegerField(verbose_name=_('data nadania'))
+    expire = models.PositiveIntegerField(verbose_name=_('data wygaśnięcia'),
+        blank=True, null=True)
+    PENALTY_TYPE_CHOICES = (
         (1, _('kick')),
         (2, _('admin jail')),
         (3, _('warn')),
         (4, _('ban')),
         (5, _('blokada postaci')),
     )
-    type = models.CharField(choices=TYPE_CHOICES, max_length=1,
-        verbose_name=_('typ kary'))
+    penalty_type = models.PositiveSmallIntegerField(choices=PENALTY_TYPE_CHOICES,
+        verbose_name=_('typ kary'), db_column='type')
+
+    # def __str__(self):
+    # TODO(tomaszkn): Nie wiem czemu to nie działa (?)
+    #     return _("%s dla %s" % (self.get_penalty_type_display, self.character))
 
     def __str__(self):
-        return "%s dla %s" % (self.get_type_display, self.character)
+        return "%s" % self.character
 
     class Meta:
         db_table = '_penalty_logs'
         verbose_name = _('informacje o karze')
         verbose_name_plural = _('logi kar')
+        ordering = ['-time']
