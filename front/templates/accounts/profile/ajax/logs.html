@@ -1,37 +1,42 @@
 {% load i18n %}
 <h2>{% trans 'Logi' %}</h2>
-<table class="table-full-width">
-  <thead>
-    <tr>
-      <th>Nadano</th>
-      <th>Postac</th>
-      <th>Powod</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <p class="warn-date">02-02-2015</p>
-        <p class="warn-author"> przez <a style="color: #ff0000">Wiktor</a></p>
-      </td>
-      <td>Taco Hemingway</td>
-      <td>Niewyparzona morda, glupie odzywki w moja strone(Ban)</td>
-    </tr>
-    <tr>
-      <td>
-        <p class="warn-date">02-02-2015</p>
-        <p class="warn-author"> przez <a style="color: #ff0000">Wiktor</a></p>
-      </td>
-      <td>Taco Hemingway</td>
-      <td>Niewyparzona morda, glupie odzywki w moja strone(AJ)</td>
-    </tr>
-    <tr>
-      <td>
-        <p class="warn-date">02-02-2015</p>
-        <p class="warn-author"> przez <a style="color: #ff0000">Wiktor</a></p>
-      </td>
-      <td>Taco Hemingway</td>
-      <td>Niewyparzona morda, glupie odzywki w moja strone(AJ)</td>
-    </tr>
-  </tbody>
-</table>
+{% if user.logs %}
+  <table class="table-full-width">
+    <thead>
+      <tr>
+        <th>{% trans 'Postać' %}</th>
+        <th>{% trans 'Informacje' %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in user.logs %}
+        <tr>
+          <td>
+            {% if not log.character.hide or request.user.is_staff %}
+              {{ character }}
+            {% else %}
+              {% trans 'Postać ukryta' %}
+            {% endif %}
+          </td>
+          <td>
+            {% blocktrans with type=log.get_type_display reason = log.reason %}
+              {{ type }} z powodu: {{ reason }}
+            {% endblocktrans %}}
+            <p class="warn-date">
+              {{ log.time }}
+              {% if log.expiry %}
+                &nbsp;{% blocktrans date=log.expiry %}Wygasa {{ date|naturaltime }}{% endblocktrans %}
+            </p>
+            <p class="warn-author"> przez <a style="color: #ff0000">Wiktor</a></p>
+          </td>
+          <td>Taco Hemingway</td>
+          <td>Niewyparzona morda, glupie odzywki w moja strone(Ban)</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <div class="alert-box warning">
+    {% trans 'Użytkownik nie ma żadnych wpisów w profilu' %}
+  </div>
+{% endif %}

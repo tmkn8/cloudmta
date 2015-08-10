@@ -19,13 +19,13 @@
         - {{ friend_request.sent_time|naturaltime }}
       </li>
     {% empty %}
-      <li>{% trans 'Brak znajomych' %}</li>
+      <li>{% trans 'Brak otrzymanych zaproszeń.' %}</li>
     {% endfor %}
   </ul>
   <hr>
 
   <h2>{% trans 'Zaproszenia wysłane' %}</h2>
-  <ul>
+  <ul class="no-bullet">
     {% for friend_request in invited_by %}
       <li>
         {{ friend_request.invited }} - {{ friend_request.sent_time|naturaltime }}
@@ -34,7 +34,13 @@
         </a>
       </li>
     {% empty %}
-      <li>{% trans 'Brak znajomych' %}</li>
+      <li>{% trans 'Brak wysłanych zaproszeń.' %}</li>
     {% endfor %}
   </ul>
+  <hr>
+  <p class="text-center">
+    <a href="{% url 'accounts:friends:index' %}">
+      {% trans 'Przeglądaj listę znajomych &raquo;' %}
+    </a>
+  </p>
 {% endblock %}

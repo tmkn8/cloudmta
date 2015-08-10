@@ -20,4 +20,10 @@
       <li>{% trans 'Brak znajomych' %}</li>
     {% endfor %}
   </ul>
+  <hr>
+  <p class="text-center">
+    <a href="{% url 'accounts:friends:requests' %}">
+      {% trans 'Przeglądaj zaproszenia do znajomych &raquo;' %}
+    </a>
+  </p>
 {% endblock %}
