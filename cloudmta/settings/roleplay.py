@@ -42,3 +42,6 @@ RP_DOOR_OWNER_TYPE_ID_GROUP = 2
 
 # Maksymalna liczba grup na postać
 RP_MAX_GROUP_NUMBER = 5
+
+# Kiedy wygasają logi kar w profilu użytkowników (dni)
+RP_PENALTY_LOGS_EXPIRY_DATE = 90*24*3600

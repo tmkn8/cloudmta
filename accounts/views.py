@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model, login, authenticate, logout
 from django.contrib.auth.decorators import user_passes_test, login_required
 from .models import QuizQuestion, FriendRequest
 from .forms import LoginForm
+import time
 
 def has_not_passed_rp_test(user):
     """Dekorator sprawdzający czy użytkownik nie zdał testu RP"""
@@ -78,7 +79,7 @@ def accounts_profile_index(request, slug):
     return render(request, template, {'user': user})
 
 def accounts_profile_about_me(request, slug):
-    """Główna zakładka profili użytkownika"""
+    """Strona 'o mnie' w profilu"""
     user = get_user_object(slug)
     if request.is_ajax():
         template = 'accounts/profile/ajax/about_me.html'
@@ -87,7 +88,7 @@ def accounts_profile_about_me(request, slug):
     return render(request, template, {'user': user})
 
 def accounts_profile_characters(request, slug):
-    """Główna zakładka profili użytkownika"""
+    """Zakładka z postaciami w profilu"""
     user = get_user_object(slug)
     if request.is_ajax():
         template = 'accounts/profile/ajax/characters.html'
@@ -96,7 +97,7 @@ def accounts_profile_characters(request, slug):
     return render(request, template, {'user': user})
 
 def accounts_profile_friends(request, slug):
-    """Główna zakładka profili użytkownika"""
+    """Zakładka ze znajomymi w profilu"""
     user = get_user_object(slug)
     if request.is_ajax():
         template = 'accounts/profile/ajax/friends.html'
@@ -105,13 +106,21 @@ def accounts_profile_friends(request, slug):
     return render(request, template, {'user': user})
 
 def accounts_profile_logs(request, slug):
-    """Główna zakładka profili użytkownika"""
+    """Zakładka z logami kar w profilu"""
     user = get_user_object(slug)
+    logs = user.penalty_logs()
+    # Jeżeli ktoś nie jest adminem lub właścicielem profilu,
+    # to limituj wyświetlanie logów
+    if not request.user.is_staff and request.user != user:
+        date_90_days_ago = int(time.time()-(settings.RP_PENALTY_LOGS_EXPIRY_DATE))
+        logs = logs.filter(time__gte=date_90_days_ago)
+    penalties_visible_for = int(settings.RP_PENALTY_LOGS_EXPIRY_DATE/(3600*24))
     if request.is_ajax():
         template = 'accounts/profile/ajax/logs.html'
     else:
         template = 'accounts/profile/logs.html'
-    return render(request, template, {'user': user})
+    return render(request, template, {'user': user, 'logs': logs,
+        'penalties_visible_for': penalties_visible_for})
 
 @login_required
 def friends_index(request):
