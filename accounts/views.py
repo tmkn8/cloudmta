@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login, authenticate, logout
 from django.contrib.auth.decorators import user_passes_test, login_required
+from django.db.models import Q
 from .models import QuizQuestion, FriendRequest
 from .forms import LoginForm
 import time
@@ -136,9 +137,9 @@ def friends_delete_friend(request, friend_pk):
     friend = get_object_or_404(request.user.friends, pk=friend_pk)
     if request.method == 'POST':
         request.user.friends.remove(friend)
-        messages.success(request, _("Pomyślnie skasowałeś znajomego %s"
+        messages.success(request, _("Pomyślnie skasowałeś znajomego %s."
             % friend))
-        return redirect('accounts:friends:index')
+        return redirect(friend.get_absolute_url())
     return render(request, 'accounts/friends/delete_friend.html',
         {'friend': friend})
 
@@ -153,7 +154,7 @@ def friends_send_request(request, friend_pk):
     """Strona wysyłania zaproszeń do znajomych
 
     Jeżeli przyjdzie GET, to wyślij zapytanie czy dodać znajomego."""
-    friend = get_object_or_404(request.user.friends, pk=friend_pk)
+    friend = get_object_or_404(get_user_model(), pk=friend_pk)
     if request.method == 'POST':
         # Nie możesz dodać siebie do znajomych
         if request.user == friend:
@@ -163,7 +164,7 @@ def friends_send_request(request, friend_pk):
         # Sprawdź czy użytkownicy są już znajomymi
         if request.user.friends.filter(pk=friend.pk).count():
             messages.error(request, _('Jesteś już znajomym tego użytkownika.'))
-            return redirect('accounts:friends:requests')
+            return redirect(friend.get_absolute_url())
 
         # Sprawdź czy istnieje zaproszenie do znajomych do/od tego użytkownika
         if FriendRequest.objects.filter(
@@ -172,13 +173,13 @@ def friends_send_request(request, friend_pk):
                 ).count():
             messages.error(request, _('Obecnie istnieje zaproszenie do/od tego '
                 'użytkownika.'))
-            return redirect('accounts:friends:requests')
+            return redirect(friend.get_absolute_url())
 
         # Wyślij zaproszenie do znajomych
         friend_request = FriendRequest(invited_by=request.user, invited=friend)
         friend_request.save()
-        message.success(request, _("Wysłano prośbę o znajomość do %s" % friend))
-        return redirect('accounts:friends:requests')
+        messages.success(request, _("Wysłano prośbę o znajomość do %s" % friend))
+        return redirect(friend.get_absolute_url())
     return render(request, 'accounts/friends/send_request.html',
         {'friend': friend})
 
@@ -207,4 +208,4 @@ def friends_accept_request(request, pk):
     else:
         messages.error(request, _('Wystąpił błąd podczas akceptowania zaproszenia. '
             'Spróbuj ponownie.'))
-    return redirect('accounts:friends:requests')
+    return redirect(friend_request.invited_by.get_absolute_url())
