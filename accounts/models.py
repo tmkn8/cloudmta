@@ -33,7 +33,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         upload_to='cover_photos', blank=True, null=True)
     passed_rp_test = models.BooleanField(default=False, verbose_name=_('zdał '
         'test RP'))
-    friends = models.ManyToManyField('self', verbose_name=_('znajomi'))
+    friends = models.ManyToManyField('self', verbose_name=_('znajomi'),
+        blank=True)
     about_me = models.TextField(verbose_name=_('o mnie'),
         help_text=_('markdown'), blank=True, null=True)
     public_email = models.BooleanField(verbose_name=_('adres e-mail '
