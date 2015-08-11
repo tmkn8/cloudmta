@@ -73,15 +73,7 @@
     </div>
   </div>
 </div>
-{% if request.user != user %}
-  {% if user in request.user.friends.all %}
-    {% trans 'Znajomi' %} - <a href="{% url 'accounts:friends:delete_friend' user.pk %}">{% trans 'Usuń ze znajomych' %}</a>
-  {% else %}
-    <a href="{% url 'accounts:friends:send_request' user.pk %}">
-      {% trans 'Zaproś do znajomych' %}
-    </a>
-  {% endif %}
-{% endif %}
+
 <div class="row">
   <div class="large-12 columns">
     <div class="tabs-content">

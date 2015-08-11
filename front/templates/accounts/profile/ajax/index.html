@@ -12,8 +12,18 @@
         <dd>{{ user.location }}</dd>
       {% endif %}
         <dt><i class="fa fa-heart"></i> {% trans 'Znajomi' %}</dt>
-        <dd>Liczba znajomych: <strong>{{ user.friends.count }}</strong></dd>
-        <dt><i class="fa fa-credit-card"></i> {% trans 'Punkty gracza' %}</dt>
+        <dd>Liczba znajomych: <strong>{{ user.friends.count }}</strong>
+        <br>
+        {% if request.user != user %}
+          {% if user in request.user.friends.all %}
+            <a href="{% url 'accounts:friends:delete_friend' user.pk %}">{% trans 'Usuń ze znajomych' %}</a>
+          {% else %}
+            <a href="{% url 'accounts:friends:send_request' user.pk %}">
+              {% trans 'Zaproś do znajomych' %}
+            </a>
+          {% endif %}
+        {% endif %}</dd>
+        <dt><i class="fa fa-credit-card"></i> {% trans 'CloudPoints' %}</dt>
         <dd>Liczba punktow gracza: <strong>1503</strong></dd>
     </dl>
   </div>
