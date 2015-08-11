@@ -1,11 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext as _
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login, authenticate, logout
 from django.contrib.auth.decorators import user_passes_test, login_required
-from .models import QuizQuestion
+from django.db.models import Q
+from .models import QuizQuestion, FriendRequest
 from .forms import LoginForm
+import time
 
 def has_not_passed_rp_test(user):
     """Dekorator sprawdzający czy użytkownik nie zdał testu RP"""
@@ -63,3 +65,147 @@ def roleplay_test(request):
         questions_indices = range(0, settings.RP_TEST_QUESTIONS_NUMBERS)
     return render(request, 'accounts/roleplay_test.html',
         {'questions': zip(questions_indices, questions)})
+
+def get_user_object(slug):
+    return get_object_or_404(get_user_model(), username=slug)
+
+
+def accounts_profile_index(request, slug):
+    """Główna zakładka profili użytkownika"""
+    user = get_user_object(slug)
+    if request.is_ajax():
+        template = 'accounts/profile/ajax/index.html'
+    else:
+        template = 'accounts/profile/index.html'
+    return render(request, template, {'user': user})
+
+def accounts_profile_about_me(request, slug):
+    """Strona 'o mnie' w profilu"""
+    user = get_user_object(slug)
+    if request.is_ajax():
+        template = 'accounts/profile/ajax/about_me.html'
+    else:
+        template = 'accounts/profile/about_me.html'
+    return render(request, template, {'user': user})
+
+def accounts_profile_characters(request, slug):
+    """Zakładka z postaciami w profilu"""
+    user = get_user_object(slug)
+    if request.is_ajax():
+        template = 'accounts/profile/ajax/characters.html'
+    else:
+        template = 'accounts/profile/characters.html'
+    return render(request, template, {'user': user})
+
+def accounts_profile_friends(request, slug):
+    """Zakładka ze znajomymi w profilu"""
+    user = get_user_object(slug)
+    if request.is_ajax():
+        template = 'accounts/profile/ajax/friends.html'
+    else:
+        template = 'accounts/profile/friends.html'
+    return render(request, template, {'user': user})
+
+def accounts_profile_logs(request, slug):
+    """Zakładka z logami kar w profilu"""
+    user = get_user_object(slug)
+    logs = user.penalty_logs()
+    # Jeżeli ktoś nie jest adminem lub właścicielem profilu,
+    # to limituj wyświetlanie logów
+    if not request.user.is_staff and request.user != user:
+        date_90_days_ago = int(time.time()-(settings.RP_PENALTY_LOGS_EXPIRY_DATE))
+        logs = logs.filter(time__gte=date_90_days_ago)
+    penalties_visible_for = int(settings.RP_PENALTY_LOGS_EXPIRY_DATE/(3600*24))
+    if request.is_ajax():
+        template = 'accounts/profile/ajax/logs.html'
+    else:
+        template = 'accounts/profile/logs.html'
+    return render(request, template, {'user': user, 'logs': logs,
+        'penalties_visible_for': penalties_visible_for})
+
+@login_required
+def friends_index(request):
+    """Wyświetl listę znajomych użytkownika"""
+    friends = request.user.friends.all()
+    return render(request, 'accounts/friends/index.html', {'friends': friends})
+
+@login_required
+def friends_delete_friend(request, friend_pk):
+    """Strona kasacji znajomego
+
+    Jeżeli przyjdzie GET, to wyślij zapytanie czy skasować znajomego."""
+    friend = get_object_or_404(request.user.friends, pk=friend_pk)
+    if request.method == 'POST':
+        request.user.friends.remove(friend)
+        messages.success(request, _("Pomyślnie skasowałeś znajomego %s."
+            % friend))
+        return redirect(friend.get_absolute_url())
+    return render(request, 'accounts/friends/delete_friend.html',
+        {'friend': friend})
+
+def friends_requests(request):
+    context = {
+        'invited_by': request.user.friends_invited_by.all(),
+        'invited': request.user.friends_invited.all(),
+    }
+    return render(request, 'accounts/friends/requests.html', context)
+
+def friends_send_request(request, friend_pk):
+    """Strona wysyłania zaproszeń do znajomych
+
+    Jeżeli przyjdzie GET, to wyślij zapytanie czy dodać znajomego."""
+    friend = get_object_or_404(get_user_model(), pk=friend_pk)
+    if request.method == 'POST':
+        # Nie możesz dodać siebie do znajomych
+        if request.user == friend:
+            messages.error(request, _('Nie możesz dodać się do znajomych.'))
+            return redirect(request.user.get_absolute_url())
+
+        # Sprawdź czy użytkownicy są już znajomymi
+        if request.user.friends.filter(pk=friend.pk).count():
+            messages.error(request, _('Jesteś już znajomym tego użytkownika.'))
+            return redirect(friend.get_absolute_url())
+
+        # Sprawdź czy istnieje zaproszenie do znajomych do/od tego użytkownika
+        if FriendRequest.objects.filter(
+                    Q(invited=request.user, invited_by=friend) |
+                    Q(invited=friend, invited_by=request.user)
+                ).count():
+            messages.error(request, _('Obecnie istnieje zaproszenie do/od tego '
+                'użytkownika.'))
+            return redirect(friend.get_absolute_url())
+
+        # Wyślij zaproszenie do znajomych
+        friend_request = FriendRequest(invited_by=request.user, invited=friend)
+        friend_request.save()
+        messages.success(request, _("Wysłano prośbę o znajomość do %s" % friend))
+        return redirect(friend.get_absolute_url())
+    return render(request, 'accounts/friends/send_request.html',
+        {'friend': friend})
+
+def friends_delete_request(request, pk):
+    """Odrzuć lub usuń zaproszenie do znajomych"""
+    friend_request = get_object_or_404(FriendRequest, pk=pk)
+    if friend_request.delete_friend_request(user=request.user):
+        if request.user == friend_request.invited:
+            message = _("Zaproszenie od %s zostało odrzucone" %
+                friend_request.invited_by)
+        else:
+            message = ("Zaproszenie wysłane do %s zostało usunięte" %
+                friend_request.invited)
+        messages.success(request, message)
+    else:
+        messages.error(request, _('Wystąpił błąd podczas usuwania zaproszenia. '
+            'Spróbuj ponownie.'))
+    return redirect('accounts:friends:requests')
+
+def friends_accept_request(request, pk):
+    """Akceptuj zaproszenie do znajomych"""
+    friend_request = get_object_or_404(FriendRequest, pk=pk)
+    if friend_request.accept_friend_request(user=request.user):
+        messages.success(request, _("%s został Twoim znajomym." %
+            friend_request.invited_by))
+    else:
+        messages.error(request, _('Wystąpił błąd podczas akceptowania zaproszenia. '
+            'Spróbuj ponownie.'))
+    return redirect(friend_request.invited_by.get_absolute_url())

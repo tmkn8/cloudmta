@@ -29,7 +29,7 @@
       {% else %}
       <li class="has-dropdown{% if request.user.username in request.path %} active{% endif %}">
         <a href="{{ request.user.get_absolute_url }}">
-          {{ user.username }}
+          {{ request.user }}
         </a>
         <ul class="dropdown">
           <li{% if request.path == request.user.get_absolute_url %} class=" active"{% endif %}>
@@ -40,6 +40,11 @@
           <li{% if 'characters' in request.path %} class="active"{% endif %}>
             <a href="{% url 'characters:index' %}">
               {% trans 'Twoje postacie' %}
+            </a>
+          </li>
+          <li{% if 'friends' in request.path %} class="active"{% endif %}>
+            <a href="{% url 'accounts:friends:index' %}">
+              {% trans 'Twoi znajomi' %}
             </a>
           </li>
           {% if request.user.is_staff %}

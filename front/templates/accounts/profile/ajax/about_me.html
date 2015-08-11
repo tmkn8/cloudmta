@@ -1,0 +1,8 @@
+{% load i18n %}
+<h2>{% trans 'O mnie' %}</h2>
+{% if not user.format_about_me %}
+  {% trans 'Nic tutaj nie ma...' %}
+{% else %}
+  <hr>
+  {{ user.format_about_me|safe }}
+{% endif %}

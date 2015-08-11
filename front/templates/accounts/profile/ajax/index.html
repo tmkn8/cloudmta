@@ -1,0 +1,87 @@
+{% load i18n %}
+<div class="row">
+  <div class="large-4 small-12 columns">
+    <h3>{% trans 'Informacje' %}</h3>
+    <dl>
+      {% if user.gender %}
+        <dt><i class="fa fa-transgender"></i>{% trans 'Płeć' %}</dt>
+        <dd>{{ user.get_gender_display|title }}</dd>
+      {% endif %}
+      {% if user.location %}
+        <dt><i class="fa fa-compass"></i> {% trans 'Lokalizacja' %}</dt>
+        <dd>{{ user.location }}</dd>
+      {% endif %}
+        <dt><i class="fa fa-heart"></i> {% trans 'Znajomi' %}</dt>
+        <dd>Liczba znajomych: <strong>{{ user.friends.count }}</strong>
+        <br>
+        {% if request.user != user %}
+          {% if user in request.user.friends.all %}
+            <a href="{% url 'accounts:friends:delete_friend' user.pk %}">{% trans 'Usuń ze znajomych' %}</a>
+          {% else %}
+            <a href="{% url 'accounts:friends:send_request' user.pk %}">
+              {% trans 'Zaproś do znajomych' %}
+            </a>
+          {% endif %}
+        {% endif %}</dd>
+        <dt><i class="fa fa-credit-card"></i> {% trans 'CloudPoints' %}</dt>
+        <dd>Liczba punktow gracza: <strong>1503</strong></dd>
+    </dl>
+  </div>
+  <div class="large-4 small-12 columns">
+    <h3>{% trans 'Kontakt' %}</h3>
+    <dl>
+      {% if user.public_email %}
+        <dt><i class="fa fa-envelope-o"></i> {% trans 'Adres email' %}</dt>
+        <dd><a href="mailto:{{ user.email }}">{{ user.email }}</a></dd>
+      {% endif %}
+      {% if user.skype_id %}
+        <dt><i class="fa fa-skype"></i> {% trans 'Skype' %}</dt>
+        <dd><a href="skype:{{ user.skype_id }}">{{ user.skype_id }}</a></dd>
+      {% endif %}
+      {% if user.website %}
+        <dt><i class="fa fa-globe"></i> {% trans 'Strona internetowa' %}</dt>
+        <dd><a href="{{ user.website }}">{{ user.website }}</a></dd>
+      {% endif %}
+    </dl>
+  </div>
+  <div class="large-4 small-12 columns">
+    <h3>{% trans 'Sieci społecznościowe' %}</h3>
+    <ul class= "no-bullet">
+      {% if user.facebook %}
+      <li>
+        <a class="button facebook expand" href="http://facebook.com/{{ user.facebook }}"><i class="fa fa-facebook"></i> Facebook </a>
+      </li>
+      {% endif %}
+      {% if user.twitter %}
+      <li>
+        <a class="button twitter expand" href="http://www.twitter.com/{{ user.twitter }}"><i class="fa fa-twitter"></i> Twitter </a>
+      </li>
+      {% endif %}
+      {% if user.youtube %}
+      <li>
+        <a class="button youtube expand" href="http://youtube.com/{{ user.youtube }}"><i class="fa fa-youtube"></i> YouTube </a>
+      </li>
+      {% endif %}
+      {% if user.tumblr %}
+      <li>
+        <a class="button tumblr expand" href="http://{{ user.tumblr }}.tumblr.com"><i class="fa fa-tumblr"></i> Tumblr </a>
+      </li>
+      {% endif %}
+      {% if user.instagram %}
+      <li>
+        <a class="button instagram expand" href="http://instagram.com/{{ user.instagram }}"><i class="fa fa-instagram"></i> Instagram  </a>
+      </li>
+      {% endif %}
+      {% if user.rgsc %}
+      <li>
+        <a class="button rgsc expand" href="http://socialclub.rockstargames.com/member/{{ user.rgsc }}"><i class="fa fa-star"></i> RG Social Club </a>
+      </li>
+      {% endif %}
+      {% if user.steam %}
+      <li>
+        <a class="button steam expand" href="http://steamcommunity.com/id/{{ user.steam }}"><i class="fa fa-steam"></i> Steam </a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+</div>

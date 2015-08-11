@@ -1,19 +1,136 @@
 {% extends 'base_content.html' %}
 {% load i18n %}
+{% load humanize %}
+{% load staticfiles %}
+
+{% block body_id %}user-profile{% endblock %}
 
 {% block title %}
-  {% blocktrans %}
-    Profil użytkownika {{ user }}
-  {% endblocktrans %}
+  ~{{ user }}
 {% endblock %}
 
 {% block content %}
-  <h1>{{ user }}</h1>
-  <ul>
-    {% url 'accounts:profile:index' as profile_index_url %}
-    <li {% if request.path == profile_index_url %}class="active"{% endif %}>
-      <a href="{% url 'accounts:profile:index' %}">
-        {% trans 'Ogólne' %}
-      </a>
-    </li>
-  </ul>
+<div class="row">
+  <div class="large-12 columns">
+    <div class="cover-photo" {% if user.get_cover_photo_url %}style="background-image: url({{ user.get_cover_photo_url }})"{% endif %}>
+      <div id="user-profile-name-and-avatar-line">
+        <a href="{{ user.get_absolute_url }}">
+          <img class="avatar avatar-large left" id="user-profile-avatar"
+          src="{{ user.get_avatar_url }}" alt="{{ user}}">
+          <h1 id="user-profile-username">
+            {{ user }}
+            {% if user.is_staff %}
+              <small><span class="label alert round">{% trans 'Administracja' %}</span></small>
+            {% endif %}
+          </h1>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="large-12 columns">
+    <div class="nav">
+      <nav>
+        <ul class="tabs" data-tab role="tablist" id="user-profile-nav-tabs">
+          <li class="tab-title {% if request.path == user.get_absolute_url %}active{% endif %}"
+            role="presentation">
+            <a href="#pane-user" role="tab" tabindex="0" aria-selected="true" aria-controls="pane-user">
+              <i class="fa fa-info"></i>
+              <span class="right show-for-large-up">{{ user }}</span>
+            </a>
+          </li>
+          <li class="tab-title {% if 'about-me' in request.path %}active{% endif %}"
+            role="presentation">
+            <a href="#pane-about-me" role="tab" tabindex="1" aria-selected="false" aria-controls="pane-about-me">
+              <i class="fa fa-pencil-square-o"></i>
+              <span class="right show-for-large-up">{% trans 'O mnie' %}</span>
+            </a>
+          </li>
+          <li class="tab-title {% if 'characters' in request.path %}active{% endif %}"
+            role="presentation">
+            <a href="#pane-characters" role="tab" tabindex="2" aria-selected="false" aria-controls="pane-characters">
+              <i class="fa fa-users"></i>
+              <span class="right show-for-large-up">{% trans 'Postacie' %}</span>
+            </a>
+          </li>
+          <li class="tab-title {% if 'friends' in request.path %}active{% endif %}"
+            role="presentation">
+            <a href="#pane-friends" role="tab" tabindex="3" aria-selected="false" aria-controls="pane-friends">
+              <i class="fa fa-heart"></i>
+              <span class="right show-for-large-up">{% trans 'Znajomi' %}</span>
+            </a>
+          </li>
+          <li class="tab-title {% if 'logs' in request.path %}active{% endif %}"
+            role="presentation">
+            <a href="#pane-logs" role="tab" tabindex="4" aria-selected="false" aria-controls="pane-logs">
+              <i class="fa fa-folder-open-o"></i>
+              <span class="right show-for-large-up">{% trans 'Logi' %}</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-12 columns">
+    <div class="tabs-content">
+      <section role="tabpanel" aria-hidden="false" class="content {% if request.path == user.get_absolute_url %}active{% endif %}" id="pane-user">
+        {% block profile_index_content %}{% endblock %}
+      </section>
+      <section role="tabpanel" aria-hidden="true" class="content {% if 'about-me' in request.path %}active{% endif %}" id="pane-about-me">
+        {% block profile_about_me_content %}{% endblock %}
+      </section>
+      <section role="tabpanel" aria-hidden="true" class="content {% if 'characters' in request.path %}active{% endif %}" id="pane-characters">
+        {% block profile_characters_content %}{% endblock %}
+      </section>
+      <section role="tabpanel" aria-hidden="true" class="content {% if 'friends' in request.path %}active{% endif %}" id="pane-friends">
+        {% block profile_friends_content %}{% endblock %}
+      </section>
+      <section role="tabpanel" aria-hidden="true" class="content {% if 'logs' in request.path %}active{% endif %}" id="pane-logs">
+        {% block profile_logs_content %}{% endblock %}
+      </section>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block before_end_of_body %}
+  <script>
+    var href = '';
+    var already_loaded = [];
+
+    $('#user-profile-nav-tabs').on('toggled', function (event, tab) {
+      href = $(tab).children('a').attr('href');
+      switch (href) {
+        case '#pane-user':
+          url = '{{ user.get_absolute_url }}';
+          break;
+        case '#pane-characters':
+          url = '{% url "accounts:profile:characters" user.username %}';
+          break;
+        case '#pane-logs':
+          url = '{% url "accounts:profile:logs" user.username %}';
+          break;
+        case '#pane-friends':
+          url = '{% url "accounts:profile:friends" user.username %}';
+          break;
+        case '#pane-about-me':
+          url = '{% url "accounts:profile:about_me" user.username %}';
+          break;
+        default:
+          alert('{% trans "Wystąpił błąd" %}');
+          break;
+      }
+
+      history.pushState(null, null, url);
+      if (jQuery.inArray(href, already_loaded) == -1) {
+        already_loaded.push(href);
+        $(href).html('');
+        $(href).load(url);
+      }
+    });
+  </script>
+{% endblock %}

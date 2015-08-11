@@ -1,0 +1,39 @@
+#error-page {
+  background-image: url(../img/homepage/bg.png);
+
+  .error-box {
+    clear: both;
+    margin-top: 150px;
+    margin-bottom: 150px;
+    @media #{$medium-only}, #{$small-only} {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    background-color: scale-color($black, $alpha: -90%);
+    padding-top: 100px;
+    padding-bottom: 100px;
+    width: 100%;
+      h1 {
+        color: $primary-color;
+        font-size: rem-calc(150);
+        padding-top: 15px;
+        @media #{$medium-only}, #{$small-only} {
+          font-size: rem-calc(110);
+        }
+      }
+      .first-line {
+        color: $white;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        font-size: rem-calc(100);
+        @media #{$medium-only}, #{$small-only} {
+          font-size: rem-calc(60);
+        }
+      }
+      .second-line {
+        color: $silver;
+        padding-top: 0;
+        font-size: $h3-font-size;
+      }
+  }
+}

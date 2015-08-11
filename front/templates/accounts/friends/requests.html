@@ -1,0 +1,46 @@
+{% extends 'accounts/base_friends.html' %}
+{% load i18n %}
+{% load humanize %}
+{% block body_id %}friends-menu{% endblock %}
+{% block friends_content %}
+  <h2>{% trans 'Zaproszenia otrzymane' %}</h2>
+  <ul class="no-bullet">
+    {% for friend_request in invited %}
+      <li>
+        <div class="avatar-box avatar-medium" style="background-image: url({{ friend_request.invited_by.get_avatar_url }})">
+          <div class="avatar-box-username">{{ friend_request.invited_by }}</div>
+        </div>
+        <a class="button success tiny accept" href="{% url 'accounts:friends:accept_request' friend_request.pk %}">
+          <i class="fa fa-check"></i>
+        </a>
+        <a class="button alert success tiny" href="{% url 'accounts:friends:delete_request' friend_request.pk %}">
+          <i class="fa fa-wheelchair"></i>
+        </a>
+        - {{ friend_request.sent_time|naturaltime }}
+      </li>
+    {% empty %}
+      <li>{% trans 'Brak otrzymanych zaproszeń.' %}</li>
+    {% endfor %}
+  </ul>
+  <hr>
+
+  <h2>{% trans 'Zaproszenia wysłane' %}</h2>
+  <ul class="no-bullet">
+    {% for friend_request in invited_by %}
+      <li>
+        {{ friend_request.invited }} - {{ friend_request.sent_time|naturaltime }}
+        <a class="success tiny" href="{% url 'accounts:friends:delete_request' friend_request.pk %}">
+          {% trans 'Usuń zaproszenie do znajomych' %}
+        </a>
+      </li>
+    {% empty %}
+      <li>{% trans 'Brak wysłanych zaproszeń.' %}</li>
+    {% endfor %}
+  </ul>
+  <hr>
+  <p class="text-center">
+    <a href="{% url 'accounts:friends:index' %}">
+      {% trans 'Przeglądaj listę znajomych &raquo;' %}
+    </a>
+  </p>
+{% endblock %}

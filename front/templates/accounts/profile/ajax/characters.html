@@ -1,0 +1,21 @@
+{% load staticfiles %}
+{% load i18n %}
+<h2>{% trans 'Postacie' %}</h2>
+<ul class="characters-list large-block-grid-3 medium-block-grid-2 small-block-grid-1" data-equalizer>
+  {% for character in user.characters.all %}
+    <li>
+      <a style="background-image: url({%if character.hide%}{% static 'img/skins/hidden.png' %}{%else%}{% static character.get_skin_static_url %}{%endif%})">
+        <ul class="no-bullet">
+          <li>
+            <h2>{% if character.hide %} {% trans 'Postać ukryta' %} {% else %} {{ character }} {% endif %} </h2>
+          </li>
+          <li>{{ character.format_online_time }} </li>
+        </ul>
+      </a>
+    </li>
+  {% empty %}
+    <li>
+      <h1>{% trans 'Brak postaci' %}</h1>
+    </li>
+  {% endfor %}
+</ul>

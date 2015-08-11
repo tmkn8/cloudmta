@@ -29,7 +29,7 @@
     </div>
     {% for k, v in rank.get_rank_permissions.items %}
       <h5>{{ k|title }}</h5>
-      <div class="switch small">
+      <div class="switch tiny">
         <input id="perm_{{ k }}_id"  name="perm_{{ k }}"
           {% if v %} checked{% endif %} type="checkbox">
         <label for="perm_{{ k }}_id">{{ k|title }}</label>

@@ -1,0 +1,19 @@
+#friends-menu {
+
+  .remove-friend {
+    width: 100px;
+    margin-bottom: rem-calc(-30);
+    opacity: 0.2;
+    top: rem-calc(-100);
+    -webkit-transition: opacity 0.5s; /* Safari */
+    transition: opacity 0.5s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .accept {
+    margin-right: -4px;
+  }
+}

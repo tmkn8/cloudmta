@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block body_id %}error-page{% endblock %}
+
+{% block container %}
+  <div class="error-box">
+    <div class="row">
+      <div class="medium-4 small-12 columns">
+        {% block error_title %}{% endblock %}
+      </div>
+      <div class="medium-8 small-12 columns">
+        {% block error_content %}{% endblock %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

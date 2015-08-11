@@ -5,10 +5,14 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.contrib.auth.models import UserManager
-from characters.models import Character
+from characters.models import Character, PenaltyLog
 import hashlib
+import urllib
+from gravatar import Gravatar
+from django.templatetags.static import static
 
 class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_VALIDATOR = RegexValidator(r'^([A-Za-z0-9]{3,})$')
@@ -23,22 +27,94 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('ma dostęp do strony administracji.'))
     date_joined = models.DateTimeField(_('data dołączenia'),
         default=timezone.now)
+    avatar = models.ImageField(verbose_name=_('awatar'), blank=True, null=True,
+        upload_to='user-avatars')
+    cover_photo = models.ImageField(verbose_name=_('okładka profilu'),
+        upload_to='cover_photos', blank=True, null=True)
     passed_rp_test = models.BooleanField(default=False, verbose_name=_('zdał '
         'test RP'))
+    friends = models.ManyToManyField('self', verbose_name=_('znajomi'),
+        blank=True)
+    about_me = models.TextField(verbose_name=_('o mnie'),
+        help_text=_('markdown'), blank=True, null=True)
+    public_email = models.BooleanField(verbose_name=_('adres e-mail '
+        'widoczny publicznie'), default=False)
+    website = models.URLField(verbose_name=_('strona internetowa'),
+        blank=True, null=True)
+    skype_id = models.CharField(max_length=40, verbose_name=_('identyfikator '
+        'skype'), null=True, blank=True)
+    facebook = models.CharField(max_length=100, verbose_name=_('Facebook'),
+        blank=True, null=True)
+    steam = models.CharField(max_length=100, verbose_name=_('Steam'),
+        blank=True, null=True)
+    rgsc = models.CharField(max_length=100, verbose_name=_('Rockstar Games '
+        'Social Club'), blank=True, null=True)
+    twitter = models.CharField(max_length=100, verbose_name=_('Twitter'),
+        blank=True, null=True)
+    youtube = models.CharField(max_length=100, verbose_name=_('YouTube'),
+        blank=True, null=True)
+    tumblr = models.CharField(max_length=100, verbose_name=_('Twitter'),
+        blank=True, null=True)
+    instagram = models.CharField(max_length=100, verbose_name=_('Instagram'),
+        blank=True, null=True)
+    location = models.CharField(max_length=100, verbose_name=_('miejscowość'),
+        blank=True, null=True)
+    GENDER_CHOICES = (
+        ('F', _('kobieta')),
+        ('M', _('mężczyzna')),
+        ('N', _('żadna z powyższych')),
+    )
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True,
+        null=True)
 
     objects = UserManager()
 
+    def __str__(self):
+        """Zwróć nazwę użytkownika"""
+        return self.username
+
+    class Meta:
+        verbose_name = _('użytkownik Django')
+        verbose_name_plural = _('użytkownicy Django')
+
     def get_absolute_url(self):
         """Pobierz link do profilu"""
-        return 'nothing yet'
+        return reverse('accounts:profile:index', kwargs={'slug': self.username})
+
+    def get_cover_photo_url(self):
+        """Zwróć URL cover photo"""
+        if self.cover_photo:
+            return self.cover_photo.url
+        return None
+
+    def get_avatar_url(self):
+        """Zwróc URL awatara"""
+        if self.avatar:
+            return self.avatar.url
+
+        gravatar = Gravatar(self.email.lower())
+        gravatar.size = 300
+        gravatar.default = 404
+        try:
+            gravatar_url = urllib.request.urlopen(gravatar.thumb)
+        except urllib.error.URLError:
+            return static(settings.DEFAULT_AVATAR)
+        return gravatar.thumb
+
+    def format_about_me(self):
+        if not self.about_me:
+            return None
+        import markdown
+        return markdown.markdown(self.about_me, safe_mode=True)
 
     def mybbmember(self):
         """Pobierz obiekt użytkownika forum"""
         return MyBBMember.objects.get(pk=self.pk)
 
-    def __str__(self):
-        """Zwróć nazwę użytkownika"""
-        return self.username
+    def penalty_logs(self):
+        """Pobierz logi kar użytkownika"""
+        return PenaltyLog.objects.filter(
+            character__in=self.characters.all())
 
     def get_full_name(self):
         """Wymagane przez klasę rodzica"""
@@ -70,10 +146,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Zdaj test RP gracza"""
         self.passed_rp_test = True
         self.save()
-
-    class Meta:
-        verbose_name = _('użytkownik Django')
-        verbose_name_plural = _('użytkownicy Django')
 
 class MyBBMember(models.Model):
     """Ten model jest tabelą z MyBB, na cele logowania"""
@@ -117,7 +189,8 @@ class MyBBMember(models.Model):
         """Sprawdza hasło algorytmem MyBB"""
         member_salt_hash = hashlib.md5(self.salt.encode('utf-8')).hexdigest()
         input_password = hashlib.md5(password.encode('utf-8')).hexdigest()
-        hashed_password = hashlib.md5(member_salt_hash.encode('utf-8') + input_password.encode('utf-8'))
+        hashed_password = hashlib.md5(member_salt_hash.encode('utf-8') \
+            + input_password.encode('utf-8'))
         if hashed_password.hexdigest() == self.password:
             return True
         return False
@@ -136,7 +209,7 @@ class QuizQuestion(models.Model):
         ('d', _('Odpowiedź D')),
     )
     correct_answer = models.CharField(max_length=1,
-        choices=CORRECT_ANSWER_CHOICES)
+        choices=CORRECT_ANSWER_CHOICES, verbose_name=_('poprawna odpowiedź'))
 
     def __str__(self):
         return _("Pytanie %s..." % self.question[:10])
@@ -150,5 +223,41 @@ class QuizQuestion(models.Model):
         if not isinstance(answer, str):
             return False
         if self.correct_answer.lower() == answer.lower():
+            return True
+        return False
+
+class FriendRequest(models.Model):
+    invited_by = models.ForeignKey(settings.AUTH_USER_MODEL,
+        verbose_name=_('zapraszający'), related_name='friends_invited_by',
+        related_query_name='friend_invited_by')
+    invited = models.ForeignKey(settings.AUTH_USER_MODEL,
+        verbose_name=_('zaproszony użytkownik'), related_name='friends_invited',
+        related_query_name='friend_invited')
+    sent_time = models.DateTimeField(verbose_name=_('czas zaproszenia'),
+        auto_now_add=True)
+
+    def __str__(self):
+        return _("%s zaproszony przez %s" % (self.invited, self.invited_by))
+
+    class Meta:
+        verbose_name = _('zaproszenie do znajomych')
+        verbose_name_plural = _('zaproszenia do znajomych')
+
+    def accept_friend_request(self, user):
+        """Akceptuj zaproszenie do znajomych"""
+        # Jeżeli użytkownik nie jest zaproszony, to nie pozwól mu przyjąć
+        # zaproszenia
+        if user != self.invited:
+            return False
+        # Dodaj znajomego
+        user.friends.add(self.invited_by)
+        # Skasuj zaproszenie
+        self.delete()
+        return True
+
+    def delete_friend_request(self, user):
+        """Odrzuć lub usuń zaproszenie do znajomych"""
+        if user == self.invited or user == self.invited_by:
+            self.delete()
             return True
         return False

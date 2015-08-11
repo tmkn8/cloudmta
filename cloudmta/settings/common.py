@@ -120,3 +120,5 @@ MESSAGE_TAGS = {
 }
 
 EMAIL_SUBJECT_PREFIX = '[CloudMTA]'
+
+DEFAULT_AVATAR = 'img/default-avatar.png'

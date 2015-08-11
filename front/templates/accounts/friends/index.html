@@ -1,0 +1,29 @@
+{% extends 'accounts/base_friends.html' %}
+{% load i18n %}
+{% block body_id %}friends-menu{% endblock %}
+{% block friends_content %}
+  <h1>{% trans 'Lista Twoich znajomych' %}</h1>
+  <hr>
+  <ul class="large-block-grid-5 medium-block-grid-4 small-block-grid-3">
+    {% for friend in friends %}
+      <li>
+        <a href="{{ friend.get_absolute_url }}">
+          <div class="avatar-box avatar-medium" style="background-image: url({{ friend.get_avatar_url }})">
+            <div class="avatar-box-username">{{ friend }}</div>
+          </div>
+        </a>
+        <a class="button alert tiny remove-friend" href="{% url 'accounts:friends:delete_friend' friend.pk %}">
+          <i class="fa fa-trash"></i>
+        </a>
+      </li>
+    {% empty %}
+      <li>{% trans 'Brak znajomych' %}</li>
+    {% endfor %}
+  </ul>
+  <hr>
+  <p class="text-center">
+    <a href="{% url 'accounts:friends:requests' %}">
+      {% trans 'Przeglądaj zaproszenia do znajomych &raquo;' %}
+    </a>
+  </p>
+{% endblock %}
