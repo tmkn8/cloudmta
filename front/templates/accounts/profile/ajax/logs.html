@@ -1,0 +1,49 @@
+{% load i18n %}
+<h2>{% trans 'Logi' %}</h2>
+{% if logs %}
+  <table class="table-full-width">
+    <thead>
+      <tr>
+        <th>{% trans 'Postać' %}</th>
+        <th>{% trans 'Informacje' %}</th>
+        <th>{% trans 'Czas' %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs%}
+        <tr>
+          <td>
+            {% if not log.character.hide or request.user.is_staff %}
+              {{ log.character }}
+            {% else %}
+              {% trans 'Postać ukryta' %}
+            {% endif %}
+          </td>
+          <td>
+            {% blocktrans with type=log.get_penalty_type_display admin=log.admin admin_url=log.admin.get_absolute_url %}
+              <strong>Nadano karę <em>{{ type }}</em> przez <a href="{{ admin_url }}">{{ admin }}</a></strong>
+            {% endblocktrans %}
+            <br>
+              {{ log.reason }}
+          </td>
+          <td>
+            <strong>{{ log.time }}</strong>
+            {% if log.expire %}
+              <br>
+              {% blocktrans with date=log.expire %}Wygasa {{ date }}{% endblocktrans %}
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <br>
+  <div class="alert-box secondary">
+    {% blocktrans %}
+      Jedynie administracja oraz właściciel profilu widzi kary starsze niż {{ penalties_visible_for }} dni.
+    {% endblocktrans %}
+{% else %}
+  <div class="alert-box warning">
+    {% trans 'Użytkownik nie ma żadnych wpisów w profilu' %}
+  </div>
+{% endif %}

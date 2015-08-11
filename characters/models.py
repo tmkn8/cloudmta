@@ -113,7 +113,7 @@ class Character(models.Model):
         seconds = int(seconds)
         m, s = divmod(seconds, 60)
         h, m = divmod(m, 60)
-        return "%dh %02dmin." % (h, m)
+        return "%dh %02dmin" % (h, m)
 
     def format_online_time(self):
         """Sformatuj czas online"""
@@ -201,3 +201,42 @@ class LoginLog(models.Model):
         db_table = '_login_logs'
         verbose_name = _('log logowania')
         verbose_name_plural = _('logi logowania')
+
+class PenaltyLog(models.Model):
+    """Logi kar"""
+    id = models.AutoField(db_column='ID', primary_key=True)
+    serial = models.CharField(max_length=settings.RP_SERIAL_LENGTH,
+        verbose_name=_('serial'))
+    ip = models.GenericIPAddressField(verbose_name=_('adres IP'))
+    character = models.ForeignKey('characters.Character',
+        verbose_name=_('postać'), db_column='userID',
+        related_name='characters', related_query_name='character')
+    admin = models.ForeignKey(settings.AUTH_USER_MODEL,
+        verbose_name=_('administrator'), db_column='adminID',
+        related_name='admins', related_query_name='admin')
+    reason = models.TextField(verbose_name=_('powód'), blank=True, null=True)
+    time = models.PositiveIntegerField(verbose_name=_('data nadania'))
+    expire = models.PositiveIntegerField(verbose_name=_('data wygaśnięcia'),
+        blank=True, null=True)
+    PENALTY_TYPE_CHOICES = (
+        (1, _('kick')),
+        (2, _('admin jail')),
+        (3, _('warn')),
+        (4, _('ban')),
+        (5, _('blokada postaci')),
+    )
+    penalty_type = models.PositiveSmallIntegerField(choices=PENALTY_TYPE_CHOICES,
+        verbose_name=_('typ kary'), db_column='type')
+
+    # def __str__(self):
+    # TODO(tomaszkn): Nie wiem czemu to nie działa (?)
+    #     return _("%s dla %s" % (self.get_penalty_type_display, self.character))
+
+    def __str__(self):
+        return "%s" % self.character
+
+    class Meta:
+        db_table = '_penalty_logs'
+        verbose_name = _('informacje o karze')
+        verbose_name_plural = _('logi kar')
+        ordering = ['-time']

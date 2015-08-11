@@ -1,0 +1,16 @@
+{% load staticfiles %}
+{% load i18n %}
+<h2>{% trans 'Znajomi' %}</h2>
+<ul class="large-block-grid-5 medium-block-grid-3 small-block-grid-2">
+  {% for friend in user.friends.all %}
+    <li>
+      <a href="{{ friend.get_absolute_url }}">
+        <div class="avatar-box avatar-medium" style="background-image: url({{ friend.get_avatar_url }})">
+          <div class="avatar-box-username">{{ friend }}</div>
+        </div>
+      </a>
+    </li>
+  {% empty %}
+    <li>{% trans 'Brak znajomych...' %}</li>
+  {% endfor %}
+</ul>

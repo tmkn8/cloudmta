@@ -29,9 +29,9 @@ class Post(models.Model):
     def format_content(self):
         """Użyj Markdownu, żeby sformatować tekst do HTML"""
         import markdown
-        return markdown.markdown(self.content)
+        return markdown.markdown(self.content, safe_mode=True)
 
     def format_content_short(self):
         """Sformatuj tekst Markdown -> HTML i skróć go do 400 znaków"""
         import markdown
-        return markdown.markdown("%s..." % self.content[:400])
+        return markdown.markdown("%s..." % self.content[:400], safe_mode=True)

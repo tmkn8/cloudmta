@@ -1,0 +1,27 @@
+{% extends 'base_content.html' %}
+{% load i18n %}
+
+{% block title %}
+  {% trans 'Twoi znajomi' %}
+{% endblock %}
+
+{% block under_header %}
+  {% trans 'Twoi znajomi' as friends_trans_text %}
+  {% url 'accounts:friends:index' as friends_url %}
+  {% include 'includes/header_banner.html' with text=friends_trans_text url=friends_url %}
+{% endblock %}
+
+{% block content %}
+  {% if request.user.friends_invited.count %}
+    <a class="button expand warning large" href="{% url 'accounts:friends:requests' %}">
+      {% blocktrans with requests_count=request.user.friends_invited.count %}
+        Masz {{ requests_count }} zaproszeń do znajomych.
+      {% endblocktrans %}
+    </a>
+  {% endif %}
+
+  {% block friends_content %}
+  
+  {% endblock %}
+
+{% endblock %}
