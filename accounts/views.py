@@ -209,3 +209,8 @@ def friends_accept_request(request, pk):
         messages.error(request, _('Wystąpił błąd podczas akceptowania zaproszenia. '
             'Spróbuj ponownie.'))
     return redirect(friend_request.invited_by.get_absolute_url())
+
+@login_required
+def user-panel(request):
+    """Wyświetl panel użytkownika"""
+    return render(request, 'accounts/user_panel/index.html')
