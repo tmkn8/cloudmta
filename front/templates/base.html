@@ -10,9 +10,9 @@
     <script src="{% static 'js/output_header.js' %}"></script>
   </head>
   <body class="{% block body_class %}{% endblock %}" id="{% block body_id %}{% endblock %}">
+    {% include 'includes/messages.html' %}
     {% include 'includes/header.html' %}
     {% block under_header %}{% endblock %}
-    {% include 'includes/messages.html' %}
     {% block container %}{% endblock %}
     {% include 'includes/footer.html' %}
     <script src="{% static 'js/output_footer.js' %}"></script>

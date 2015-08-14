@@ -188,8 +188,9 @@ footer#cloudmta-footer {
   border-radius: 50%;
 }
 
-.index-error {
-  position: absolute;
-  width: 100%;
-  margin-bottom: 10px;
+.alert-box {
+  position: fixed;
+  width: 64.8%;
+  z-index: 2;
+
 }
