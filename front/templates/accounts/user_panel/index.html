@@ -4,7 +4,7 @@
 {% block title %}
   {% trans 'Panel uzytkownika' %}
 {% endblock %}
-
+{% block body_id %}user-panel{% endblock %}
 {% block under_header %}
   {% trans 'Panel uzytkownika' as friends_trans_text %}
   {% url 'accounts:user_panel:index' as friends_url %}
@@ -12,10 +12,17 @@
 {% endblock %}
 
 {% block content %}
-<h1>hej</h1>
-<p>co tam?</p>
-<p>co tam?</p>
-<p>co tam?</p>
-<p>co tam?</p>
+<h2>Edytuj awatar</h2>
+<div>
+  <img class="avatar avatar-large" src="{{ user.get_avatar_url }}" alt="{{ user}}"> Edytuj
+</div>
+<hr>
+<h2>Edycja danych</h2>
+<hr>
+<h2>Znajomi</h2>
+<hr>
+<h2>Twoje postacie</h2>
+<hr>
+<h2>Logi logowan</h2>
 
 {% endblock %}
