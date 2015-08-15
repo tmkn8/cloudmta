@@ -47,8 +47,8 @@
               {% trans 'Twoi znajomi' %}
             </a>
           </li>
-          <li{% if 'user-panel' in request.path %} class="active"{% endif %}>
-            <a href="{% url 'accounts:user-panel:index' %}">
+          <li{% if 'user_panel' in request.path %} class="active"{% endif %}>
+            <a href="{% url 'accounts:user_panel:index' %}">
               {% trans 'Panel uzytkownika' %}
             </a>
           </li>
