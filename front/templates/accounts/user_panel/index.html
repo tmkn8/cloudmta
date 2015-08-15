@@ -22,7 +22,6 @@
           <img class="avatar th avatar-large" src="{{ user.get_avatar_url }}" alt="{{ user}}">
           <p class="under-avatar-text text-center">Hej, maksymalny rozmiar awatara to taki i taki. Awatar zostanie skompresowany do odpowiednich rozmiarow. </p>
         </div>
-        <div class="button expand">Zmien awatar</div>
       </div>
     </div>
     <form>
@@ -36,11 +35,10 @@
         <input type="password" name="password" id="confirm_password">
         <label for="change_email">Zmien adres email</label>
         <input type="text" name="email" value="get user email" id="change_email">
-        <div class="button expand">Potwierdz zmiany</div>
     </form>
       </div>
     <form>
-      <div class="large-3 medium-6 columns">
+      <div class="large-3 medium-6 columns" data-equalizer-watch>
         <h3>Informacje</h3>
         <label for="change_sex">Zmien plec</label>
         <select name="sex" id="change_sex">
@@ -54,10 +52,9 @@
         <input type="text" id="skype">
         <label for="skype">Podaj adres skype</label>
         <input type="text" id="skype">
-        <div class="button expand">Potwierdz zmiany</div>
       </div>
     </form>
-      <div class="large-3 medium-6 columns">
+      <div class="large-3 medium-6 columns" data-equalizer-watch>
       <form>
           <h3>Social media</h3>
           <label for="change_sex">Zmien plec</label>
@@ -72,11 +69,18 @@
           <input type="text" id="skype">
           <label for="skype">Podaj adres skype</label>
           <input type="text" id="skype">
-          <div class="button expand">Potwierdz zmiany</div>
         </div>
       </form>
       </div>
   </form>
+</div>
+<div class="row">
+  <div class="large-3 columns">
+    <div class="button expand"> Zmien awatar</div>
+  </div>
+  <div class="large-9 columns">
+    <div class="button expand"> Potwierdz zmiany</div>
+  </div>
 </div>
 <hr>
   <h2>Znajomi</h2>
@@ -89,7 +93,7 @@
     <div class="large-12 columns">
       <h2>O mnie</h2>
       <textarea name="message" class="expand" rows="10">
-        Edytuj strone "O mnie". Pamietaj, ze do edycji musisz uzyc jezyka Markdown.
+          {{ user.format_about_me|safe }}
       </textarea>
       <div class="button right">Wyslij</div>
     </div>
@@ -112,4 +116,10 @@
     </tr>
   </tbody>
 </table>
+
+
+<script>
+  $(document).foundation();
+</script>
+
 {% endblock %}
