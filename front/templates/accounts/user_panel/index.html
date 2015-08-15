@@ -18,11 +18,92 @@
 </div>
 <hr>
 <h2>Edycja danych</h2>
+<div class="row">
+    <form>
+      <div class="large-4 columns">
+        <h3>Glowne</h3>
+        <label for="change_nickname">Zmien nazwe uzytkownika</label>
+        <input type="text" name="nickname" id="change_nickname">
+        <label for="change_password">Zmien haslo</label>
+        <input type="password" name="password" id="change_password">
+        <label for="confirm_password">Potwierdz haslo</label>
+        <input type="password" name="password" id="confirm_password">
+        <label for="change_email">Zmien adres email</label>
+        <input type="text" name="email" value="get user email" id="change_email">
+        <div class="button expand">Potwierdz zmiany</div>
+    </form>
+      </div>
+    <form>
+      <div class="large-4 columns">
+        <h3>Informacje & Kontakt</h3>
+        <label for="change_sex">Zmien plec</label>
+        <select name="sex" id="change_sex">
+          <option value="male">Mezczyzna</option>
+          <option value="famale">Kobieta</option>
+          <option value="no_one_knows">Kto wie</option>
+        </select>
+        <label for="skype">Podaj adres skype</label>
+        <input type="text" id="skype">
+        <label for="skype">Podaj adres skype</label>
+        <input type="text" id="skype">
+        <label for="skype">Podaj adres skype</label>
+        <input type="text" id="skype">
+        <div class="button expand">Potwierdz zmiany</div>
+      </div>
+    </form>
+      <div class="large-4 columns">
+      <form>
+          <h3>Social media</h3>
+          <label for="change_sex">Zmien plec</label>
+          <select name="sex" id="change_sex">
+            <option value="male">Mezczyzna</option>
+            <option value="famale">Kobieta</option>
+            <option value="no_one_knows">Kto wie</option>
+          </select>
+          <label for="skype">Podaj adres skype</label>
+          <input type="text" id="skype">
+          <label for="skype">Podaj adres skype</label>
+          <input type="text" id="skype">
+          <label for="skype">Podaj adres skype</label>
+          <input type="text" id="skype">
+          <div class="button expand">Potwierdz zmiany</div>
+        </div>
+      </form>
+      </div>
+  </form>
+</div>
 <hr>
-<h2>Znajomi</h2>
+  <h2>Znajomi</h2>
+  <p>Posiadasz <strong>{{ user.friends.count }}</strong> znajomych. <a>Przejdz do listy znajomych</a></p>
 <hr>
-<h2>Twoje postacie</h2>
+  <h2>Twoje postacie</h2>
+  <p>Posiadasz <strong>w chuj</strong> postaci. <a>Przejdz do listy postaci</a></p>
 <hr>
-<h2>Logi logowan</h2>
-
+  <div class="row">
+    <div class="large-12 columns">
+      <h2>O mnie</h2>
+      <textarea name="message" class="expand" rows="10">
+        Edytuj strone "O mnie". Pamietaj, ze do edycji musisz uzyc jezyka Markdown.
+      </textarea>
+      <div class="button right tiny">Wyslij</div>
+    </div>
+  </div>
+<hr>
+<h2>Logi logowan (ostatnie 30 dni)</h2>
+<table class="expand">
+  <thead>
+    <tr>
+      <th width="20%">Adres IP</th>
+      <th width="70%">Postac, stan konta.</th>
+      <th width="20%">Godzina</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Content Goes Here</td>
+      <td>This is longer content Donec id elit non mi porta gravida at eget metus.</td>
+      <td>Content Goes Here</td>
+    </tr>
+  </tbody>
+</table>
 {% endblock %}
